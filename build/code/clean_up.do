@@ -1,0 +1,6 @@
+erase 	"./data/nhts/1990/1990 restricted/HHPER1990.dta"
+erase 	"./data/nhts/1995/1995 restricted/HHPER1995.dta"
+erase 	"./data/nhts/2001/2001 restricted/HHPER2001.dta"
+erase 	"./data/nhts/2009/2009 restricted/HHPER2009.dta"
+erase 	"./data/nhts/2017/2017 public/HHPER2017.dta"
+erase 	"./output/NHTScombined.dta"
