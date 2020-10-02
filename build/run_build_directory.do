@@ -27,8 +27,6 @@ do		"$dof/build/code/combine_gpm.do"
 /* Prep gas price data */
 do		"$dof/build/code/prep_gasprice.do" 
 
-CHECK BELOW HERE, and RESOLVE GAS PRICE DO
-
 /* Prep driver license data */
 do		"$dof/build/code/prep_drive_license_data.do" 
 

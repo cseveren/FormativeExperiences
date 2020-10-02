@@ -21,7 +21,7 @@ set more off
 
 *============== User Edit Here ================*
 global 	dof 	"C:/GitHub/FormativeExperiences" 
-global 	data	"C:\Dropbox\Dropbox\Data_Projects\Driving_Gas_Shocks"
+global 	data	"C:\Dropbox\Dropbox\Data_Projects\FormativeExperiences_Data"
 *==============================================*
 
 ** Set data location to current directory **
