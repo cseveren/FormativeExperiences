@@ -3,8 +3,8 @@
 ** 2000 Census data. 
 *************************************************************
 
-*local 	logf "`1'" 
-*log using "`logf'", replace text
+local 	logf "`1'" 
+log using "`logf'", replace text
 
 use 	"./output/census2000_basefile.dta", clear
 
@@ -202,12 +202,10 @@ foreach bw of local bwlistq {
 
 foreach bw of local bwlist {
 	eststo rdl_trn_A`bw'_no_rb: 	reg t_transit T D DT 		if bwA<=`bw' [aw=perwt], robust
-	eststo rdl_trn_B`bw'_no_rb: 	reg t_transit T D DT 		if bwB<=`bw' [aw=perwt], robust
 }
 
 foreach bw of local bwlistq {
 	eststo rdq_trn_A`bw'_no_rb: 	reg t_transit T D DT D2 D2T 	if bwA<=`bw' [aw=perwt], robust
-	eststo rdq_trn_B`bw'_no_rb: 	reg t_transit T D DT D2 D2T 	if bwB<=`bw' [aw=perwt], robust
 }
 
 ***************************
@@ -218,52 +216,14 @@ foreach bw of local bwlistq {
 
 foreach bw of local bwlist {
 	eststo rdl_veh_A`bw'_no_rb: 	reg t_vehicle T D DT 		if bwA<=`bw' [aw=perwt], robust
-	eststo rdl_veh_B`bw'_no_rb: 	reg t_vehicle T D DT 		if bwB<=`bw' [aw=perwt], robust
 }
 
 foreach bw of local bwlistq {
 	eststo rdq_veh_A`bw'_no_rb: 	reg t_vehicle T D DT D2 D2T 	if bwA<=`bw' [aw=perwt], robust
-	eststo rdq_veh_B`bw'_no_rb: 	reg t_vehicle T D DT D2 D2T 	if bwB<=`bw' [aw=perwt], robust
-}
-
-* Demographic Controls
-
-foreach bw of local bwlist {
-	eststo rdl_veh_A`bw'_cA_rb: 	reg t_vehicle T D DT `clist'	if bwA<=`bw' [aw=perwt], robust
-	eststo rdl_veh_B`bw'_cA_rb: 	reg t_vehicle T D DT `clist'	if bwB<=`bw' [aw=perwt], robust
-}
-
-foreach bw of local bwlistq {
-	eststo rdq_veh_A`bw'_cA_rb: 	reg t_vehicle T D DT D2 D2T `clist'	if bwA<=`bw' [aw=perwt], robust
-	eststo rdq_veh_B`bw'_cA_rb: 	reg t_vehicle T D DT D2 D2T `clist'	if bwB<=`bw' [aw=perwt], robust
-}
-
-* Demographic Controls + State of Birth FE
-
-foreach bw of local bwlist {
-	eststo rdl_veh_A`bw'_cB_rb: 	reghdfe t_vehicle T D DT `clist'	if bwA<=`bw' [aw=perwt], a(bpl) vce(robust)
-	eststo rdl_veh_B`bw'_cB_rb: 	reghdfe t_vehicle T D DT `clist'	if bwB<=`bw' [aw=perwt], a(bpl) vce(robust)
-}
-
-foreach bw of local bwlistq {
-	eststo rdq_veh_A`bw'_cB_rb: 	reghdfe t_vehicle T D DT D2 D2T `clist'	if bwA<=`bw' [aw=perwt], a(bpl) vce(robust)
-	eststo rdq_veh_B`bw'_cB_rb: 	reghdfe t_vehicle T D DT D2 D2T `clist'	if bwB<=`bw' [aw=perwt], a(bpl) vce(robust)
-}
-
-* Demographic Controls + State of Birth FE + linc
-
-foreach bw of local bwlist {
-	eststo rdl_veh_A`bw'_cI_rb: 	reghdfe t_vehicle T D DT linc `clist'	if bwA<=`bw' [aw=perwt], a(bpl) vce(robust)
-	eststo rdl_veh_B`bw'_cI_rb: 	reghdfe t_vehicle T D DT linc `clist'	if bwB<=`bw' [aw=perwt], a(bpl) vce(robust)
-}
-
-foreach bw of local bwlistq {
-	eststo rdq_veh_A`bw'_cI_rb: 	reghdfe t_vehicle T D DT D2 D2T linc `clist'	if bwA<=`bw' [aw=perwt], a(bpl) vce(robust)
-	eststo rdq_veh_B`bw'_cI_rb: 	reghdfe t_vehicle T D DT D2 D2T linc `clist'	if bwB<=`bw' [aw=perwt], a(bpl) vce(robust)
 }
 
 ********************************
-** RD in commuting OUTPUT ******
+** RD OUTPUT              ******
 ********************************
 
 ** Set preferences
@@ -273,86 +233,44 @@ local tabprefs cells(b(star fmt(%9.4f)) se(par)) stats(r2_a N, fmt(%9.4f %9.0g) 
 ** Output display in TEX **
 
 * Driving, standard
-esttab rdl_dri_A??_no_rb using "./results/rd/dri_nocont_1o_regbw.tex", keep(T) booktabs replace `tabprefs' 
-esttab rdq_dri_A??_no_rb using "./results/rd/dri_nocont_2o_regbw.tex", keep(T) booktabs replace `tabprefs' 
+esttab rdl_dri_A??_no_rb using "./results/table_a3/dri_nocont_1o_regbw.tex", keep(T) booktabs replace `tabprefs' 
+esttab rdq_dri_A??_no_rb using "./results/table_a3/dri_nocont_2o_regbw.tex", keep(T) booktabs replace `tabprefs' 
 
-esttab rdl_dri_A??_cA_rb using "./results/rd/dri_demo_1o_regbw.tex", keep(T) booktabs replace `tabprefs' 
-esttab rdq_dri_A??_cA_rb using "./results/rd/dri_demo_2o_regbw.tex", keep(T) booktabs replace `tabprefs' 
+esttab rdl_dri_A??_cA_rb using "./results/table_a3/dri_demo_1o_regbw.tex", keep(T) booktabs replace `tabprefs' 
+esttab rdq_dri_A??_cA_rb using "./results/table_a3/dri_demo_2o_regbw.tex", keep(T) booktabs replace `tabprefs' 
 
-esttab rdl_dri_A??_cB_rb using "./results/rd/dri_demsob_1o_regbw.tex", keep(T) booktabs replace `tabprefs' 
-esttab rdq_dri_A??_cB_rb using "./results/rd/dri_demsob_2o_regbw.tex", keep(T) booktabs replace `tabprefs' 
+esttab rdl_dri_A??_cB_rb using "./results/table_a3/dri_demsob_1o_regbw.tex", keep(T) booktabs replace `tabprefs' 
+esttab rdq_dri_A??_cB_rb using "./results/table_a3/dri_demsob_2o_regbw.tex", keep(T) booktabs replace `tabprefs' 
 
-esttab rdl_dri_A??_cI_rb using "./results/rd/dri_demstinc_1o_regbw.tex", keep(T) booktabs replace `tabprefs' 
-esttab rdq_dri_A??_cI_rb using "./results/rd/dri_demstinc_2o_regbw.tex", keep(T) booktabs replace `tabprefs' 
+esttab rdl_dri_A??_cI_rb using "./results/table_a3/dri_demstinc_1o_regbw.tex", keep(T) booktabs replace `tabprefs' 
+esttab rdq_dri_A??_cI_rb using "./results/table_a3/dri_demstinc_2o_regbw.tex", keep(T) booktabs replace `tabprefs' 
 
 * Vehicle, standard
-esttab rdl_veh_A??_no_rb using "./results/rd/veh_nocont_1o_regbw.tex", keep(T) booktabs replace `tabprefs' 
-esttab rdq_veh_A??_no_rb using "./results/rd/veh_nocont_2o_regbw.tex", keep(T) booktabs replace `tabprefs' 
-
-esttab rdl_veh_A??_cA_rb using "./results/rd/veh_demo_1o_regbw.tex", keep(T) booktabs replace `tabprefs' 
-esttab rdq_veh_A??_cA_rb using "./results/rd/veh_demo_2o_regbw.tex", keep(T) booktabs replace `tabprefs' 
-
-esttab rdl_veh_A??_cB_rb using "./results/rd/veh_demsob_1o_regbw.tex", keep(T) booktabs replace `tabprefs' 
-esttab rdq_veh_A??_cB_rb using "./results/rd/veh_demsob_2o_regbw.tex", keep(T) booktabs replace `tabprefs' 
-
-esttab rdl_veh_A??_cI_rb using "./results/rd/veh_demstinc_1o_regbw.tex", keep(T) booktabs replace `tabprefs' 
-esttab rdq_veh_A??_cI_rb using "./results/rd/veh_demstinc_2o_regbw.tex", keep(T) booktabs replace `tabprefs' 
+esttab rdl_veh_A??_no_rb using "./results/table_a4/veh_nocont_1o_regbw.tex", keep(T) booktabs replace `tabprefs' 
+esttab rdq_veh_A??_no_rb using "./results/table_a4/veh_nocont_2o_regbw.tex", keep(T) booktabs replace `tabprefs' 
 
 * Transit, standard
-esttab rdl_trn_A??_no_rb using "./results/rd/tran_nocont_1o_regbw.tex",  keep(T) booktabs replace `tabprefs' 
-esttab rdq_trn_A??_no_rb using "./results/rd/tran_nocont_2o_regbw.tex", keep(T) booktabs replace `tabprefs' 
+esttab rdl_trn_A??_no_rb using "./results/table_a4/tran_nocont_1o_regbw.tex",  keep(T) booktabs replace `tabprefs' 
+esttab rdq_trn_A??_no_rb using "./results/table_a4/tran_nocont_2o_regbw.tex", keep(T) booktabs replace `tabprefs' 
 
 * Driving, alternate
-esttab rdl_dri_B??_no_rb using "./results/rd/dri_nocont_1o_altbw.tex", keep(T) booktabs replace `tabprefs' 
-esttab rdq_dri_B??_no_rb using "./results/rd/dri_nocont_2o_altbw.tex", keep(T) booktabs replace `tabprefs' 
+esttab rdl_dri_B??_no_rb using "./results/table_a5/dri_nocont_1o_altbw.tex", keep(T) booktabs replace `tabprefs' 
+esttab rdq_dri_B??_no_rb using "./results/table_a5/dri_nocont_2o_altbw.tex", keep(T) booktabs replace `tabprefs' 
 
-esttab rdl_dri_B??_cA_rb using "./results/rd/dri_demo_1o_altbw.tex", keep(T) booktabs replace `tabprefs' 
-esttab rdq_dri_B??_cA_rb using "./results/rd/dri_demo_2o_altbw.tex", keep(T) booktabs replace `tabprefs' 
+esttab rdl_dri_B??_cA_rb using "./results/table_a5/dri_demo_1o_altbw.tex", keep(T) booktabs replace `tabprefs' 
+esttab rdq_dri_B??_cA_rb using "./results/table_a5/dri_demo_2o_altbw.tex", keep(T) booktabs replace `tabprefs' 
 
-esttab rdl_dri_B??_cB_rb using "./results/rd/dri_demsob_1o_altbw.tex", keep(T) booktabs replace `tabprefs' 
-esttab rdq_dri_B??_cB_rb using "./results/rd/dri_demsob_2o_altbw.tex", keep(T) booktabs replace `tabprefs' 
+esttab rdl_dri_B??_cB_rb using "./results/table_a5/dri_demsob_1o_altbw.tex", keep(T) booktabs replace `tabprefs' 
+esttab rdq_dri_B??_cB_rb using "./results/table_a5/dri_demsob_2o_altbw.tex", keep(T) booktabs replace `tabprefs' 
 
-esttab rdl_dri_B??_cI_rb using "./results/rd/dri_demstinc_1o_altbw.tex", keep(T) booktabs replace `tabprefs' 
-esttab rdq_dri_B??_cI_rb using "./results/rd/dri_demstinc_2o_altbw.tex", keep(T) booktabs replace `tabprefs' 
-
-* Vehicle, alternate
-esttab rdl_veh_B??_no_rb using "./results/rd/veh_nocont_1o_altbw.tex", keep(T) booktabs replace `tabprefs' 
-esttab rdq_veh_B??_no_rb using "./results/rd/veh_nocont_2o_altbw.tex", keep(T) booktabs replace `tabprefs' 
-
-esttab rdl_veh_B??_cA_rb using "./results/rd/veh_demo_1o_altbw.tex", keep(T) booktabs replace `tabprefs' 
-esttab rdq_veh_B??_cA_rb using "./results/rd/veh_demo_2o_altbw.tex", keep(T) booktabs replace `tabprefs' 
-
-esttab rdl_veh_B??_cB_rb using "./results/rd/veh_demsob_1o_altbw.tex", keep(T) booktabs replace `tabprefs' 
-esttab rdq_veh_B??_cB_rb using "./results/rd/veh_demsob_2o_altbw.tex", keep(T) booktabs replace `tabprefs' 
-
-esttab rdl_veh_B??_cI_rb using "./results/rd/veh_demstinc_1o_altbw.tex", keep(T) booktabs replace `tabprefs' 
-esttab rdq_veh_B??_cI_rb using "./results/rd/veh_demstinc_2o_altbw.tex", keep(T) booktabs replace `tabprefs' 
-
-* Transit, alternate
-esttab rdl_trn_B??_no_rb using "./results/rd/tran_nocont_1o_altbw.tex",  keep(T) booktabs replace `tabprefs' 
-esttab rdq_trn_B??_no_rb using "./results/rd/tran_nocont_2o_altbw.tex", keep(T) booktabs replace `tabprefs' 
+esttab rdl_dri_B??_cI_rb using "./results/table_a5/dri_demstinc_1o_altbw.tex", keep(T) booktabs replace `tabprefs' 
+esttab rdq_dri_B??_cI_rb using "./results/table_a5/dri_demstinc_2o_altbw.tex", keep(T) booktabs replace `tabprefs' 
 
 eststo clear 
 
 ********************************
 ** RD HETEROGENEITY ************
 ********************************
-
-** Gender = Female **
-foreach bw of local bwlist {
-	eststo hetrdl_dri_fem_A`bw': reg t_drive T D DT if bwA<=`bw' & sex==2 [aw=perwt], vce(robust)
-}
-foreach bw of local bwlistq {
-	eststo hetrdq_dri_fem_A`bw': reg t_drive T D DT D2 D2T if bwA<=`bw' & sex==2 [aw=perwt], vce(robust)
-}
-
-** Race = White **
-foreach bw of local bwlist {
-	eststo hetrdl_dri_whi_A`bw': reg t_drive T D DT if bwA<=`bw' & nwhite==0 [aw=perwt], vce(robust)
-}
-foreach bw of local bwlistq {
-	eststo hetrdq_dri_whi_A`bw': reg t_drive T D DT D2 D2T if bwA<=`bw' & nwhite==0 [aw=perwt], vce(robust)
-}
 
 ** Race = Black **
 foreach bw of local bwlist {
@@ -368,14 +286,6 @@ foreach bw of local bwlist {
 }
 foreach bw of local bwlistq {
 	eststo hetrdq_dri_noc_A`bw': reg t_drive T D DT D2 D2T if bwA<=`bw' & d_col==0 [aw=perwt], vce(robust)
-}
-
-** School = College **
-foreach bw of local bwlist {
-	eststo hetrdl_dri_col_A`bw':reg t_drive T D DT if bwA<=`bw' & d_col==1 [aw=perwt], vce(robust)
-}
-foreach bw of local bwlistq {
-	eststo hetrdq_dri_col_A`bw': reg t_drive T D DT D2 D2T if bwA<=`bw' & d_col==1 [aw=perwt], vce(robust)
 }
 
 /*
@@ -394,14 +304,6 @@ foreach bw of local bwlistq {
 	eststo hetrdq_dri_nMA_A`bw': reg t_drive T D DT D2 D2T if bwA<=`bw' & metro==1 [aw=perwt], vce(robust)
 }
 
-** In MA, outside PC **
-foreach bw of local bwlist {
-	eststo hetrdl_dri_nPC_A`bw': reg t_drive T D DT if bwA<=`bw' & metro==3 [aw=perwt], vce(robust)
-}
-foreach bw of local bwlistq {
-	eststo hetrdq_dri_nPC_A`bw': reg t_drive T D DT D2 D2T if bwA<=`bw' & metro==3 [aw=perwt], vce(robust)
-}
-
 ** In PC **
 foreach bw of local bwlist {
 	eststo hetrdl_dri_iPC_A`bw': reg t_drive T D DT if bwA<=`bw' & metro==2 [aw=perwt], vce(robust)
@@ -410,55 +312,22 @@ foreach bw of local bwlistq {
 	eststo hetrdq_dri_iPC_A`bw': reg t_drive T D DT D2 D2T if bwA<=`bw' & metro==2 [aw=perwt], vce(robust)
 }
 
-** Below median wage**
-foreach bw of local bwlist {
-	eststo hetrdl_dri_lmw_A`bw': reg t_drive T D DT if bwA<=`bw' & w_wage_con<=25000 [aw=perwt], vce(robust)
-}
-foreach bw of local bwlistq {
-	eststo hetrdq_dri_lmw_A`bw': reg t_drive T D DT D2 D2T if bwA<=`bw' & w_wage_con<=25000 [aw=perwt], vce(robust)
-}
-
-** Above median wage**
-foreach bw of local bwlist {
-	eststo hetrdl_dri_gmw_A`bw': reg t_drive T D DT if bwA<=`bw' & w_wage_con>25000 [aw=perwt], vce(robust)
-}
-foreach bw of local bwlistq {
-	eststo hetrdq_dri_gmw_A`bw': reg t_drive T D DT D2 D2T if bwA<=`bw' & w_wage_con>25000 [aw=perwt], vce(robust)
-}
 
 ********************************
 ** RD HETEROGENEITY OUTPUT *****
 ********************************
 
-esttab hetrdl_dri_fem_A?? using "./results/rd/hetdri_fem_lin.tex",  keep(T) booktabs replace `tabprefs'
-esttab hetrdq_dri_fem_A?? using "./results/rd/hetdri_fem_quad.tex", keep(T) booktabs replace `tabprefs'
+esttab hetrdl_dri_blk_A?? using "./results/table_a6/hetdri_blk_lin.tex",  keep(T) booktabs replace `tabprefs'
+esttab hetrdq_dri_blk_A?? using "./results/table_a6/hetdri_blk_quad.tex", keep(T) booktabs replace `tabprefs'
 
-esttab hetrdl_dri_whi_A?? using "./results/rd/hetdri_whi_lin.tex",  keep(T) booktabs replace `tabprefs'
-esttab hetrdq_dri_whi_A?? using "./results/rd/hetdri_whi_quad.tex", keep(T) booktabs replace `tabprefs'
+esttab hetrdl_dri_noc_A?? using "./results/table_a6/hetdri_noc_lin.tex",  keep(T) booktabs replace `tabprefs'
+esttab hetrdq_dri_noc_A?? using "./results/table_a6/hetdri_noc_quad.tex", keep(T) booktabs replace `tabprefs'
 
-esttab hetrdl_dri_blk_A?? using "./results/rd/hetdri_blk_lin.tex",  keep(T) booktabs replace `tabprefs'
-esttab hetrdq_dri_blk_A?? using "./results/rd/hetdri_blk_quad.tex", keep(T) booktabs replace `tabprefs'
+esttab hetrdl_dri_nMA_A?? using "./results/table_a6/hetdri_nMA_lin.tex",  keep(T) booktabs replace `tabprefs'
+esttab hetrdq_dri_nMA_A?? using "./results/table_a6/hetdri_nMA_quad.tex", keep(T) booktabs replace `tabprefs'
 
-esttab hetrdl_dri_noc_A?? using "./results/rd/hetdri_noc_lin.tex",  keep(T) booktabs replace `tabprefs'
-esttab hetrdq_dri_noc_A?? using "./results/rd/hetdri_noc_quad.tex", keep(T) booktabs replace `tabprefs'
-
-esttab hetrdl_dri_col_A?? using "./results/rd/hetdri_col_lin.tex",  keep(T) booktabs replace `tabprefs'
-esttab hetrdq_dri_col_A?? using "./results/rd/hetdri_col_quad.tex", keep(T) booktabs replace `tabprefs'
-
-esttab hetrdl_dri_nMA_A?? using "./results/rd/hetdri_nMA_lin.tex",  keep(T) booktabs replace `tabprefs'
-esttab hetrdq_dri_nMA_A?? using "./results/rd/hetdri_nMA_quad.tex", keep(T) booktabs replace `tabprefs'
-
-esttab hetrdl_dri_nPC_A?? using "./results/rd/hetdri_nPC_lin.tex",  keep(T) booktabs replace `tabprefs'
-esttab hetrdq_dri_nPC_A?? using "./results/rd/hetdri_nPC_quad.tex", keep(T) booktabs replace `tabprefs'
-
-esttab hetrdl_dri_iPC_A?? using "./results/rd/hetdri_iPC_lin.tex",  keep(T) booktabs replace `tabprefs'
-esttab hetrdq_dri_iPC_A?? using "./results/rd/hetdri_iPC_quad.tex", keep(T) booktabs replace `tabprefs'
-
-esttab hetrdl_dri_lmw_A?? using "./results/rd/hetdri_lmw_lin.tex",  keep(T) booktabs replace `tabprefs'
-esttab hetrdq_dri_lmw_A?? using "./results/rd/hetdri_lmw_quad.tex", keep(T) booktabs replace `tabprefs'
-
-esttab hetrdl_dri_gmw_A?? using "./results/rd/hetdri_gmw_lin.tex",  keep(T) booktabs replace `tabprefs'
-esttab hetrdq_dri_gmw_A?? using "./results/rd/hetdri_gmw_quad.tex", keep(T) booktabs replace `tabprefs'
+esttab hetrdl_dri_iPC_A?? using "./results/table_a6/hetdri_iPC_lin.tex",  keep(T) booktabs replace `tabprefs'
+esttab hetrdq_dri_iPC_A?? using "./results/table_a6/hetdri_iPC_quad.tex", keep(T) booktabs replace `tabprefs'
 
 eststo clear
 
@@ -468,7 +337,7 @@ eststo clear
 ********************************
 
 preserve 
-	drop 	D D2 T bwA bwB DT D2T linc nwhtie 
+	drop 	D D2 T bwA bwB DT D2T linc nwhite 
 	** RD variables
 	gen 	D 	= 1959 - birthyr 	/* D is age in 1959 */
 	gen		D2	= D*D
@@ -510,8 +379,8 @@ preserve
 
 	local tabprefs cells(b(star fmt(%9.4f)) se(par)) stats(r2_a N, fmt(%9.4f %9.0g) labels(R-squared)) legend label starlevels(+ 0.10 * 0.05 ** 0.01) 
 
-	esttab rdl_dri_A??_1974 using "./results/rd/dri_1o_1974.tex", keep(T) booktabs replace `tabprefs' 
-	esttab rdq_dri_A??_1974 using "./results/rd/dri_2o_1974.tex", keep(T) booktabs replace `tabprefs' 
+	esttab rdl_dri_A??_1974 using "./results/other/rd1974_dri_1o.tex", keep(T) booktabs replace `tabprefs' 
+	esttab rdq_dri_A??_1974 using "./results/other/rd1974_dri_2o.tex", keep(T) booktabs replace `tabprefs' 
 	
 	estimates clear
 restore
@@ -545,16 +414,16 @@ foreach y of numlist 15 {
 	local gphlist yr_age`y' if yr_age`y'>=1965 & yr_age`y'<=1990, connect(d) xline(1973.81 1974.64 1979.16 1980.54, lc(red) lp(dash)) xline(1973.85 1974.6 1979.2 1980.5, lc(red) lp(dot))
 
 	scatter t_drive 	`gphlist' name(t1, replace) ytitle("Drive to Work") 
-	graph export "./results/rd/tgraphs`y'_drive.png", replace
+	graph export "./results/figures/tgraphs`y'_drive.png", replace
 	
 	scatter t_transit 	`gphlist' name(t2, replace) ytitle("Take Transit to Work")
-	graph export "./results/rd/tgraphs`y'_transit.png", replace
+	graph export "./results/figures/tgraphs`y'_transit.png", replace
 	
 	scatter t_vehicle   `gphlist' name(t3, replace) ytitle("Household Vehicle Access")
-	graph export "./results/rd/tgraphs`y'_vehicle.png", replace
+	graph export "./results/figures/tgraphs`y'_vehicle.png", replace
 
 	graph combine t1 t2 t3, row(3) xcommon saving(tgraphs_127, replace) ysize(8.5)
-	graph export "./results/rd/tgraphs15_main3outcomes.png", replace
+	graph export "./results/figures/tgraphs15_main3outcomes.png", replace
 
 	scatter t_walk 		`gphlist' name(t4, replace) ytitle("Walk to Work")
 	scatter t_workathome `gphlist'name(t5, replace) ytitle("Work at Home")
@@ -562,20 +431,17 @@ foreach y of numlist 15 {
 	scatter t_timedr 	`gphlist' name(t7, replace) ytitle("Mean Drive Time")
 
 	graph combine t4 t5 t6 t7, row(3) xcommon title("Other Commuting Outcomes in 2000") saving(tgraphs_other, replace)
-	graph export "./results/rd/tgraphs`y'_other.png", replace
+	graph export "./results/figures/tgraphs`y'_other.png", replace
 	
 	scatter e_emp 		`gphlist' name(e1, replace) ytitle("Employed")
 	scatter e_lfp 		`gphlist' name(e2, replace) ytitle("Labor Force Part.")
-	*scatter e_hrs_unc 	yr_age`y' if yr_age`y'>=1970 & yr_age`y'<=1990, connect(d) xline(1979.2 1980.5, lc(red)) name(e5, replace) ytitle("Hours Worked 2000, All")
 	scatter e_hrs_con 	`gphlist' name(e6, replace) ytitle("Hours Worked if Employed")
-	*scatter e_wks_unc 	yr_age`y' if yr_age`y'>=1970 & yr_age`y'<=1990, connect(d) xline(1979.2 1980.5, lc(red)) name(e7, replace) ytitle("Weeks Worked 1999, All")
 	scatter e_wks_con 	`gphlist' name(e8, replace) ytitle("Weeks Worked if Employed") ylab(46(0.5)48)
-	*scatter w_wage_unc	yr_age`y' if yr_age`y'>=1970 & yr_age`y'<=1990, connect(d) xline(1979.2 1980.5, lc(red)) name(w1, replace) ytitle("Wage Income 2000, All")
 	scatter w_wage_con 	`gphlist' name(w2, replace) ytitle("Wage Income if Employed") 
 	scatter w_hhi  		`gphlist' name(w3, replace) ytitle("Household Income")
 
 	graph combine e1 e2 e6 e8 w2 w3, row(3) xcommon title("Labor Market in 2000") saving(eWgraphs, replace) xsize(5)
-	graph export "./results/rd/eWgraphs`y'.png", replace
+	graph export "./results/figures/eWgraphs`y'.png", replace
 
 	scatter h_own  		`gphlist' name(h1, replace) ytitle("Owned Home")
 	scatter h_rent  	`gphlist' name(h2, replace) ytitle("Rented")
@@ -583,7 +449,7 @@ foreach y of numlist 15 {
 	scatter h_rentpr 	`gphlist' name(h4, replace) ytitle("Contract Rent")
 
 	graph combine h1 h2 h3 h4, row(2) xcommon title("Housing in 2000") saving(hgraphs, replace)
-	graph export "./results/rd/hgraphs`y'.png", replace
+	graph export "./results/figures/hgraphs`y'.png", replace
 
 	scatter d_marr  `gphlist' name(d1, replace) ytitle("Married")
 	scatter d_div 	`gphlist' name(d2, replace) ytitle("Divorced")
@@ -591,7 +457,7 @@ foreach y of numlist 15 {
 	scatter d_col 	`gphlist' name(d4, replace) ytitle("Graduated College")
 
 	graph combine d1 d2 d3 d4, row(2) xcommon title("Education and Household in 2000") saving(dgraphs, replace)
-	graph export "./results/rd/dgraphs`y'.png", replace
+	graph export "./results/figures/dgraphs`y'.png", replace
 
 	graph close 
 	graph drop _all
@@ -662,7 +528,7 @@ twoway (scatter _b_T inc_centile,  msize(tiny)) || (rspike hse_bon lse_bon inc_c
 		xti("Income Decile in 2000") yti("RD Effect") ///
 		saving(RDincome_het, replace)
 
-graph export RDincome_het.png, replace
+graph export "./results/figures/RDincome_het.png", replace
 		
 twoway (scatter _b_T inc_centile,  msize(tiny)) || (rspike hse_bon lse_bon inc_centile) || ///
 		(lpoly b_T100 inc_centile [aw=n_bin100]), ///
@@ -671,13 +537,21 @@ twoway (scatter _b_T inc_centile,  msize(tiny)) || (rspike hse_bon lse_bon inc_c
 		xti("Income Centile in 2000") yti("Estimated RD Effect") ///
 		saving(RDincome_het2, replace)
 		
-graph export "./results/rd/RDincome_het2.png", replace
+graph export "./results/figures/RDincome_het2.png", replace
 
 graph close 
 
 
 **********************************
 ** Close **
+
+erase dgraphs.gph 
+erase eWgraphs.gph 
+erase hgraphs.gph 
+erase RDincome_het.gph 
+erase RDincome_het2.gph 
+erase tgraphs_127.gph 
+erase tgraphs_other.gph 
 
 capture noisily log close
 clear

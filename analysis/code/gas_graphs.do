@@ -1,6 +1,5 @@
 *************************************************************
 ** Summary materials for gas prices
-** CS March 2019
 *************************************************************
 
 ************************************
@@ -68,7 +67,7 @@ twoway line d2gp_bp year, lcolor(gs12) || ///
 	   ylab(-0.5 "-50%" 0 "0%" 0.5 "50%" 1 "100%")
 graph export "./results/figures/gasprice_variation_picture_d2.png", replace	
 
-erase level.gph 
+erase real.gph 
 erase d1.gph 
 erase d2.gph
 clear
