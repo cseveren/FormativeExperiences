@@ -461,6 +461,81 @@ local 	tabprefs cells(b(star fmt(%9.4f)) se(par)) stats(r2_a N, fmt(%9.4f %9.0g)
 	
 esttab 	tdrop_? using "./results/other/dropoilcrises.tex", booktabs replace `tabprefs'
 
+est clear
+
+** ** ** **
+/* Other robustness */
+
+preserve
+	clear
+	insheet using 	"./data/state_pops/nhgis0081_ds104_1980_state.csv", c
+	keep 	statea c7l001
+	rename 	statea statefip
+	rename	c7l001 pop
+	tempfile p1980
+	save	"`p1980'", replace
+	
+	use 	"./output/gasprice_prepped.dta", clear
+	merge 	m:1 statefip using "`p1980'"
+	collapse (mean) gas_price_99 d1gp_bp d2gp_bp [aw=pop], by(year)
+	rename gas_price_99 rgp_national 
+	rename d1gp_bp d1gp_national
+	rename d2gp_bp d2gp_national
+	tempfile natprice
+	save	"`natprice'", replace
+	tab 	rgp_national 
+	tab 	year
+restore
+
+rename 	yr_age17 year
+merge m:1 year using "`natprice'"
+keep if	_merge==3
+drop  	d1gp_national rgp_national _merge
+rename  d2gp_national d2gp17_national
+rename 	year yr_age17
+
+rename yr_age16 year
+merge m:1 year using "`natprice'"
+drop if _merge==2
+drop  	d1gp_national d2gp_national _merge
+rename   rgp_national rgp16_national
+rename year yr_age16
+
+
+** Multiple treatments + national shocks
+eststo mt_1: reghdfe t_drive d2gp_bp_at17 real_gp_at16 						if m_samestate==1 [aw=perwt], a(bpl censusyear_all age) cluster(bpl)	
+eststo mt_2: reghdfe t_drive d2gp_bp_at17 real_gp_at16 d_* lhhi c.byr##c.byr if m_samestate==1 [aw=perwt], a(stcenyr_fe age) cluster(bpl)
+eststo mt_3: reghdfe t_drive d2gp17_national 						if m_samestate==1 [aw=perwt], a(bpl censusyear_all age) cluster(bpl)	
+eststo mt_4: reghdfe t_drive d2gp17_national d_* lhhi c.byr##c.byr if m_samestate==1 [aw=perwt], a(stcenyr_fe age) cluster(bpl)
+eststo mt_5: reghdfe t_drive rgp16_national 						if m_samestate==1 [aw=perwt], a(bpl censusyear_all age) cluster(bpl)	
+eststo mt_6: reghdfe t_drive rgp16_national d_* lhhi c.byr##c.byr if m_samestate==1 [aw=perwt], a(stcenyr_fe age) cluster(bpl)
+
+local 	tabprefs cells(b(star fmt(%9.4f)) se(par)) stats(r2_a N, fmt(%9.4f %9.0g) labels(R-squared)) legend label starlevels(+ 0.10 * 0.05 ** 0.01 *** 0.001) 
+	
+esttab 	mt_? using "./results/other/census_multtreatment_and_national.tex", booktabs replace `tabprefs'
+est clear
+
+** SEs
+
+eststo se_1: reghdfe t_drive d2gp_bp_at17 						if m_samestate==1 [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
+eststo se_2: reghdfe t_drive d2gp_bp_at17 						if m_samestate==1 [aw=perwt], a(bpl censusyear_all age) cluster(byr)	
+eststo se_3: reghdfe t_drive d2gp_bp_at17 						if m_samestate==1 [aw=perwt], a(bpl censusyear_all age) cluster(bpl byr)
+eststo se_4: reghdfe t_drive d2gp_bp_at17 d_* lhhi c.byr##c.byr  if m_samestate==1 [aw=perwt], a(stcenyr_fe age) cluster(bpl)
+eststo se_5: reghdfe t_drive d2gp_bp_at17 d_* lhhi c.byr##c.byr  if m_samestate==1 [aw=perwt], a(stcenyr_fe age) cluster(byr)
+eststo se_6: reghdfe t_drive d2gp_bp_at17 d_* lhhi c.byr##c.byr  if m_samestate==1 [aw=perwt], a(stcenyr_fe age) cluster(bpl byr)
+
+eststo se_7: reghdfe t_drive real_gp_at16 						if m_samestate==1 [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
+eststo se_8: reghdfe t_drive real_gp_at16 						if m_samestate==1 [aw=perwt], a(bpl censusyear_all age) cluster(byr)
+eststo se_9: reghdfe t_drive real_gp_at16 						if m_samestate==1 [aw=perwt], a(bpl censusyear_all age) cluster(bpl byr)	
+eststo se_10: reghdfe t_drive real_gp_at16 d_* lhhi c.byr##c.byr  if m_samestate==1 [aw=perwt], a(stcenyr_fe age) cluster(bpl)
+eststo se_11: reghdfe t_drive real_gp_at16 d_* lhhi c.byr##c.byr  if m_samestate==1 [aw=perwt], a(stcenyr_fe age) cluster(byr)
+eststo se_12: reghdfe t_drive real_gp_at16 d_* lhhi c.byr##c.byr  if m_samestate==1 [aw=perwt], a(stcenyr_fe age) cluster(bpl byr)
+
+local 	tabprefs cells(b(star fmt(%9.4f)) se(par)) stats(r2_a N, fmt(%9.4f %9.0g) labels(R-squared)) legend label starlevels(+ 0.10 * 0.05 ** 0.01 *** 0.001) 
+	
+esttab 	se_* using "./results/other/census_altSEs.tex", booktabs replace `tabprefs'
+est clear
+
 **************************************************
 /* Mediation Analysis and Additional Robustness */
 

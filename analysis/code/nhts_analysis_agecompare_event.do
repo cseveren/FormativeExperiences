@@ -189,59 +189,7 @@ compress
 ** Panel Regressions 		 ***
 ********************************
 
-** sandbox ** ** **
-reghdfe ldens30 d1gp_now_at15 	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-reghdfe ldens30 d1gp_now_at16 	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-reghdfe ldens30 d1gp_now_at17 	[aw=expfllpr], a(stateid hhi_bin_yr age) cluster(stateid)
-reghdfe ldens30 d1gp_now_at18	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-
-reghdfe ldens_all d1gp_now_at16 	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-reghdfe ldens30 d1gp_now_at17 	[aw=expfllpr], a(stateid hhi_bin_yr age) cluster(stateid)
-
-reghdfe ldens d1gp_now_at17 	[aw=expfllpr], a(stateid hhi_bin_yr age) cluster(stateid)
-reghdfe ldens30 d1gp_now_at17 	[aw=expfllpr], a(stateid hhi_bin_yr age) cluster(stateid)
-reghdfe ldens_all d1gp_now_at17 	[aw=expfllpr], a(stateid hhi_bin_yr age) cluster(stateid)
-
-reghdfe ldens d1gp_now_at18 	[aw=expfllpr], a(stateid hhi_bin_yr age) cluster(stateid)
-reghdfe ldens30 d1gp_now_at18 	[aw=expfllpr], a(stateid hhi_bin_yr age) cluster(stateid)
-reghdfe ldens_all d1gp_now_at18 	[aw=expfllpr], a(stateid hhi_bin_yr age) cluster(stateid)
-
-reghdfe ldens d1gp_now_at17 	[aw=expfllpr], a(stateid hhi_bin_yr age) cluster(stateid)
-reghdfe ldens d1gp_now_at17 	[aw=expfllpr], a(stsamyr_fe age hhi_bin_yr) cluster(stateid)
-
-reghdfe urban_bin d1gp_now_at17 	[aw=expfllpr], a(stateid hhi_bin_yr age) cluster(stateid)
-reghdfe urban_bin d1gp_now_at17 	[aw=expfllpr], a(stsamyr_fe age hhi_bin_yr) cluster(stateid)
-
-reghdfe ldens d1gp_now_at17 urban_bin	[aw=expfllpr], a(stateid hhi_bin_yr age) cluster(stateid)
-reghdfe ldens d1gp_now_at17 urban_bin	[aw=expfllpr], a(stsamyr_fe age hhi_bin_yr) cluster(stateid)
-
-
-reghdfe lvmt_pc d1gp_now_at17 if urban_bin==0	[aw=expfllpr], a(stateid hhi_bin_yr age) cluster(stateid)
-reghdfe lvmt_pc d1gp_now_at17 if urban_bin==1	[aw=expfllpr], a(stateid hhi_bin_yr age) cluster(stateid)
-
-reghdfe ldens d1gp_now_at17 if urban_bin==0	[aw=expfllpr], a(stateid hhi_bin_yr age) cluster(stateid)
-reghdfe ldens d1gp_now_at17 if urban_bin==1	[aw=expfllpr], a(stateid hhi_bin_yr age) cluster(stateid)
-
-
-reghdfe ldens d1gp_now_at17 urban_bin	[aw=expfllpr], a(stsamyr_fe age hhi_bin_yr) cluster(stateid)
-
-reghdfe lvmt_pc d1gp_now_at17 [aw=expfllpr], a(stateid hhi_bin_yr age) cluster(stateid)
-
-rifhdreg lvmt_pc d1gp_now_at17 [aw=expfllpr], rif(q(90)) abs(stateid hhi_bin_yr age) cluster(stateid)
-rifhdreg lvmt_pc d1gp_now_at17 [aw=expfllpr], rif(q(75)) abs(stateid hhi_bin_yr age) cluster(stateid)
-rifhdreg lvmt_pc d1gp_now_at17 [aw=expfllpr], rif(q(50)) abs(stateid hhi_bin_yr age) cluster(stateid)
-rifhdreg lvmt_pc d1gp_now_at17 [aw=expfllpr], rif(q(25)) abs(stateid hhi_bin_yr age) cluster(stateid)
-rifhdreg lvmt_pc d1gp_now_at17 [aw=expfllpr], rif(q(10)) abs(stateid hhi_bin_yr age) cluster(stateid)
-
-rifhdreg ldens d1gp_now_at17 [aw=expfllpr], rif(q(90)) abs(stateid hhi_bin_yr age) cluster(stateid)
-rifhdreg ldens d1gp_now_at17 [aw=expfllpr], rif(q(75)) abs(stateid hhi_bin_yr age) cluster(stateid)
-rifhdreg ldens d1gp_now_at17 [aw=expfllpr], rif(q(50)) abs(stateid hhi_bin_yr age) cluster(stateid)
-rifhdreg ldens d1gp_now_at17 [aw=expfllpr], rif(q(25)) abs(stateid hhi_bin_yr age) cluster(stateid)
-rifhdreg ldens d1gp_now_at17 [aw=expfllpr], rif(q(10)) abs(stateid hhi_bin_yr age) cluster(stateid)
-
-
 ** ** ** **
-
 
 eststo tc1a_1: reghdfe lvmt_pc d1gp_now_at14 d1gp_now_at15 d1gp_now_at16 d1gp_now_at17 ///
 					d1gp_now_at18 d1gp_now_at19 [aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
@@ -250,7 +198,7 @@ eststo tc1a_2: reghdfe lvmt_pc d1gp_now_at13 d1gp_now_at14 d1gp_now_at15 d1gp_no
 
 local 	tabprefs cells(b(star fmt(%9.4f)) se(par)) stats(r2 N, fmt(%9.4f %9.0g) labels(R-squared)) legend label starlevels(+ 0.10 * 0.05 ** 0.01 *** 0.001) 
 
-esttab 	tc1a_* using "./results/panel_nhts/compare_reald1ages_13-20.tex", booktabs replace `tabprefs' 
+esttab 	tc1a_* using "./results/table4/nhts_reald1ages_13-20.tex", booktabs replace `tabprefs' 
 
 eststo clear					
 					
@@ -260,7 +208,7 @@ local timevars d1gp_now_at13 d1gp_now_at14 d1gp_now_at15 d1gp_now_at16 d1gp_now_
 
 reghdfe lvmt_pc `timevars' [aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
 
-postfile handle str32 varname float(b se) using "./results/panel_nhts/compare_reald1ages_long", replace
+postfile handle str32 varname float(b se) using "./results/figures/nhts_reald1ages_long", replace
 foreach v of local timevars {
 	post handle ("`v'") (_b[`v']) (_se[`v'])
 }

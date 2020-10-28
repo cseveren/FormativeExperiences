@@ -58,10 +58,10 @@ gen		min_age_full_round = round(min_age_full)
 gen		min_int_age_round = round(min_int_age)
 
 estpost tab year min_age_full_round
-esttab using "./results/dl_summary_full", unstack cell(b) booktabs replace 
+esttab using "./results/table_a1/dl_summary_full", unstack cell(b) booktabs replace 
 
 estpost tab year min_int_age_round
-esttab using "./results/dl_summary_provisional", unstack cell(b) booktabs replace 
+esttab using "./results/table_a1/dl_summary_provisional", unstack cell(b) booktabs replace 
 
 
 merge 1:1 stfip year using "`statepops'"
@@ -71,10 +71,10 @@ drop	_merge
 collapse (mean) min_age_full min_int_age [aw=pop], by(year)
 
 estpost tabstat min_age_full, by(year)
-esttab  using "./results/dl_ave_full", main(mean) booktabs replace 
+esttab  using "./results/table_a1/dl_ave_full", main(mean) booktabs replace 
 
 estpost tabstat min_int_age, by(year)
-esttab  using "./results/dl_ave_int", main(mean) booktabs replace
+esttab  using "./results/table_a1/dl_ave_int", main(mean) booktabs replace
 
 ********************
 clear
@@ -92,4 +92,4 @@ rename  y lp_age
 gen lp_age_round = round(lp_age)
 
 estpost tab year lp_age_round
-esttab using "./results/dl_summary_lp", unstack cell(b) booktabs replace 
+esttab using "./results/table_a1/dl_summary_lp", unstack cell(b) booktabs replace 

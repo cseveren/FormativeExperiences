@@ -2,12 +2,13 @@
 ** This file makes performs panel analyses from all census 
 ** data years.
 *************************************************************
-cd 	"/home/c1cns02/Desktop/stata_work/Driving_Gas_Shocks_mnanalysis/"
+clear
 
-use 	"censusall_prepped.dta", clear
-do 	"mn_wrapper_eval.do"
-drop 	perwt
-rename 	perwt_orig perwt
+local 	logf "`1'" 
+log using "`logf'", replace text
+
+use 	"./output/censusall_prepped.dta", clear
+
 ********************************
 ** Ensure Sample Restrictions
 
@@ -16,6 +17,8 @@ drop if farm==2
 
 drop if age<=24
 drop if age>54
+
+*sample 20
 
 ********************************
 ********************************
@@ -40,7 +43,7 @@ local 	agelist 16 17
 foreach age of local agelist {
 	gen 	year = birthyr + `age'
 
-	merge m:1 year statefip using "gasprice_prepped.dta", keepusing(gas_price_99 d1gp_bp d2gp_bp) gen(_merge`age')
+	merge m:1 year statefip using "./output/gasprice_prepped.dta", keepusing(gas_price_99 d1gp_bp d2gp_bp) gen(_merge`age')
 
 	rename	gas_price_99 real_gp_at`age'
 	rename	d1gp_bp  d1gp_bp_at`age'
@@ -84,7 +87,7 @@ compress
 
 preserve
 	** Gas Price Changes
-	use 	"gasprice_prepped.dta", clear
+	use 	"./output/gasprice_prepped.dta", clear
 	keep	statefip year d1gp_bp
 	rename	d1gp_bp d1gp_bp_
 	reshape wide d1gp_bp_, i(statefip) j(year)
@@ -178,20 +181,22 @@ compress
 gen float aexp=1
 
 * Make sure code works
-preserve
+/* preserve
 	sample 0.5
+	do 		"$dof/analysis/code/cef/mn_wrapper_eval.do"
 	mat A = (0.89,-0.2,1)
 
 	mn_wrapper_eval t_drive aexp age_* bpl_* cy_* if insample_samestate==1 [aw=perwt], tfirst(0) tlast(38) expvar(d1gp_bp) awts(wt) init3(A)
-restore
+restore */
 
 * Grid Search
 
-preserve
+/* preserve
 	replace aexp = 0
 	reg 	t_drive age_* bpl_* cy_*
 	predict td_resids, r
-
+	do 		"$dof/analysis/code/cef/mn_wrapper_eval.do"
+	
 	matrix 	P = J(21,17,.)
 
 	local 	i = 1
@@ -208,11 +213,12 @@ preserve
 	}
 
 	matrix 	list P, format(%2.1f)
-restore
+restore */
 
+do 		"$dof/analysis/code/cef/mn_wrapper_eval.do"
 
 * Final optimization
-* APPROACH A
+* APPROACH A * * Take whichever result is the minimum of A or B in terms of RSS *
 
 sum t_drive if insample_samestate==1 [aw=perwt]
 replace aexp=0
@@ -225,7 +231,7 @@ mat 	Af = (D[1,92],-0.01,-1, D[1,1..91])
 mn_wrapper_eval t_drive aexp age_* bpl_* cy_* if insample_samestate==1 [aw=perwt], tfirst(0) tlast(38) expvar(d1gp_bp) awts(wt) initall(Af)
 
 
-* APPROACH B
+* APPROACH B *
 reg 	t_drive age_* bpl_* cy_* if insample_samestate==1 [aw=perwt]
 predict td_resids, r
 
@@ -238,38 +244,6 @@ mat 	C2 = e(b)
 
 mat 	Af = (C1[1,92]+C2[1,1],C2[1,2],C2[1,3], C1[1,1..91])
 mn_wrapper_eval t_drive aexp age_* bpl_* cy_* if insample_samestate==1 [aw=perwt], tfirst(0) tlast(38) expvar(d1gp_bp) awts(wt) initall(Af)
-
-
-****** STOP ********
-
-
-
-
-
-
-
-
-
-
-
-** -0.011391, -0.9882452
-
-gen  	t_drivealt1 = t_drive + 0.011391*aexp
-reg 	t_drivealt1 age_* bpl_* cy_* if insample_samestate==1 [aw=perwt]
-predict	resid_1, r
-
-mat 	Af = (0,-0.011391,-0.9882452)
-mn_wrapper_eval resid_1 aexp if insample_samestate==1 [aw=perwt], tfirst(0) tlast(38) expvar(d1gp_bp) awts(wt) init3(Af)
-** -0.002697, -0.8367698
-
-mat 	Af = (0.94,-0.011391,-0.9882452)
-mn_wrapper_eval resid_1 aexp age_* bpl_* cy_* if insample_samestate==1 [aw=perwt], tfirst(0) tlast(38) expvar(d1gp_bp) awts(wt) init3(Af)
-
-mat 	Af = (0.94,-0.011391,-0.9882452)
-mn_wrapper_eval t_drive aexp age_* bpl_* cy_* if insample_samestate==1 [aw=perwt], tfirst(0) tlast(38) expvar(d1gp_bp) awts(wt) init3(Af)
-
-mn_wrapper_eval t_drive aexp age_* bpl_* cy_* if insample_samestate==1 [aw=perwt], tfirst(0) tlast(38) expvar(d1gp_bp) awts(wt) init3(Af)
-
 
 capture noisily log close
 clear

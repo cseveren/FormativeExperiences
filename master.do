@@ -32,6 +32,3 @@ do		"$dof/build/run_build_directory.do"
 
 ** Execute script perform analysis in the paper **
 do		"$dof/analysis/run_analysis_directory.do"
-
-** CEF STUFF **
-

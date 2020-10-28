@@ -1,4 +1,4 @@
-* Last update 3-18-2019
+* Last update 2020
 *==============================================================================*
 *                      	   NHTS analysis do file                               *
 *==============================================================================*
@@ -198,207 +198,69 @@ sum GPMCombo_All if idco==1 [aw=expfllpr], d
 sum bigveh [aw=expfllpr], d
 sum bigveh_All if idco==1 [aw=expfllpr], d
 
-/* Summary Statsa */
+/* Summary Stats */
 
 eststo 	gsum1: estpost tabstat GPMCombo_All bigveh_All if idco==1 [aw=expfllpr], s(mean sd min max count) c(s) 
 eststo 	gsum2: estpost tabstat GPMCombined bigveh [aw=expfllpr], s(mean sd min max count) c(s) 
 
-esttab gsum? using "./results/panel_nhts/summary_stats_gpm.tex", booktabs replace cells(mean sd min max count)
+esttab gsum? using "./results/table_a2/summary_stats_gpm.tex", booktabs replace cells(mean sd min max count)
 
-/*MERGE AT 18*/
-/* By vehicle */
+/*MERGE AT 17*/
+est clear
 
 local demc white urban_bin famsize i.sex
 
-eststo gpm_tabA_1:	reghdfe GPMCombo_All d2gp_now_at17 						 if idco==1 [aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo gpm_tabA_2:	reghdfe GPMCombo_All d2gp_now_at17 `demc' 				 if idco==1 [aw=expfllpr], a(stsamyr_fe age hhi_bin_yr) cluster(stateid)
-eststo gpm_tabA_3:	reghdfe GPMCombined d2gp_now_at17 c.vehyear##c.vehyear vehage		[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo gpm_tabA_4:	reghdfe GPMCombined d2gp_now_at17 `demc' c.vehyear##c.vehyear vehage [aw=expfllpr], a(stsamyr_fe age hhi_bin_yr) cluster(stateid)
+eststo gpm_tabA_1:	reghdfe GPMCombo_All d2gp_now_at18 						 if idco==1 [aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
+eststo gpm_tabA_2:	reghdfe GPMCombo_All d2gp_now_at18 `demc' 				 if idco==1 [aw=expfllpr], a(stsamyr_fe age hhi_bin_yr) cluster(stateid)
+eststo gpm_tabA_3:	reghdfe GPMCombined d2gp_now_at18 c.vehyear##c.vehyear vehage		[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
+eststo gpm_tabA_4:	reghdfe GPMCombined d2gp_now_at18 `demc' c.vehyear##c.vehyear vehage [aw=expfllpr], a(stsamyr_fe age hhi_bin_yr) cluster(stateid)
 
-eststo gpm_tabA_5:	reghdfe bigveh_All 	d2gp_now_at17 						 if idco==1 [aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo gpm_tabA_6:	reghdfe bigveh_All 	d2gp_now_at17 `demc' 				 if idco==1 [aw=expfllpr], a(stsamyr_fe age hhi_bin_yr) cluster(stateid)
-eststo gpm_tabA_7:	reghdfe bigveh 		d2gp_now_at17 c.vehyear##c.vehyear vehage		[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo gpm_tabA_8:	reghdfe bigveh		d2gp_now_at17 `demc' c.vehyear##c.vehyear vehage [aw=expfllpr], a(stsamyr_fe age hhi_bin_yr) cluster(stateid)
-local demc white urban_bin famsize i.sex
-eststo gpm_tabB_1:	reghdfe GPMCombo_All d2gp_now_atp1 						 if idco==1 [aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo gpm_tabB_2:	reghdfe GPMCombo_All d2gp_now_atp1 `demc' 				 if idco==1 [aw=expfllpr], a(stsamyr_fe age hhi_bin_yr) cluster(stateid)
-eststo gpm_tabB_3:	reghdfe GPMCombined d2gp_now_atp1 c.vehyear##c.vehyear vehage		[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo gpm_tabB_4:	reghdfe GPMCombined d2gp_now_atp1 `demc' c.vehyear##c.vehyear vehage [aw=expfllpr], a(stsamyr_fe age hhi_bin_yr) cluster(stateid)
-local demc white urban_bin famsize i.sex
-eststo gpm_tabB_5:	reghdfe bigveh_All 	d2gp_now_atp1 						 if idco==1 [aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo gpm_tabB_6:	reghdfe bigveh_All 	d2gp_now_atp1 `demc' 				 if idco==1 [aw=expfllpr], a(stsamyr_fe age hhi_bin_yr) cluster(stateid)
-eststo gpm_tabB_7:	reghdfe bigveh 		d2gp_now_atp1 c.vehyear##c.vehyear vehage		[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo gpm_tabB_8:	reghdfe bigveh		d2gp_now_atp1 `demc' c.vehyear##c.vehyear vehage [aw=expfllpr], a(stsamyr_fe age hhi_bin_yr) cluster(stateid)
+eststo gpm_tabA_5:	reghdfe bigveh_All 	d2gp_now_at18 						 if idco==1 [aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
+eststo gpm_tabA_6:	reghdfe bigveh_All 	d2gp_now_at18 `demc' 				 if idco==1 [aw=expfllpr], a(stsamyr_fe age hhi_bin_yr) cluster(stateid)
+eststo gpm_tabA_7:	reghdfe bigveh 		d2gp_now_at18 c.vehyear##c.vehyear vehage		[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
+eststo gpm_tabA_8:	reghdfe bigveh		d2gp_now_at18 `demc' c.vehyear##c.vehyear vehage [aw=expfllpr], a(stsamyr_fe age hhi_bin_yr) cluster(stateid)
+
+
+eststo gpm_tabB_1:	reghdfe GPMCombo_All d2gp_now_at17 						 if idco==1 [aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
+eststo gpm_tabB_2:	reghdfe GPMCombo_All d2gp_now_at17 `demc' 				 if idco==1 [aw=expfllpr], a(stsamyr_fe age hhi_bin_yr) cluster(stateid)
+eststo gpm_tabB_3:	reghdfe GPMCombined d2gp_now_at17 c.vehyear##c.vehyear vehage		[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
+eststo gpm_tabB_4:	reghdfe GPMCombined d2gp_now_at17 `demc' c.vehyear##c.vehyear vehage [aw=expfllpr], a(stsamyr_fe age hhi_bin_yr) cluster(stateid)
+
+eststo gpm_tabB_5:	reghdfe bigveh_All 	d2gp_now_at17 						 if idco==1 [aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
+eststo gpm_tabB_6:	reghdfe bigveh_All 	d2gp_now_at17 `demc' 				 if idco==1 [aw=expfllpr], a(stsamyr_fe age hhi_bin_yr) cluster(stateid)
+eststo gpm_tabB_7:	reghdfe bigveh 		d2gp_now_at17 c.vehyear##c.vehyear vehage		[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
+eststo gpm_tabB_8:	reghdfe bigveh		d2gp_now_at17 `demc' c.vehyear##c.vehyear vehage [aw=expfllpr], a(stsamyr_fe age hhi_bin_yr) cluster(stateid)
+
+
+eststo gpm_tabC_1:	reghdfe GPMCombo_All d2gp_now_atp2 						 if idco==1 [aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
+eststo gpm_tabC_2:	reghdfe GPMCombo_All d2gp_now_atp2 `demc' 				 if idco==1 [aw=expfllpr], a(stsamyr_fe age hhi_bin_yr) cluster(stateid)
+eststo gpm_tabC_3:	reghdfe GPMCombined d2gp_now_atp2 c.vehyear##c.vehyear vehage		[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
+eststo gpm_tabC_4:	reghdfe GPMCombined d2gp_now_atp2 `demc' c.vehyear##c.vehyear vehage [aw=expfllpr], a(stsamyr_fe age hhi_bin_yr) cluster(stateid)
+
+eststo gpm_tabC_5:	reghdfe bigveh_All 	d2gp_now_atp2 						 if idco==1 [aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
+eststo gpm_tabC_6:	reghdfe bigveh_All 	d2gp_now_atp2 `demc' 				 if idco==1 [aw=expfllpr], a(stsamyr_fe age hhi_bin_yr) cluster(stateid)
+eststo gpm_tabC_7:	reghdfe bigveh 		d2gp_now_atp2 c.vehyear##c.vehyear vehage		[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
+eststo gpm_tabC_8:	reghdfe bigveh		d2gp_now_atp2 `demc' c.vehyear##c.vehyear vehage [aw=expfllpr], a(stsamyr_fe age hhi_bin_yr) cluster(stateid)
+
+
+eststo gpm_tabD_1:	reghdfe GPMCombo_All d2gp_now_atp1 						 if idco==1 [aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
+eststo gpm_tabD_2:	reghdfe GPMCombo_All d2gp_now_atp1 `demc' 				 if idco==1 [aw=expfllpr], a(stsamyr_fe age hhi_bin_yr) cluster(stateid)
+eststo gpm_tabD_3:	reghdfe GPMCombined d2gp_now_atp1 c.vehyear##c.vehyear vehage		[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
+eststo gpm_tabD_4:	reghdfe GPMCombined d2gp_now_atp1 `demc' c.vehyear##c.vehyear vehage [aw=expfllpr], a(stsamyr_fe age hhi_bin_yr) cluster(stateid)
+
+eststo gpm_tabD_5:	reghdfe bigveh_All 	d2gp_now_atp1 						 if idco==1 [aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
+eststo gpm_tabD_6:	reghdfe bigveh_All 	d2gp_now_atp1 `demc' 				 if idco==1 [aw=expfllpr], a(stsamyr_fe age hhi_bin_yr) cluster(stateid)
+eststo gpm_tabD_7:	reghdfe bigveh 		d2gp_now_atp1 c.vehyear##c.vehyear vehage		[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
+eststo gpm_tabD_8:	reghdfe bigveh		d2gp_now_atp1 `demc' c.vehyear##c.vehyear vehage [aw=expfllpr], a(stsamyr_fe age hhi_bin_yr) cluster(stateid)
 
 local 	tabprefs cells(b(star fmt(%9.4f)) se(par)) stats(r2_a N, fmt(%9.4f %9.0g) labels(R-squared)) legend label starlevels(+ 0.10 * 0.05 ** 0.01 *** 0.001) 
 
-esttab 	gpm_tabA_? 		using "./results/panel_nhts/gpm_table_d2_17.tex", booktabs replace `tabprefs'
-esttab 	gpm_tabB_? 		using "./results/panel_nhts/gpm_table_d2_p1.tex", booktabs replace `tabprefs'
+esttab 	gpm_tabA_? 		using "./results/table_a13/gpm_table_d2_18.tex", booktabs replace `tabprefs'
+esttab 	gpm_tabB_? 		using "./results/table_a13/gpm_table_d2_17.tex", booktabs replace `tabprefs'
+esttab 	gpm_tabC_? 		using "./results/table_a13/gpm_table_d2_p2.tex", booktabs replace `tabprefs'
+esttab 	gpm_tabD_? 		using "./results/table_a13/gpm_table_d2_p1.tex", booktabs replace `tabprefs'
 
 eststo clear
-
-/*
-
-eststo gpm_veh18_1:		reghdfe GPMCombined d2gp_now_at18 						[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo gpm_veh18_2:		reghdfe GPMCombined d2gp_now_at18 `demc' 				[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo gpm_veh18_3:		reghdfe GPMCombined d2gp_now_at18 `demc'			 	[aw=expfllpr], a(stateid nhtsyear age hhi_bin_yr) cluster(stateid)
-eststo gpm_veh18_4:		reghdfe GPMCombined d2gp_now_at18 `demc' 				[aw=expfllpr], a(stsamyr_fe age hhi_bin_yr) cluster(stateid)
-eststo gpm_veh18_5:		reghdfe GPMCombined d2gp_now_at18 `demc' c.byr##c.byr 	[aw=expfllpr], a(stsamyr_fe age hhi_bin_yr) cluster(stateid)
-eststo gpm_veh18_6:		reghdfe GPMCombined d2gp_now_at18 						[aw=expfllpr], a(stateid nhtsyear age vehyear) cluster(stateid)
-eststo gpm_veh18_7:		reghdfe GPMCombined d2gp_now_at18 						[aw=expfllpr], a(stateid nhtsyear age vehageyr) cluster(stateid)
-eststo gpm_veh18_8:		reghdfe GPMCombined d2gp_now_at18 `demc' 				[aw=expfllpr], a(stateid nhtsyear age vehageyr) cluster(stateid)
-eststo gpm_veh18_9:		reghdfe GPMCombined d2gp_now_at18 `demc'			 	[aw=expfllpr], a(stateid nhtsyear age vehageyr hhi_bin_yr) cluster(stateid)
-eststo gpm_veh18_10:	reghdfe GPMCombined d2gp_now_at18 `demc' 				[aw=expfllpr], a(stsamyr_fe age vehageyr hhi_bin_yr) cluster(stateid)
-eststo gpm_veh18_11:	reghdfe GPMCombined d2gp_now_at18 `demc' c.byr##c.byr 	[aw=expfllpr], a(stsamyr_fe age vehageyr hhi_bin_yr) cluster(stateid)
-
-local demc white urban_bin famsize
-
-eststo hieff_veh18_1:	reghdfe hi_eff d2gp_now_at18 						[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo hieff_veh18_2:	reghdfe hi_eff d2gp_now_at18 `demc' 				[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo hieff_veh18_3:	reghdfe hi_eff d2gp_now_at18 `demc'			 		[aw=expfllpr], a(stateid nhtsyear age hhi_bin_yr) cluster(stateid)
-eststo hieff_veh18_4:	reghdfe hi_eff d2gp_now_at18 `demc' 				[aw=expfllpr], a(stsamyr_fe age hhi_bin_yr) cluster(stateid)
-eststo hieff_veh18_5:	reghdfe hi_eff d2gp_now_at18 `demc' c.byr##c.byr 	[aw=expfllpr], a(stsamyr_fe age hhi_bin_yr) cluster(stateid)
-eststo hieff_veh18_6:	reghdfe hi_eff d2gp_now_at18 						[aw=expfllpr], a(stateid nhtsyear age vehyear) cluster(stateid)
-eststo hieff_veh18_7:	reghdfe hi_eff d2gp_now_at18 						[aw=expfllpr], a(stateid nhtsyear age vehageyr) cluster(stateid)
-eststo hieff_veh18_8:	reghdfe hi_eff d2gp_now_at18 `demc' 				[aw=expfllpr], a(stateid nhtsyear age vehageyr) cluster(stateid)
-eststo hieff_veh18_9:	reghdfe hi_eff d2gp_now_at18 `demc'			 		[aw=expfllpr], a(stateid nhtsyear age vehageyr hhi_bin_yr) cluster(stateid)
-eststo hieff_veh18_10:	reghdfe hi_eff d2gp_now_at18 `demc' 				[aw=expfllpr], a(stsamyr_fe age vehageyr hhi_bin_yr) cluster(stateid)
-eststo hieff_veh18_11:	reghdfe hi_eff d2gp_now_at18 `demc' c.byr##c.byr 	[aw=expfllpr], a(stsamyr_fe age vehageyr hhi_bin_yr) cluster(stateid)
-
-local demc white urban_bin famsize
-
-eststo bigveh_veh18_1:	reghdfe bigveh d2gp_now_at18 						[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo bigveh_veh18_2:	reghdfe bigveh d2gp_now_at18 `demc' 				[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo bigveh_veh18_3:	reghdfe bigveh d2gp_now_at18 `demc'			 		[aw=expfllpr], a(stateid nhtsyear age hhi_bin_yr) cluster(stateid)
-eststo bigveh_veh18_4:	reghdfe bigveh d2gp_now_at18 `demc' 				[aw=expfllpr], a(stsamyr_fe age hhi_bin_yr) cluster(stateid)
-eststo bigveh_veh18_5:	reghdfe bigveh d2gp_now_at18 `demc' c.byr##c.byr 	[aw=expfllpr], a(stsamyr_fe age hhi_bin_yr) cluster(stateid)
-eststo bigveh_veh18_6:	reghdfe bigveh d2gp_now_at18 						[aw=expfllpr], a(stateid nhtsyear age vehyear) cluster(stateid)
-eststo bigveh_veh18_7:	reghdfe bigveh d2gp_now_at18 						[aw=expfllpr], a(stateid nhtsyear age vehageyr) cluster(stateid)
-eststo bigveh_veh18_8:	reghdfe bigveh d2gp_now_at18 `demc' 				[aw=expfllpr], a(stateid nhtsyear age vehageyr) cluster(stateid)
-eststo bigveh_veh18_9:	reghdfe bigveh d2gp_now_at18 `demc'			 		[aw=expfllpr], a(stateid nhtsyear age vehageyr hhi_bin_yr) cluster(stateid)
-eststo bigveh_veh18_10:	reghdfe bigveh d2gp_now_at18 `demc' 				[aw=expfllpr], a(stsamyr_fe age vehageyr hhi_bin_yr) cluster(stateid)
-eststo bigveh_veh18_11:	reghdfe bigveh d2gp_now_at18 `demc' c.byr##c.byr 	[aw=expfllpr], a(stsamyr_fe age vehageyr hhi_bin_yr) cluster(stateid)
-
-/* By Person */
-
-local demc white urban_bin famsize
-
-eststo gpm_per18_1:	reghdfe GPMCombo_All d2gp_now_at18 						if idco==1 [aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo gpm_per18_2:	reghdfe GPMCombo_All d2gp_now_at18 `demc' 				if idco==1 [aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo gpm_per18_3:	reghdfe GPMCombo_All d2gp_now_at18 `demc'			 	if idco==1 [aw=expfllpr], a(stateid nhtsyear age hhi_bin_yr) cluster(stateid)
-eststo gpm_per18_4:	reghdfe GPMCombo_All d2gp_now_at18 `demc' 				if idco==1 [aw=expfllpr], a(stsamyr_fe age hhi_bin_yr) cluster(stateid)
-eststo gpm_per18_5:	reghdfe GPMCombo_All d2gp_now_at18 `demc' c.byr##c.byr 	if idco==1 [aw=expfllpr], a(stsamyr_fe age hhi_bin_yr) cluster(stateid)
-
-local demc white urban_bin famsize
-
-eststo hieff_per18_1:	reghdfe hi_eff_All d2gp_now_at18 						if idco==1 [aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo hieff_per18_2:	reghdfe hi_eff_All d2gp_now_at18 `demc' 				if idco==1 [aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo hieff_per18_3:	reghdfe hi_eff_All d2gp_now_at18 `demc'			 		if idco==1 [aw=expfllpr], a(stateid nhtsyear age hhi_bin_yr) cluster(stateid)
-eststo hieff_per18_4:	reghdfe hi_eff_All d2gp_now_at18 `demc' 				if idco==1 [aw=expfllpr], a(stsamyr_fe age hhi_bin_yr) cluster(stateid)
-eststo hieff_per18_5:	reghdfe hi_eff_All d2gp_now_at18 `demc' c.byr##c.byr 	if idco==1 [aw=expfllpr], a(stsamyr_fe age hhi_bin_yr) cluster(stateid)
-
-local demc white urban_bin famsize
-
-eststo bigveh_per18_1:	reghdfe bigveh_All d2gp_now_at18 						if idco==1 [aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo bigveh_per18_2:	reghdfe bigveh_All d2gp_now_at18 `demc' 				if idco==1 [aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo bigveh_per18_3:	reghdfe bigveh_All d2gp_now_at18 `demc'			 		if idco==1 [aw=expfllpr], a(stateid nhtsyear age hhi_bin_yr) cluster(stateid)
-eststo bigveh_per18_4:	reghdfe bigveh_All d2gp_now_at18 `demc' 				if idco==1 [aw=expfllpr], a(stsamyr_fe age hhi_bin_yr) cluster(stateid)
-eststo bigveh_per18_5:	reghdfe bigveh_All d2gp_now_at18 `demc' c.byr##c.byr 	if idco==1 [aw=expfllpr], a(stsamyr_fe age hhi_bin_yr) cluster(stateid)
-
-/* output */
-local 	tabprefs cells(b(star fmt(%9.4f)) se(par)) stats(r2_a N, fmt(%9.4f %9.0g) labels(R-squared)) legend label starlevels(+ 0.10 * 0.05 ** 0.01 *** 0.001) 
-
-esttab 	gpm_veh18_* 	using "./results/panel_nhts/gpm_veh_d2_18.tex", booktabs replace `tabprefs'
-esttab 	hieff_veh18_* 	using "./results/panel_nhts/hieff_veh_d2_18.tex", booktabs replace `tabprefs'
-esttab 	bigveh_veh18_* 	using "./results/panel_nhts/bigveh_veh_d2_18.tex", booktabs replace `tabprefs'
-esttab 	gpm_per18_* 	using "./results/panel_nhts/gpm_per_d2_18.tex", booktabs replace `tabprefs'
-esttab 	hieff_per18_* 	using "./results/panel_nhts/hieff_per_d2_18.tex", booktabs replace `tabprefs'
-esttab 	bigveh_per18_* 	using "./results/panel_nhts/bigveh_per_d2_18.tex", booktabs replace `tabprefs'
-
-eststo clear
-
-/*MERGE AT DL*/
-/* By vehicle */
-
-local demc white urban_bin famsize
-
-eststo gpm_vehp2_1:		reghdfe GPMCombined d2gp_now_atp2 						[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo gpm_vehp2_2:		reghdfe GPMCombined d2gp_now_atp2 `demc' 				[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo gpm_vehp2_3:		reghdfe GPMCombined d2gp_now_atp2 `demc'			 	[aw=expfllpr], a(stateid nhtsyear age hhi_bin_yr) cluster(stateid)
-eststo gpm_vehp2_4:		reghdfe GPMCombined d2gp_now_atp2 `demc' 				[aw=expfllpr], a(stsamyr_fe age hhi_bin_yr) cluster(stateid)
-eststo gpm_vehp2_5:		reghdfe GPMCombined d2gp_now_atp2 `demc' c.byr##c.byr 	[aw=expfllpr], a(stsamyr_fe age hhi_bin_yr) cluster(stateid)
-eststo gpm_vehp2_6:		reghdfe GPMCombined d2gp_now_atp2 						[aw=expfllpr], a(stateid nhtsyear age vehyear) cluster(stateid)
-eststo gpm_vehp2_7:		reghdfe GPMCombined d2gp_now_atp2 						[aw=expfllpr], a(stateid nhtsyear age vehageyr) cluster(stateid)
-eststo gpm_vehp2_8:		reghdfe GPMCombined d2gp_now_atp2 `demc' 				[aw=expfllpr], a(stateid nhtsyear age vehageyr) cluster(stateid)
-eststo gpm_vehp2_9:		reghdfe GPMCombined d2gp_now_atp2 `demc'			 	[aw=expfllpr], a(stateid nhtsyear age vehageyr hhi_bin_yr) cluster(stateid)
-eststo gpm_vehp2_10:	reghdfe GPMCombined d2gp_now_atp2 `demc' 				[aw=expfllpr], a(stsamyr_fe age vehageyr hhi_bin_yr) cluster(stateid)
-eststo gpm_vehp2_11:	reghdfe GPMCombined d2gp_now_atp2 `demc' c.byr##c.byr 	[aw=expfllpr], a(stsamyr_fe age vehageyr hhi_bin_yr) cluster(stateid)
-
-local demc white urban_bin famsize
-
-eststo hieff_vehp2_1:	reghdfe hi_eff d2gp_now_atp2 						[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo hieff_vehp2_2:	reghdfe hi_eff d2gp_now_atp2 `demc' 				[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo hieff_vehp2_3:	reghdfe hi_eff d2gp_now_atp2 `demc'			 		[aw=expfllpr], a(stateid nhtsyear age hhi_bin_yr) cluster(stateid)
-eststo hieff_vehp2_4:	reghdfe hi_eff d2gp_now_atp2 `demc' 				[aw=expfllpr], a(stsamyr_fe age hhi_bin_yr) cluster(stateid)
-eststo hieff_vehp2_5:	reghdfe hi_eff d2gp_now_atp2 `demc' c.byr##c.byr 	[aw=expfllpr], a(stsamyr_fe age hhi_bin_yr) cluster(stateid)
-eststo hieff_vehp2_6:	reghdfe hi_eff d2gp_now_atp2 						[aw=expfllpr], a(stateid nhtsyear age vehyear) cluster(stateid)
-eststo hieff_vehp2_7:	reghdfe hi_eff d2gp_now_atp2 						[aw=expfllpr], a(stateid nhtsyear age vehageyr) cluster(stateid)
-eststo hieff_vehp2_8:	reghdfe hi_eff d2gp_now_atp2 `demc' 				[aw=expfllpr], a(stateid nhtsyear age vehageyr) cluster(stateid)
-eststo hieff_vehp2_9:	reghdfe hi_eff d2gp_now_atp2 `demc'			 		[aw=expfllpr], a(stateid nhtsyear age vehageyr hhi_bin_yr) cluster(stateid)
-eststo hieff_vehp2_10:	reghdfe hi_eff d2gp_now_atp2 `demc' 				[aw=expfllpr], a(stsamyr_fe age vehageyr hhi_bin_yr) cluster(stateid)
-eststo hieff_vehp2_11:	reghdfe hi_eff d2gp_now_atp2 `demc' c.byr##c.byr 	[aw=expfllpr], a(stsamyr_fe age vehageyr hhi_bin_yr) cluster(stateid)
-
-local demc white urban_bin famsize
-
-eststo bigveh_vehp2_1:	reghdfe bigveh d2gp_now_atp2 						[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo bigveh_vehp2_2:	reghdfe bigveh d2gp_now_atp2 `demc' 				[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo bigveh_vehp2_3:	reghdfe bigveh d2gp_now_atp2 `demc'			 		[aw=expfllpr], a(stateid nhtsyear age hhi_bin_yr) cluster(stateid)
-eststo bigveh_vehp2_4:	reghdfe bigveh d2gp_now_atp2 `demc' 				[aw=expfllpr], a(stsamyr_fe age hhi_bin_yr) cluster(stateid)
-eststo bigveh_vehp2_5:	reghdfe bigveh d2gp_now_atp2 `demc' c.byr##c.byr 	[aw=expfllpr], a(stsamyr_fe age hhi_bin_yr) cluster(stateid)
-eststo bigveh_vehp2_6:	reghdfe bigveh d2gp_now_atp2 						[aw=expfllpr], a(stateid nhtsyear age vehyear) cluster(stateid)
-eststo bigveh_vehp2_7:	reghdfe bigveh d2gp_now_atp2 						[aw=expfllpr], a(stateid nhtsyear age vehageyr) cluster(stateid)
-eststo bigveh_vehp2_8:	reghdfe bigveh d2gp_now_atp2 `demc' 				[aw=expfllpr], a(stateid nhtsyear age vehageyr) cluster(stateid)
-eststo bigveh_vehp2_9:	reghdfe bigveh d2gp_now_atp2 `demc'			 		[aw=expfllpr], a(stateid nhtsyear age vehageyr hhi_bin_yr) cluster(stateid)
-eststo bigveh_vehp2_10:	reghdfe bigveh d2gp_now_atp2 `demc' 				[aw=expfllpr], a(stsamyr_fe age vehageyr hhi_bin_yr) cluster(stateid)
-eststo bigveh_vehp2_11:	reghdfe bigveh d2gp_now_atp2 `demc' c.byr##c.byr 	[aw=expfllpr], a(stsamyr_fe age vehageyr hhi_bin_yr) cluster(stateid)
-
-/* By Person */
-
-local demc white urban_bin famsize
-
-eststo gpm_perp2_1:	reghdfe GPMCombo_All d2gp_now_atp2 						if idco==1 [aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo gpm_perp2_2:	reghdfe GPMCombo_All d2gp_now_atp2 `demc' 				if idco==1 [aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo gpm_perp2_3:	reghdfe GPMCombo_All d2gp_now_atp2 `demc'			 	if idco==1 [aw=expfllpr], a(stateid nhtsyear age hhi_bin_yr) cluster(stateid)
-eststo gpm_perp2_4:	reghdfe GPMCombo_All d2gp_now_atp2 `demc' 				if idco==1 [aw=expfllpr], a(stsamyr_fe age hhi_bin_yr) cluster(stateid)
-eststo gpm_perp2_5:	reghdfe GPMCombo_All d2gp_now_atp2 `demc' c.byr##c.byr 	if idco==1 [aw=expfllpr], a(stsamyr_fe age hhi_bin_yr) cluster(stateid)
-
-local demc white urban_bin famsize
-
-eststo hieff_perp2_1:	reghdfe hi_eff_All d2gp_now_atp2 						if idco==1 [aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo hieff_perp2_2:	reghdfe hi_eff_All d2gp_now_atp2 `demc' 				if idco==1 [aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo hieff_perp2_3:	reghdfe hi_eff_All d2gp_now_atp2 `demc'			 		if idco==1 [aw=expfllpr], a(stateid nhtsyear age hhi_bin_yr) cluster(stateid)
-eststo hieff_perp2_4:	reghdfe hi_eff_All d2gp_now_atp2 `demc' 				if idco==1 [aw=expfllpr], a(stsamyr_fe age hhi_bin_yr) cluster(stateid)
-eststo hieff_perp2_5:	reghdfe hi_eff_All d2gp_now_atp2 `demc' c.byr##c.byr 	if idco==1 [aw=expfllpr], a(stsamyr_fe age hhi_bin_yr) cluster(stateid)
-
-local demc white urban_bin famsize
-
-eststo bigveh_perp2_1:	reghdfe bigveh_All d2gp_now_atp2 						if idco==1 [aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo bigveh_perp2_2:	reghdfe bigveh_All d2gp_now_atp2 `demc' 				if idco==1 [aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo bigveh_perp2_3:	reghdfe bigveh_All d2gp_now_atp2 `demc'			 		if idco==1 [aw=expfllpr], a(stateid nhtsyear age hhi_bin_yr) cluster(stateid)
-eststo bigveh_perp2_4:	reghdfe bigveh_All d2gp_now_atp2 `demc' 				if idco==1 [aw=expfllpr], a(stsamyr_fe age hhi_bin_yr) cluster(stateid)
-eststo bigveh_perp2_5:	reghdfe bigveh_All d2gp_now_atp2 `demc' c.byr##c.byr 	if idco==1 [aw=expfllpr], a(stsamyr_fe age hhi_bin_yr) cluster(stateid)
-
-/* output */
-local 	tabprefs cells(b(star fmt(%9.4f)) se(par)) stats(r2_a N, fmt(%9.4f %9.0g) labels(R-squared)) legend label starlevels(+ 0.10 * 0.05 ** 0.01 *** 0.001) 
-
-esttab 	gpm_vehp2_* 	using "./results/panel_nhts/gpm_veh_d2_p2.tex", booktabs replace `tabprefs'
-esttab 	hieff_vehp2_* 	using "./results/panel_nhts/hieff_veh_d2_p2.tex", booktabs replace `tabprefs'
-esttab 	bigveh_vehp2_* 	using "./results/panel_nhts/bigveh_veh_d2_p2.tex", booktabs replace `tabprefs'
-esttab 	gpm_perp2_* 	using "./results/panel_nhts/gpm_per_d2_p2.tex", booktabs replace `tabprefs'
-esttab 	hieff_perp2_* 	using "./results/panel_nhts/hieff_per_d2_p2.tex", booktabs replace `tabprefs'
-esttab 	bigveh_perp2_* 	using "./results/panel_nhts/bigveh_per_d2_p2.tex", booktabs replace `tabprefs'
-*/
 
 log close
-eststo clear
 clear

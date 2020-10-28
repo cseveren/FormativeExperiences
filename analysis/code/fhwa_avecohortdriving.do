@@ -60,7 +60,7 @@ preserve
 		legend(lab(1 "By Age 16") lab(2 "By Age 17") lab(3 "By Age 18") ///
 			lab(4 "By Age 20") lab(5 "By Age 22") pos(6) r(1))	
 
-	graph export "./results/pofDLbyageALL.png", as(png) replace
+	graph export "./results/figures/dladoption_byageALL.png", as(png) replace
 	
 restore 
 ****************************
@@ -70,4 +70,4 @@ keep age year p_drivers
 
 reshape wide p_drivers, i(year) j(age)
 
-export delim "./results/dladoption_by_age.csv"
+export delim "./results/figures/dladoption_by_age.csv"

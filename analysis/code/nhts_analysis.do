@@ -165,39 +165,12 @@ compress
 
 eststo clear
 
-/* sandbox */
-/*
-gen 	d2gp_now_atp1_sq = d2gp_now_atp1*d2gp_now_atp1
-
-reghdfe lvmt_pc d2gp_now_atp1			[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-
-reghdfe lvmt_pc d2gp_now_atp1 d2gp_now_atp1_sq [aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-
-
-
-
-reghdfe lvmt_pc d2gp_now_atp1			[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-reghdfe lvmt_pc d2gp_now_atp1			[aw=expfllpr], a(stateid nhtsyear yr_age16 age) cluster(stateid)
-reghdfe lvmt_pc d2gp_now_atp1			[aw=expfllpr], a(stateid nhtsyear yr_age16) cluster(stateid)
-reghdfe lvmt_pc d2gp_now_atp1 age age2	[aw=expfllpr], a(stateid nhtsyear yr_age16) cluster(stateid)
-reghdfe lvmt_pc d2gp_now_atp1 age age2	[aw=expfllpr], a(stsamyr_fe hhi_bin_yr yr_age16) cluster(stateid)
-
-
-
-reghdfe lvmt_pc d2gp_now_at17  						[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-
-reghdfe lvmt_pc d2gp_now_at17 if employed==1 						[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-*/
-
 /* Summary Stats */ 
-
 
 eststo 	sum1: estpost tabstat mile_per_psn_ALL_lt115 d2gp_now_at17 white urban_bin famsize sex age [aw=expfllpr], s(mean sd count) c(s) 
 eststo 	sum2: estpost tabstat mile_per_psn_ALL_lt115 if mile_per_psn_ALL_lt115>0 & !mi(mile_per_psn_ALL_lt115) [aw=expfllpr], s(mean sd min max count) c(s) 
 
-esttab sum? using "./results/panel_nhts/summary_stats.tex", booktabs replace cells(mean sd min max count)
-
-	
+esttab sum? using "./results/table_a2/nhts_summary_stats.tex", booktabs replace cells(mean sd min max count)
 
 /* Main specifications at different ages */ 
 
@@ -241,12 +214,12 @@ eststo tc2f_5:	reghdfe lvmt_pc real_gp_at16  `demc'  c.byr##c.byr	[aw=expfllpr],
 
 local 	tabprefs cells(b(star fmt(%9.4f)) se(par)) stats(r2_a N, fmt(%9.4f %9.0g) labels(R-squared)) legend label starlevels(+ 0.10 * 0.05 ** 0.01 *** 0.001) 
 
-esttab 	tc2a_* using "./results/panel_nhts/mainspecs_d2_18.tex", booktabs replace `tabprefs'
-esttab 	tc2b_* using "./results/panel_nhts/mainspecs_d2_17.tex", booktabs replace `tabprefs'
-esttab 	tc2c_* using "./results/panel_nhts/mainspecs_d1_18.tex", booktabs replace `tabprefs'
-esttab 	tc2d_* using "./results/panel_nhts/mainspecs_d1_17.tex", booktabs replace `tabprefs'
-esttab 	tc2e_* using "./results/panel_nhts/mainspecs_d1_16.tex", booktabs replace `tabprefs'
-esttab 	tc2f_* using "./results/panel_nhts/mainspecs_lev16.tex", booktabs replace `tabprefs'
+esttab 	tc2a_* using "./results/table_a11/mainspecs_d2_18.tex", booktabs replace `tabprefs'
+esttab 	tc2b_* using "./results/table3/nhts_d2_17.tex", booktabs replace `tabprefs'
+esttab 	tc2c_* using "./results/table_a11/mainspecs_d1_18.tex", booktabs replace `tabprefs'
+esttab 	tc2d_* using "./results/table_a11/mainspecs_d1_17.tex", booktabs replace `tabprefs'
+esttab 	tc2e_* using "./results/table_a11/mainspecs_d1_16.tex", booktabs replace `tabprefs'
+esttab 	tc2f_* using "./results/table3/nhts_lev16.tex", booktabs replace `tabprefs'
 
 eststo clear
 
@@ -292,49 +265,18 @@ eststo tdlf_5:	reghdfe lvmt_pc real_gp_atp0  `demc'  c.byr##c.byr	[aw=expfllpr],
 
 local 	tabprefs cells(b(star fmt(%9.4f)) se(par)) stats(r2_a N, fmt(%9.4f %9.0g) labels(R-squared)) legend label starlevels(+ 0.10 * 0.05 ** 0.01 *** 0.001) 
 
-esttab 	tdla_* using "./results/panel_nhts/mainspecs_d2_p2.tex", booktabs replace `tabprefs'
-esttab 	tdlb_* using "./results/panel_nhts/mainspecs_d2_p1.tex", booktabs replace `tabprefs'
-esttab 	tdlc_* using "./results/panel_nhts/mainspecs_d1_p2.tex", booktabs replace `tabprefs'
-esttab 	tdld_* using "./results/panel_nhts/mainspecs_d1_p1.tex", booktabs replace `tabprefs'
-esttab 	tdle_* using "./results/panel_nhts/mainspecs_d1_p0.tex", booktabs replace `tabprefs'
-esttab 	tdlf_* using "./results/panel_nhts/mainspecs_levp0.tex", booktabs replace `tabprefs'
+esttab 	tdla_* using "./results/table_a11/mainspecs_d2_p2.tex", booktabs replace `tabprefs'
+esttab 	tdlb_* using "./results/table3/nhts_d2_p1.tex", booktabs replace `tabprefs'
+esttab 	tdlc_* using "./results/table_a11/mainspecs_d1_p2.tex", booktabs replace `tabprefs'
+esttab 	tdld_* using "./results/table_a11/mainspecs_d1_p1.tex", booktabs replace `tabprefs'
+esttab 	tdle_* using "./results/table_a11/mainspecs_d1_p0.tex", booktabs replace `tabprefs'
+esttab 	tdlf_* using "./results/table3/nhts_levp0.tex", booktabs replace `tabprefs'
 
 eststo clear
 
 /* Main specifications with cohort fixed effects */ 
 
 local demc white urban_bin famsize i.sex
-
-eststo tcogp_a_1:	reghdfe lvmt_pc d2gp_now_at18			[aw=expfllpr], a(stateid nhtsyear yr_age16 age) cluster(stateid)
-eststo tcogp_a_2:	reghdfe lvmt_pc d2gp_now_at18 `demc' 	[aw=expfllpr], a(stateid nhtsyear yr_age16 age) cluster(stateid)
-eststo tcogp_a_3:	reghdfe lvmt_pc d2gp_now_at18 `demc' 	[aw=expfllpr], a(stateid nhtsyear yr_age16 age hhi_bin_yr) cluster(stateid)
-eststo tcogp_a_4:	reghdfe lvmt_pc d2gp_now_at18 `demc' 	[aw=expfllpr], a(stsamyr_fe age yr_age16 hhi_bin_yr) cluster(stateid)
-
-eststo tcogp_b_1:	reghdfe lvmt_pc d2gp_now_at17			[aw=expfllpr], a(stateid nhtsyear yr_age16 age) cluster(stateid)
-eststo tcogp_b_2:	reghdfe lvmt_pc d2gp_now_at17 `demc' 	[aw=expfllpr], a(stateid nhtsyear yr_age16 age) cluster(stateid)
-eststo tcogp_b_3:	reghdfe lvmt_pc d2gp_now_at17 `demc' 	[aw=expfllpr], a(stateid nhtsyear yr_age16 age hhi_bin_yr) cluster(stateid)
-eststo tcogp_b_4:	reghdfe lvmt_pc d2gp_now_at17 `demc' 	[aw=expfllpr], a(stsamyr_fe age yr_age16 hhi_bin_yr) cluster(stateid)
-
-eststo tcogp_c_1:	reghdfe lvmt_pc d1gp_now_at18			[aw=expfllpr], a(stateid nhtsyear yr_age16 age) cluster(stateid)
-eststo tcogp_c_2:	reghdfe lvmt_pc d1gp_now_at18 `demc' 	[aw=expfllpr], a(stateid nhtsyear yr_age16 age) cluster(stateid)
-eststo tcogp_c_3:	reghdfe lvmt_pc d1gp_now_at18 `demc' 	[aw=expfllpr], a(stateid nhtsyear yr_age16 age hhi_bin_yr) cluster(stateid)
-eststo tcogp_c_4:	reghdfe lvmt_pc d1gp_now_at18 `demc' 	[aw=expfllpr], a(stsamyr_fe age yr_age16 hhi_bin_yr) cluster(stateid)
-
-eststo tcogp_d_1:	reghdfe lvmt_pc d1gp_now_at17			[aw=expfllpr], a(stateid nhtsyear yr_age16 age) cluster(stateid)
-eststo tcogp_d_2:	reghdfe lvmt_pc d1gp_now_at17 `demc' 	[aw=expfllpr], a(stateid nhtsyear yr_age16 age) cluster(stateid)
-eststo tcogp_d_3:	reghdfe lvmt_pc d1gp_now_at17 `demc' 	[aw=expfllpr], a(stateid nhtsyear yr_age16 age hhi_bin_yr) cluster(stateid)
-eststo tcogp_d_4:	reghdfe lvmt_pc d1gp_now_at17 `demc' 	[aw=expfllpr], a(stsamyr_fe age yr_age16 hhi_bin_yr) cluster(stateid)
-
-eststo tcogp_e_1:	reghdfe lvmt_pc d1gp_now_at16			[aw=expfllpr], a(stateid nhtsyear yr_age16 age) cluster(stateid)
-eststo tcogp_e_2:	reghdfe lvmt_pc d1gp_now_at16 `demc' 	[aw=expfllpr], a(stateid nhtsyear yr_age16 age) cluster(stateid)
-eststo tcogp_e_3:	reghdfe lvmt_pc d1gp_now_at16 `demc' 	[aw=expfllpr], a(stateid nhtsyear yr_age16 age hhi_bin_yr) cluster(stateid)
-eststo tcogp_e_4:	reghdfe lvmt_pc d1gp_now_at16 `demc' 	[aw=expfllpr], a(stsamyr_fe age yr_age16 hhi_bin_yr) cluster(stateid)
-
-eststo tcogp_f_1:	reghdfe lvmt_pc real_gp_at16 			[aw=expfllpr], a(stateid nhtsyear yr_age16 age) cluster(stateid)
-eststo tcogp_f_2:	reghdfe lvmt_pc real_gp_at16 `demc' 	[aw=expfllpr], a(stateid nhtsyear yr_age16 age) cluster(stateid)
-eststo tcogp_f_3:	reghdfe lvmt_pc real_gp_at16 `demc' 	[aw=expfllpr], a(stateid nhtsyear yr_age16 age hhi_bin_yr) cluster(stateid)
-eststo tcogp_f_4:	reghdfe lvmt_pc real_gp_at16 `demc' 	[aw=expfllpr], a(stsamyr_fe age yr_age16 hhi_bin_yr) cluster(stateid)
-
 
 eststo tcodl_a_1:	reghdfe lvmt_pc d2gp_now_atp2			[aw=expfllpr], a(stateid nhtsyear yr_age16 age) cluster(stateid)
 eststo tcodl_a_2:	reghdfe lvmt_pc d2gp_now_atp2 `demc' 	[aw=expfllpr], a(stateid nhtsyear yr_age16 age) cluster(stateid)
@@ -368,200 +310,138 @@ eststo tcodl_f_4:	reghdfe lvmt_pc real_gp_atp0 `demc' 	[aw=expfllpr], a(stsamyr_
 
 local 	tabprefs cells(b(star fmt(%9.4f)) se(par)) stats(r2_a N, fmt(%9.4f %9.0g) labels(R-squared)) legend label starlevels(+ 0.10 * 0.05 ** 0.01 *** 0.001) 
 
-esttab 	tcogp_a_* using "./results/panel_nhts/cohfespecs_d2_18.tex", booktabs replace `tabprefs'
-esttab 	tcogp_b_* using "./results/panel_nhts/cohfespecs_d2_17.tex", booktabs replace `tabprefs'
-esttab 	tcogp_c_* using "./results/panel_nhts/cohfespecs_d1_18.tex", booktabs replace `tabprefs'
-esttab 	tcogp_d_* using "./results/panel_nhts/cohfespecs_d1_17.tex", booktabs replace `tabprefs'
-esttab 	tcogp_e_* using "./results/panel_nhts/cohfespecs_d1_16.tex", booktabs replace `tabprefs'
-esttab 	tcogp_f_* using "./results/panel_nhts/cohfespecs_lev16.tex", booktabs replace `tabprefs'
-
-esttab 	tcodl_a_* using "./results/panel_nhts/cohfespecs_d2_p2.tex", booktabs replace `tabprefs'
-esttab 	tcodl_b_* using "./results/panel_nhts/cohfespecs_d2_p1.tex", booktabs replace `tabprefs'
-esttab 	tcodl_c_* using "./results/panel_nhts/cohfespecs_d1_p2.tex", booktabs replace `tabprefs'
-esttab 	tcodl_d_* using "./results/panel_nhts/cohfespecs_d1_p1.tex", booktabs replace `tabprefs'
-esttab 	tcodl_e_* using "./results/panel_nhts/cohfespecs_d1_p0.tex", booktabs replace `tabprefs'
-esttab 	tcodl_f_* using "./results/panel_nhts/cohfespecs_levp0.tex", booktabs replace `tabprefs'
-
-eststo clear
-
-/* Other outcomes */ 
-
-local demc white urban_bin famsize i.sex
-
-eststo tc4a_1:	reghdfe lvmt_pc 		d2gp_now_at18 										[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tc4a_2:	reghdfe lvmt_pc 		d2gp_now_at18 c.byr##c.byr `demc' 					[aw=expfllpr], a(stsamyr_fe age hhi_bin_yr) cluster(stateid)
-eststo tc4a_3:	reghdfe lvmt_pc 		d2gp_now_at18 c.byr##c.byr `demc' 	if urban_bin==1 [aw=expfllpr], a(stsamyr_fe age hhi_bin_yr) cluster(stateid)
-
-eststo tc4a_4:	reghdfe miles_per_psn 	d2gp_now_at18 										[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tc4a_5:	reghdfe miles_per_psn 	d2gp_now_at18 c.byr##c.byr `demc' 					[aw=expfllpr], a(stsamyr_fe age hhi_bin_yr) cluster(stateid)
-eststo tc4a_6:	reghdfe miles_per_psn 	d2gp_now_at18 c.byr##c.byr `demc' 	if urban_bin==1 [aw=expfllpr], a(stsamyr_fe age hhi_bin_yr) cluster(stateid)
-
-eststo tc4a_7:	reghdfe miles_per_psn 	d2gp_now_at18 						if miles_per_psn>0 [aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tc4a_8:	reghdfe miles_per_psn 	d2gp_now_at18 c.byr##c.byr `demc' 	if miles_per_psn>0 [aw=expfllpr], a(stsamyr_fe age hhi_bin_yr) cluster(stateid)
-eststo tc4a_9:	reghdfe miles_per_psn 	d2gp_now_at18 c.byr##c.byr `demc' 	if urban_bin==1 & miles_per_psn>0 [aw=expfllpr], a(stsamyr_fe age hhi_bin_yr) cluster(stateid)
-
-local 	tabprefs cells(b(star fmt(%9.4f)) se(par)) stats(r2_a N, fmt(%9.4f %9.0g) labels(R-squared)) legend label starlevels(+ 0.10 * 0.05 ** 0.01 *** 0.001) 
-
-esttab 	tc4a_* using "./results/panel_nhts/other_vmt_d2_18.tex", booktabs replace `tabprefs'
+esttab 	tcodl_a_* using "./results/table_a12/cohfespecs_d2_p2.tex", booktabs replace `tabprefs'
+esttab 	tcodl_b_* using "./results/table_a12/cohfespecs_d2_p1.tex", booktabs replace `tabprefs'
+esttab 	tcodl_c_* using "./results/table_a12/cohfespecs_d1_p2.tex", booktabs replace `tabprefs'
+esttab 	tcodl_d_* using "./results/table_a12/cohfespecs_d1_p1.tex", booktabs replace `tabprefs'
+esttab 	tcodl_e_* using "./results/table_a12/cohfespecs_d1_p0.tex", booktabs replace `tabprefs'
+esttab 	tcodl_f_* using "./results/table_a12/cohfespecs_levp0.tex", booktabs replace `tabprefs'
 
 eststo clear
 
 /* Age Heterogeneity */
 
-gen		d2gp_age18_2534 = (age>=25 & age<=34)*d2gp_now_at18
-gen		d2gp_age18_3544 = (age>=35 & age<=44)*d2gp_now_at18
-gen		d2gp_age18_4554 = (age>=45 & age<=54)*d2gp_now_at18
-
-gen		d2gp_age18_2529 = (age>=25 & age<=29)*d2gp_now_at18
-gen		d2gp_age18_3034 = (age>=30 & age<=34)*d2gp_now_at18
-gen		d2gp_age18_3539 = (age>=35 & age<=39)*d2gp_now_at18
-gen		d2gp_age18_4044 = (age>=40 & age<=44)*d2gp_now_at18
-gen		d2gp_age18_4549 = (age>=45 & age<=49)*d2gp_now_at18
-gen		d2gp_age18_5054 = (age>=50 & age<=54)*d2gp_now_at18
-
-gen		d2gp_agep2_2534 = (age>=25 & age<=34)*d2gp_now_atp2
-gen		d2gp_agep2_3544 = (age>=35 & age<=44)*d2gp_now_atp2
-gen		d2gp_agep2_4554 = (age>=45 & age<=54)*d2gp_now_atp2
-
-gen		d2gp_agep2_2529 = (age>=25 & age<=29)*d2gp_now_atp2
-gen		d2gp_agep2_3034 = (age>=30 & age<=34)*d2gp_now_atp2
-gen		d2gp_agep2_3539 = (age>=35 & age<=39)*d2gp_now_atp2
-gen		d2gp_agep2_4044 = (age>=40 & age<=44)*d2gp_now_atp2
-gen		d2gp_agep2_4549 = (age>=45 & age<=49)*d2gp_now_atp2
-gen		d2gp_agep2_5054 = (age>=50 & age<=54)*d2gp_now_atp2
-
-local 	bin5yrs_18  d2gp_age18_2529 d2gp_age18_3034 d2gp_age18_3539 d2gp_age18_4044 d2gp_age18_4549 d2gp_age18_5054
-local	bin10yrs_18 d2gp_age18_2534 d2gp_age18_3544 d2gp_age18_4554
-
-local 	bin5yrs_p2  d2gp_agep2_2529 d2gp_agep2_3034 d2gp_agep2_3539 d2gp_agep2_4044 d2gp_agep2_4549 d2gp_agep2_5054
-local	bin10yrs_p2 d2gp_agep2_2534 d2gp_agep2_3544 d2gp_agep2_4554
-
-local demc white urban_bin famsize i.sex
-
-eststo tcage_1:	reghdfe lvmt_pc  `bin5yrs_18' 	 					[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tcage_2:	reghdfe lvmt_pc  `bin5yrs_18' `demc' c.byr##c.byr	[aw=expfllpr], a(stsamyr_fe age hhi_bin_yr) cluster(stateid)
-eststo tcage_3:	reghdfe lvmt_pc  `bin10yrs_18'	 					[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tcage_4:	reghdfe lvmt_pc  `bin10yrs_18' `demc' c.byr##c.byr	[aw=expfllpr], a(stsamyr_fe age hhi_bin_yr) cluster(stateid)
-
-eststo tcage_5:	reghdfe lvmt_pc  `bin5yrs_p2'	 			[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tcage_6:	reghdfe lvmt_pc  `bin5yrs_p2' c.byr##c.byr	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tcage_7:	reghdfe lvmt_pc  `bin10yrs_p2'	 			[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tcage_8:	reghdfe lvmt_pc  `bin10yrs_p2' c.byr##c.byr	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-
-local 	tabprefs cells(b(star fmt(%9.4f)) se(par)) stats(r2_a N, fmt(%9.4f %9.0g) labels(R-squared)) legend label starlevels(+ 0.10 * 0.05 ** 0.01 *** 0.001) 
-
-esttab 	tcage_? using "./results/panel_nhts/agehet_18p2.tex", booktabs replace `tabprefs'
-
-eststo clear
-drop  	d2gp_age??_????
-
 gen		d2gp_age17_2534 = (age>=25 & age<=34)*d2gp_now_at17
 gen		d2gp_age17_3544 = (age>=35 & age<=44)*d2gp_now_at17
 gen		d2gp_age17_4554 = (age>=45 & age<=54)*d2gp_now_at17
-
-gen		d2gp_age17_2529 = (age>=25 & age<=29)*d2gp_now_at17
-gen		d2gp_age17_3034 = (age>=30 & age<=34)*d2gp_now_at17
-gen		d2gp_age17_3539 = (age>=35 & age<=39)*d2gp_now_at17
-gen		d2gp_age17_4044 = (age>=40 & age<=44)*d2gp_now_at17
-gen		d2gp_age17_4549 = (age>=45 & age<=49)*d2gp_now_at17
-gen		d2gp_age17_5054 = (age>=50 & age<=54)*d2gp_now_at17
 
 gen		d2gp_agep1_2534 = (age>=25 & age<=34)*d2gp_now_atp1
 gen		d2gp_agep1_3544 = (age>=35 & age<=44)*d2gp_now_atp1
 gen		d2gp_agep1_4554 = (age>=45 & age<=54)*d2gp_now_atp1
 
-gen		d2gp_agep1_2529 = (age>=25 & age<=29)*d2gp_now_atp1
-gen		d2gp_agep1_3034 = (age>=30 & age<=34)*d2gp_now_atp1
-gen		d2gp_agep1_3539 = (age>=35 & age<=39)*d2gp_now_atp1
-gen		d2gp_agep1_4044 = (age>=40 & age<=44)*d2gp_now_atp1
-gen		d2gp_agep1_4549 = (age>=45 & age<=49)*d2gp_now_atp1
-gen		d2gp_agep1_5054 = (age>=50 & age<=54)*d2gp_now_atp1
-
-local 	bin5yrs_17  d2gp_age17_2529 d2gp_age17_3034 d2gp_age17_3539 d2gp_age17_4044 d2gp_age17_4549 d2gp_age17_5054
 local	bin10yrs_17 d2gp_age17_2534 d2gp_age17_3544 d2gp_age17_4554
 
-local 	bin5yrs_p1  d2gp_agep1_2529 d2gp_agep1_3034 d2gp_agep1_3539 d2gp_agep1_4044 d2gp_agep1_4549 d2gp_agep1_5054
 local	bin10yrs_p1 d2gp_agep1_2534 d2gp_agep1_3544 d2gp_agep1_4554
 
 local demc white urban_bin famsize i.sex
 
-eststo tcage_1:	reghdfe lvmt_pc  `bin5yrs_17' 	 					[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tcage_2:	reghdfe lvmt_pc  `bin5yrs_17' `demc' c.byr##c.byr	[aw=expfllpr], a(stsamyr_fe age hhi_bin_yr) cluster(stateid)
 eststo tcage_3:	reghdfe lvmt_pc  `bin10yrs_17'	 					[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
 eststo tcage_4:	reghdfe lvmt_pc  `bin10yrs_17' `demc' c.byr##c.byr	[aw=expfllpr], a(stsamyr_fe age hhi_bin_yr) cluster(stateid)
 
-eststo tcage_5:	reghdfe lvmt_pc  `bin5yrs_p1'	 			[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tcage_6:	reghdfe lvmt_pc  `bin5yrs_p1' c.byr##c.byr	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
 eststo tcage_7:	reghdfe lvmt_pc  `bin10yrs_p1'	 			[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
 eststo tcage_8:	reghdfe lvmt_pc  `bin10yrs_p1' c.byr##c.byr	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
 
 local 	tabprefs cells(b(star fmt(%9.4f)) se(par)) stats(r2_a N, fmt(%9.4f %9.0g) labels(R-squared)) legend label starlevels(+ 0.10 * 0.05 ** 0.01 *** 0.001) 
 
-esttab 	tcage_? using "./results/panel_nhts/agehet_17p1.tex", booktabs replace `tabprefs'
+esttab 	tcage_? using "./results/table_a16/nhts_agehet_17p1.tex", booktabs replace `tabprefs'
 
 eststo clear
 drop  	d2gp_age??_????
 
-/* Asymmetry  */
-gen		d2gp_now_at18_pos = max(0, d2gp_now_at18) if !mi(d2gp_now_at18)
-gen		d2gp_now_at18_neg = min(0, d2gp_now_at18) if !mi(d2gp_now_at18)
+** ** ** **
+/* Robust to dropping 1979/80 Crisis */
+loc y79 "byr!=1965"	
+loc y74 "byr!=1960"
 
-gen		d2gp_now_atp2_pos = max(0, d2gp_now_atp2) if !mi(d2gp_now_atp2)
-gen		d2gp_now_atp2_neg = min(0, d2gp_now_atp2) if !mi(d2gp_now_atp2)
+eststo tdrop_1:	reghdfe lvmt_pc d2gp_now_at17  				if `y74' [aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
+eststo tdrop_2:	reghdfe lvmt_pc d2gp_now_atp2 				if `y74' [aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
+eststo tdrop_3:	reghdfe lvmt_pc d2gp_now_at17  				if `y79' [aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
+eststo tdrop_4:	reghdfe lvmt_pc d2gp_now_atp2 				if `y79' [aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
+eststo tdrop_5:	reghdfe lvmt_pc d2gp_now_at17  				if `y74' & `y79' [aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
+eststo tdrop_6:	reghdfe lvmt_pc d2gp_now_atp2 				if `y74' & `y79' [aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
 
-gen		d2gp_now_at17_pos = max(0, d2gp_now_at17) if !mi(d2gp_now_at17)
-gen		d2gp_now_at17_neg = min(0, d2gp_now_at17) if !mi(d2gp_now_at17)
-
-gen		d2gp_now_atp1_pos = max(0, d2gp_now_atp1) if !mi(d2gp_now_atp1)
-gen		d2gp_now_atp1_neg = min(0, d2gp_now_atp1) if !mi(d2gp_now_atp1)
-
-local demc white urban_bin famsize i.sex
-
-eststo tc_asym8_1:	reghdfe lvmt_pc d2gp_now_at18_???  						[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tc_asym8_2:	reghdfe lvmt_pc d2gp_now_at18_??? `demc'				[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tc_asym8_3:	reghdfe lvmt_pc d2gp_now_at18_??? `demc' 				[aw=expfllpr], a(stateid nhtsyear age hhi_bin_yr) cluster(stateid)
-eststo tc_asym8_4:	reghdfe lvmt_pc d2gp_now_at18_??? `demc' 				[aw=expfllpr], a(stsamyr_fe age hhi_bin_yr) cluster(stateid)
-eststo tc_asym8_5:	reghdfe lvmt_pc d2gp_now_at18_??? `demc' c.byr##c.byr 	[aw=expfllpr], a(stsamyr_fe age hhi_bin_yr) cluster(stateid)
-
-eststo tc_asym7_1:	reghdfe lvmt_pc d2gp_now_at17_???  						[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tc_asym7_2:	reghdfe lvmt_pc d2gp_now_at17_??? `demc'				[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tc_asym7_3:	reghdfe lvmt_pc d2gp_now_at17_??? `demc'			 	[aw=expfllpr], a(stateid nhtsyear age hhi_bin_yr) cluster(stateid)
-eststo tc_asym7_4:	reghdfe lvmt_pc d2gp_now_at17_??? `demc'				[aw=expfllpr], a(stsamyr_fe age hhi_bin_yr) cluster(stateid)
-eststo tc_asym7_5:	reghdfe lvmt_pc d2gp_now_at17_??? `demc' c.byr##c.byr  	[aw=expfllpr], a(stsamyr_fe age hhi_bin_yr) cluster(stateid)
-
-eststo td_asym2_1:	reghdfe lvmt_pc d2gp_now_atp2_???  						[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo td_asym2_2:	reghdfe lvmt_pc d2gp_now_atp2_??? `demc'				[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo td_asym2_3:	reghdfe lvmt_pc d2gp_now_atp2_??? `demc' 				[aw=expfllpr], a(stateid nhtsyear age hhi_bin_yr) cluster(stateid)
-eststo td_asym2_4:	reghdfe lvmt_pc d2gp_now_atp2_??? `demc' 				[aw=expfllpr], a(stsamyr_fe age hhi_bin_yr) cluster(stateid)
-eststo td_asym2_5:	reghdfe lvmt_pc d2gp_now_atp2_??? `demc' c.byr##c.byr 	[aw=expfllpr], a(stsamyr_fe age hhi_bin_yr) cluster(stateid)
-
-eststo td_asym1_1:	reghdfe lvmt_pc d2gp_now_atp1_???  						[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo td_asym1_2:	reghdfe lvmt_pc d2gp_now_atp1_??? `demc'				[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo td_asym1_3:	reghdfe lvmt_pc d2gp_now_atp1_??? `demc'			 	[aw=expfllpr], a(stateid nhtsyear age hhi_bin_yr) cluster(stateid)
-eststo td_asym1_4:	reghdfe lvmt_pc d2gp_now_atp1_??? `demc'				[aw=expfllpr], a(stsamyr_fe age hhi_bin_yr) cluster(stateid)
-eststo td_asym1_5:	reghdfe lvmt_pc d2gp_now_atp1_??? `demc' c.byr##c.byr  	[aw=expfllpr], a(stsamyr_fe age hhi_bin_yr) cluster(stateid)
 
 local 	tabprefs cells(b(star fmt(%9.4f)) se(par)) stats(r2_a N, fmt(%9.4f %9.0g) labels(R-squared)) legend label starlevels(+ 0.10 * 0.05 ** 0.01 *** 0.001) 
 
-esttab 	tc_asym8_? using "./results/panel_nhts/asym_d2_18.tex.tex", booktabs replace `tabprefs'
-esttab 	tc_asym7_? using "./results/panel_nhts/asym_d2_17.tex.tex", booktabs replace `tabprefs'
-esttab 	td_asym2_? using "./results/panel_nhts/asym_d2_p2.tex.tex", booktabs replace `tabprefs'
-esttab 	td_asym1_? using "./results/panel_nhts/asym_d2_p1.tex.tex", booktabs replace `tabprefs'
+esttab 	tdrop_* using "./results/other/dropoilcrises_nhts.tex", booktabs replace `tabprefs'
+est clear
 
-/* GDL and stuff */
+** ** ** **
+/* Other robustness */
+
+preserve
+	clear
+	insheet using 	"./data/state_pops/nhgis0081_ds104_1980_state.csv", c
+	keep 	statea c7l001
+	rename 	statea statefip
+	rename	c7l001 pop
+	tempfile p1980
+	save	"`p1980'", replace
+	
+	use 	"./output/gasprice_prepped.dta", clear
+	merge 	m:1 statefip using "`p1980'"
+	collapse (mean) gas_price_99 d1gp_bp d2gp_bp [aw=pop], by(year)
+	rename gas_price_99 rgp_national 
+	rename d1gp_bp d1gp_national
+	rename d2gp_bp d2gp_national
+	tempfile natprice
+	save	"`natprice'", replace
+	tab 	rgp_national 
+	tab 	year
+restore
+
+rename 	yr_age17 year
+merge m:1 year using "`natprice'"
+keep if	_merge==3
+drop  	d1gp_national rgp_national _merge
+rename  d2gp_national d2gp17_national
+rename 	year yr_age17
+
+rename yr_age16 year
+merge m:1 year using "`natprice'"
+drop if _merge==2
+drop  	d1gp_national d2gp_national _merge
+rename   rgp_national rgp16_national
+rename year yr_age16
+
+** Multiple treatments + national shocks
+
 local demc white urban_bin famsize i.sex
 
-eststo dle_1:	reghdfe lvmt_pc min_age_full min_int_age 						[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo dle_2:	reghdfe lvmt_pc min_age_full min_int_age `demc'					[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo dle_3:	reghdfe lvmt_pc min_age_full min_int_age `demc' 				[aw=expfllpr], a(stateid nhtsyear age hhi_bin_yr) cluster(stateid)
-eststo dle_4:	reghdfe lvmt_pc min_age_full min_int_age `demc' 				[aw=expfllpr], a(stsamyr_fe age hhi_bin_yr) cluster(stateid)
-eststo dle_5:	reghdfe lvmt_pc min_age_full min_int_age `demc' c.byr##c.byr 	[aw=expfllpr], a(stsamyr_fe age hhi_bin_yr) cluster(stateid)
+eststo mt_1:	reghdfe lvmt_pc d2gp_now_at17 real_gp_at16 						[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
+eststo mt_2:	reghdfe lvmt_pc d2gp_now_at17 real_gp_at16 `demc' c.byr##c.byr  [aw=expfllpr], a(stsamyr_fe age hhi_bin_yr) cluster(stateid)
+eststo mt_3:	reghdfe lvmt_pc d2gp17_national									[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
+eststo mt_4:	reghdfe lvmt_pc d2gp17_national `demc' c.byr##c.byr  			[aw=expfllpr], a(stsamyr_fe age hhi_bin_yr) cluster(stateid)
+eststo mt_5:	reghdfe lvmt_pc rgp16_national									[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
+eststo mt_6:	reghdfe lvmt_pc rgp16_national `demc' c.byr##c.byr  			[aw=expfllpr], a(stsamyr_fe age hhi_bin_yr) cluster(stateid)
 
 local 	tabprefs cells(b(star fmt(%9.4f)) se(par)) stats(r2_a N, fmt(%9.4f %9.0g) labels(R-squared)) legend label starlevels(+ 0.10 * 0.05 ** 0.01 *** 0.001) 
- 
-esttab 	dle_* using "./results/nhts_dl/both_int.tex", booktabs replace `tabprefs' 
 
-eststo clear
+esttab 	mt_* using "./results/other/nhts_multtreatment_and_national.tex", booktabs replace `tabprefs'
+est clear
+
+** SEs
+
+local demc white urban_bin famsize i.sex
+
+eststo se_1:	reghdfe lvmt_pc d2gp_now_at17 						[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
+eststo se_2:	reghdfe lvmt_pc d2gp_now_at17						[aw=expfllpr], a(stateid nhtsyear age) cluster(byr)
+eststo se_3:	reghdfe lvmt_pc d2gp_now_at17 						[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid byr)
+eststo se_4:	reghdfe lvmt_pc d2gp_now_at17 `demc' c.byr##c.byr   [aw=expfllpr], a(stsamyr_fe age hhi_bin_yr) cluster(stateid)
+eststo se_5:	reghdfe lvmt_pc d2gp_now_at17 `demc' c.byr##c.byr   [aw=expfllpr], a(stsamyr_fe age hhi_bin_yr) cluster(byr)
+eststo se_6:	reghdfe lvmt_pc d2gp_now_at17 `demc' c.byr##c.byr   [aw=expfllpr], a(stsamyr_fe age hhi_bin_yr) cluster(stateid byr)
+
+eststo se_7:	reghdfe lvmt_pc real_gp_at16						[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
+eststo se_8:	reghdfe lvmt_pc real_gp_at16						[aw=expfllpr], a(stateid nhtsyear age) cluster(byr)
+eststo se_9:	reghdfe lvmt_pc real_gp_at16 						[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid byr)
+eststo se_10:	reghdfe lvmt_pc real_gp_at16 `demc' c.byr##c.byr   [aw=expfllpr], a(stsamyr_fe age hhi_bin_yr) cluster(stateid)
+eststo se_11:	reghdfe lvmt_pc real_gp_at16 `demc' c.byr##c.byr   [aw=expfllpr], a(stsamyr_fe age hhi_bin_yr) cluster(byr)
+eststo se_12:	reghdfe lvmt_pc real_gp_at16 `demc' c.byr##c.byr   [aw=expfllpr], a(stsamyr_fe age hhi_bin_yr) cluster(stateid byr)
+
+local 	tabprefs cells(b(star fmt(%9.4f)) se(par)) stats(r2_a N, fmt(%9.4f %9.0g) labels(R-squared)) legend label starlevels(+ 0.10 * 0.05 ** 0.01 *** 0.001) 
+
+esttab 	se_* using "./results/other/nhts_altSEs.tex", booktabs replace `tabprefs'
+est clear
 
 
 **********************************

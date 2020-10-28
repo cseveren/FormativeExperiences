@@ -5,10 +5,10 @@
 ************************************
 ************************************
 
-use 	"./results/panel_census/compare_reald1ages_long", clear
+use 	"./results/figures/census_reald1ages_long", clear
 gen		model = 0
 
-append using "./results/panel_nhts/compare_reald1ages_long"
+append using "./results/figures/nhts_reald1ages_long"
 replace model = 1 if mi(model)
 
 gen 	age = substr(varname,-2,.)
@@ -33,8 +33,8 @@ foreach m of numlist 0/1 {
 ** Census Shock
 
 local wt = 0
-local b2_censusshock = -.0140099
-local b3_censusshock = -1.078637
+local b2_censusshock = -.0140506
+local b3_censusshock = -1.075955
 
 foreach v of numlist 16/39 {
 	local wt = `wt'+(`v'-15)^`b3_censusshock'
@@ -48,8 +48,8 @@ foreach v of numlist 16/39 {
 ** NHTS Shock
 
 local wt = 0
-local b2_nhtsshock = -.6795835
-local b3_nhtsshock = -.3293701
+local b2_nhtsshock = -.6722487
+local b3_nhtsshock = -.3381073 
 
 foreach v of numlist 16/39 {
 	local wt = `wt'+(`v'-15)^`b3_nhtsshock'
@@ -75,7 +75,7 @@ twoway (rspike ci95_0_hi ci95_0_lo age if age<=25, lc(gs10) lw(vthin)) || ///
 		xtitle("Age of exposure (gas price shock {&Delta}(a{sub:t},a{sub:t-1}))") ///
 		ytitle("Extensive margin effect")
 
-graph export "./results/mn_ext.png", replace
+graph export "./results/figures/mn_ext.png", replace
 		
 		
 twoway (rspike ci95_1_hi ci95_1_lo age if age<=25, lc(gs10) lw(vthin)) || ///
@@ -88,7 +88,7 @@ twoway (rspike ci95_1_hi ci95_1_lo age if age<=25, lc(gs10) lw(vthin)) || ///
 		xtitle("Age of exposure (gas price shock {&Delta}(a{sub:t},a{sub:t-1}))") ///
 		ytitle("Intensive margin effect") 
 
-graph export "./results/mn_int.png", replace
+graph export "./results/figures/mn_int.png", replace
 
 ** COMBINED
 tempfile g1 g2		
@@ -119,7 +119,7 @@ twoway (rspike ci95_1_hi ci95_1_lo age if age<=25, lc(gs10) lw(vthin)) || ///
 graph combine "`g1'" "`g2'", c(1) xcommon  ///
  imargin(0 0 0 0) ysize(5.5) 
  
-graph export "./results/mn_both.png", replace
+graph export "./results/figures/mn_both.png", replace
 
 
 tempfile g1 g2		

@@ -173,38 +173,8 @@ compress
 ** Panel Regressions 		 ***
 ********************************
 
-** Longer Model
-eststo tc1b_2:	reghdfe lvmt_pc d1gp_now_at13  	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tc1b_3:	reghdfe lvmt_pc d1gp_now_at14 	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tc1b_4:	reghdfe lvmt_pc d1gp_now_at15 	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tc1b_5:	reghdfe lvmt_pc d1gp_now_at16 	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tc1b_6:	reghdfe lvmt_pc d1gp_now_at17 	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tc1b_7:	reghdfe lvmt_pc d1gp_now_at18 	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tc1b_8:	reghdfe lvmt_pc d1gp_now_at19 	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tc1b_9:	reghdfe lvmt_pc d1gp_now_at20 	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tc1b_10:	reghdfe lvmt_pc d1gp_now_at21 	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tc1b_11:	reghdfe lvmt_pc d1gp_now_at22 	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tc1b_12:	reghdfe lvmt_pc d1gp_now_at23 	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tc1b_13:	reghdfe lvmt_pc d1gp_now_at24 	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tc1b_14:	reghdfe lvmt_pc d1gp_now_at25 if age>26 [aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tc1b_15:	reghdfe lvmt_pc d1gp_now_at26 if age>27 [aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tc1b_16:	reghdfe lvmt_pc d1gp_now_at27 if age>28 [aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tc1b_17:	reghdfe lvmt_pc d1gp_now_at28 if age>29 [aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tc1b_18:	reghdfe lvmt_pc d1gp_now_at29 if age>30 [aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-
-local 	tabprefs cells(b(star fmt(%9.4f)) se(par)) stats(r2_a N, fmt(%9.4f %9.0g) labels(R-squared)) legend label starlevels(+ 0.10 * 0.05 ** 0.01 *** 0.001) 
-
-local 	rn1	"d1gp_now_at13 d1gp d1gp_now_at14 d1gp d1gp_now_at15 d1gp d1gp_now_at16 d1gp d1gp_now_at17 d1gp d1gp_now_at18 d1gp d1gp_now_at19 d1gp d1gp_now_at20 d1gp d1gp_now_at21 d1gp d1gp_now_at22 d1gp d1gp_now_at23 d1gp d1gp_now_at24 d1gp d1gp_now_at25 d1gp d1gp_now_at26 d1gp d1gp_now_at27 d1gp d1gp_now_at28 d1gp d1gp_now_at29 d1gp"
-
-esttab 	tc1b_* using "./results/panel_nhts/compare_reald1ages_long.tex", rename(`rn1') booktabs replace `tabprefs' 
-
 eststo clear
 
-** No Quadratic
-
-eststo clear
-
-eststo tc1a_1:	reghdfe lvmt_pc d2gp_now_at12  	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
 eststo tc1a_2:	reghdfe lvmt_pc d2gp_now_at13  	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
 eststo tc1a_3:	reghdfe lvmt_pc d2gp_now_at14  	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
 eststo tc1a_4:	reghdfe lvmt_pc d2gp_now_at15  	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
@@ -216,7 +186,6 @@ eststo tc1a_9:	reghdfe lvmt_pc d2gp_now_at20  	[aw=expfllpr], a(stateid nhtsyear
 eststo tc1a_10:	reghdfe lvmt_pc d2gp_now_at21  	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
 eststo tc1a_11:	reghdfe lvmt_pc d2gp_now_at22  	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
 
-eststo tc1b_1:	reghdfe lvmt_pc d1gp_now_at12  	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
 eststo tc1b_2:	reghdfe lvmt_pc d1gp_now_at13  	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
 eststo tc1b_3:	reghdfe lvmt_pc d1gp_now_at14 	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
 eststo tc1b_4:	reghdfe lvmt_pc d1gp_now_at15 	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
@@ -228,20 +197,7 @@ eststo tc1b_9:	reghdfe lvmt_pc d1gp_now_at20 	[aw=expfllpr], a(stateid nhtsyear 
 eststo tc1b_10:	reghdfe lvmt_pc d1gp_now_at21 	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
 eststo tc1b_11:	reghdfe lvmt_pc d1gp_now_at22 	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
 
-eststo tc1c_1:	reghdfe lvmt_pc real_gp_at12 	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tc1c_2:	reghdfe lvmt_pc real_gp_at13 	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tc1c_3:	reghdfe lvmt_pc real_gp_at14 	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tc1c_4:	reghdfe lvmt_pc real_gp_at15 	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tc1c_5:	reghdfe lvmt_pc real_gp_at16 	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tc1c_6:	reghdfe lvmt_pc real_gp_at17 	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tc1c_7:	reghdfe lvmt_pc real_gp_at18 	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tc1c_8:	reghdfe lvmt_pc real_gp_at19 	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tc1c_9:	reghdfe lvmt_pc real_gp_at20 	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tc1c_10:	reghdfe lvmt_pc real_gp_at21 	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tc1c_11:	reghdfe lvmt_pc real_gp_at22 	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
 
-
-eststo tq1a_1:	reghdfe lvmt_pc d2gp_now_atn4 	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
 eststo tq1a_2:	reghdfe lvmt_pc d2gp_now_atn3 	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
 eststo tq1a_3:	reghdfe lvmt_pc d2gp_now_atn2 	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
 eststo tq1a_4:	reghdfe lvmt_pc d2gp_now_atn1 	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
@@ -253,7 +209,6 @@ eststo tq1a_9:	reghdfe lvmt_pc d2gp_now_atp4 	[aw=expfllpr], a(stateid nhtsyear 
 eststo tq1a_10:	reghdfe lvmt_pc d2gp_now_atp5 	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
 eststo tq1a_11:	reghdfe lvmt_pc d2gp_now_atp6 	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
 
-eststo tq1b_1:	reghdfe lvmt_pc d1gp_now_atn4 	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
 eststo tq1b_2:	reghdfe lvmt_pc d1gp_now_atn3 	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
 eststo tq1b_3:	reghdfe lvmt_pc d1gp_now_atn2 	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
 eststo tq1b_4:	reghdfe lvmt_pc d1gp_now_atn1 	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
@@ -265,134 +220,21 @@ eststo tq1b_9:	reghdfe lvmt_pc d1gp_now_atp4 	[aw=expfllpr], a(stateid nhtsyear 
 eststo tq1b_10:	reghdfe lvmt_pc d1gp_now_atp5 	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
 eststo tq1b_11:	reghdfe lvmt_pc d1gp_now_atp6 	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
 
-eststo tq1c_1:	reghdfe lvmt_pc real_gp_atn4 	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tq1c_2:	reghdfe lvmt_pc real_gp_atn3 	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tq1c_3:	reghdfe lvmt_pc real_gp_atn2 	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tq1c_4:	reghdfe lvmt_pc real_gp_atn1 	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tq1c_5:	reghdfe lvmt_pc real_gp_atp0 	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tq1c_6:	reghdfe lvmt_pc real_gp_atp1 	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tq1c_7:	reghdfe lvmt_pc real_gp_atp2 	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tq1c_8:	reghdfe lvmt_pc real_gp_atp3 	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tq1c_9:	reghdfe lvmt_pc real_gp_atp4 	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tq1c_10:	reghdfe lvmt_pc real_gp_atp5 	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tq1c_11:	reghdfe lvmt_pc real_gp_atp6 	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-
 local 	tabprefs cells(b(star fmt(%9.4f)) se(par)) stats(r2_a N, fmt(%9.4f %9.0g) labels(R-squared)) legend label starlevels(+ 0.10 * 0.05 ** 0.01 *** 0.001) 
-
-estimates drop t?1?_1
 
 local 	rn2	"d2gp_now_at13 d2gp d2gp_now_at14 d2gp d2gp_now_at15 d2gp d2gp_now_at16 d2gp d2gp_now_at17 d2gp d2gp_now_at18 d2gp d2gp_now_at19 d2gp d2gp_now_at20 d2gp d2gp_now_at21 d2gp d2gp_now_at22 d2gp"
 local 	rn1	"d1gp_now_at13 d1gp d1gp_now_at14 d1gp d1gp_now_at15 d1gp d1gp_now_at16 d1gp d1gp_now_at17 d1gp d1gp_now_at18 d1gp d1gp_now_at19 d1gp d1gp_now_at20 d1gp d1gp_now_at21 d1gp d1gp_now_at22 d1gp"
-local 	rnlev	"real_gp_at13 lev real_gp_at14 lev real_gp_at15 lev real_gp_at16 lev real_gp_at17 lev real_gp_at18 lev real_gp_at19 lev real_gp_at20 lev real_gp_at21 lev real_gp_at22 lev"
 
 local 	rndl2	"d2gp_now_atn3 d2gp d2gp_now_atn2 d2gp d2gp_now_atn1 d2gp d2gp_now_atp0 d2gp d2gp_now_atp1 d2gp d2gp_now_atp2 d2gp d2gp_now_atp3 d2gp d2gp_now_atp4 d2gp d2gp_now_atp5 d2gp d2gp_now_atp6 d2gp"
 local 	rndl1	"d1gp_now_atn3 d1gp d1gp_now_atn2 d1gp d1gp_now_atn1 d1gp d1gp_now_atp0 d1gp d1gp_now_atp1 d1gp d1gp_now_atp2 d1gp d1gp_now_atp3 d1gp d1gp_now_atp4 d1gp d1gp_now_atp5 d1gp d1gp_now_atp6 d1gp"
-local 	rndllev	"real_gp_atn3 lev real_gp_atn2 lev real_gp_atn1 lev real_gp_atp0 lev real_gp_atp1 lev real_gp_atp2 lev real_gp_atp3 lev real_gp_atp4 lev real_gp_atp5 lev real_gp_atp6 lev"
 
-esttab 	tc1a_* using "./results/panel_nhts/compare_reald2ages.tex", rename(`rn2') booktabs replace `tabprefs' 
-esttab 	tc1b_* using "./results/panel_nhts/compare_reald1ages.tex", rename(`rn1') booktabs replace `tabprefs' 
-esttab 	tc1c_* using "./results/panel_nhts/compare_reallevels.tex", rename(`rnlev') booktabs replace `tabprefs' 
+esttab 	tc1a_* using "./results/table_a15/nhts_reald2ages.tex", rename(`rn2') booktabs replace `tabprefs' 
+esttab 	tc1b_* using "./results/table_a14/nhts_reald1ages.tex", rename(`rn1') booktabs replace `tabprefs' 
 
-esttab 	tq1a_* using "./results/panel_nhts/compare_dlreald2ages.tex", rename(`rndl2') booktabs replace `tabprefs' 
-esttab 	tq1b_* using "./results/panel_nhts/compare_dlreald1ages.tex", rename(`rndl1') booktabs replace `tabprefs' 
-esttab 	tq1c_* using "./results/panel_nhts/compare_dlreallevels.tex", rename(`rndllev') booktabs replace `tabprefs' 
+esttab 	tq1a_* using "./results/table_a15/nhts_dlreald2ages.tex", rename(`rndl2') booktabs replace `tabprefs' 
+esttab 	tq1b_* using "./results/table_a14/nhts_dlreald1ages.tex", rename(`rndl1') booktabs replace `tabprefs' 
 
-** With Quadratic
-
-eststo clear
-
-eststo tc1a_1:	reghdfe lvmt_pc d2gp_now_at12 c.byr##c.byr 	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tc1a_2:	reghdfe lvmt_pc d2gp_now_at13 c.byr##c.byr 	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tc1a_3:	reghdfe lvmt_pc d2gp_now_at14 c.byr##c.byr 	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tc1a_4:	reghdfe lvmt_pc d2gp_now_at15 c.byr##c.byr 	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tc1a_5:	reghdfe lvmt_pc d2gp_now_at16 c.byr##c.byr 	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tc1a_6:	reghdfe lvmt_pc d2gp_now_at17 c.byr##c.byr 	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tc1a_7:	reghdfe lvmt_pc d2gp_now_at18 c.byr##c.byr 	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tc1a_8:	reghdfe lvmt_pc d2gp_now_at19 c.byr##c.byr 	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tc1a_9:	reghdfe lvmt_pc d2gp_now_at20 c.byr##c.byr 	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tc1a_10:	reghdfe lvmt_pc d2gp_now_at21 c.byr##c.byr 	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tc1a_11:	reghdfe lvmt_pc d2gp_now_at22 c.byr##c.byr 	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-
-eststo tc1b_1:	reghdfe lvmt_pc d1gp_now_at12 c.byr##c.byr 	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tc1b_2:	reghdfe lvmt_pc d1gp_now_at13 c.byr##c.byr 	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tc1b_3:	reghdfe lvmt_pc d1gp_now_at14 c.byr##c.byr	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tc1b_4:	reghdfe lvmt_pc d1gp_now_at15 c.byr##c.byr	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tc1b_5:	reghdfe lvmt_pc d1gp_now_at16 c.byr##c.byr	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tc1b_6:	reghdfe lvmt_pc d1gp_now_at17 c.byr##c.byr	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tc1b_7:	reghdfe lvmt_pc d1gp_now_at18 c.byr##c.byr	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tc1b_8:	reghdfe lvmt_pc d1gp_now_at19 c.byr##c.byr	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tc1b_9:	reghdfe lvmt_pc d1gp_now_at20 c.byr##c.byr	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tc1b_10:	reghdfe lvmt_pc d1gp_now_at21 c.byr##c.byr	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tc1b_11:	reghdfe lvmt_pc d1gp_now_at22 c.byr##c.byr	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-
-eststo tc1c_1:	reghdfe lvmt_pc real_gp_at12 c.byr##c.byr	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tc1c_2:	reghdfe lvmt_pc real_gp_at13 c.byr##c.byr	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tc1c_3:	reghdfe lvmt_pc real_gp_at14 c.byr##c.byr	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tc1c_4:	reghdfe lvmt_pc real_gp_at15 c.byr##c.byr	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tc1c_5:	reghdfe lvmt_pc real_gp_at16 c.byr##c.byr	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tc1c_6:	reghdfe lvmt_pc real_gp_at17 c.byr##c.byr	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tc1c_7:	reghdfe lvmt_pc real_gp_at18 c.byr##c.byr	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tc1c_8:	reghdfe lvmt_pc real_gp_at19 c.byr##c.byr	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tc1c_9:	reghdfe lvmt_pc real_gp_at20 c.byr##c.byr	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tc1c_10:	reghdfe lvmt_pc real_gp_at21 c.byr##c.byr	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tc1c_11:	reghdfe lvmt_pc real_gp_at22 c.byr##c.byr	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-
-
-eststo tq1a_1:	reghdfe lvmt_pc d2gp_now_atn4 c.byr##c.byr	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tq1a_2:	reghdfe lvmt_pc d2gp_now_atn3 c.byr##c.byr	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tq1a_3:	reghdfe lvmt_pc d2gp_now_atn2 c.byr##c.byr	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tq1a_4:	reghdfe lvmt_pc d2gp_now_atn1 c.byr##c.byr	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tq1a_5:	reghdfe lvmt_pc d2gp_now_atp0 c.byr##c.byr	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tq1a_6:	reghdfe lvmt_pc d2gp_now_atp1 c.byr##c.byr	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tq1a_7:	reghdfe lvmt_pc d2gp_now_atp2 c.byr##c.byr	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tq1a_8:	reghdfe lvmt_pc d2gp_now_atp3 c.byr##c.byr	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tq1a_9:	reghdfe lvmt_pc d2gp_now_atp4 c.byr##c.byr	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tq1a_10:	reghdfe lvmt_pc d2gp_now_atp5 c.byr##c.byr	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tq1a_11:	reghdfe lvmt_pc d2gp_now_atp6 c.byr##c.byr	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-
-eststo tq1b_1:	reghdfe lvmt_pc d1gp_now_atn4 c.byr##c.byr	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tq1b_2:	reghdfe lvmt_pc d1gp_now_atn3 c.byr##c.byr	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tq1b_3:	reghdfe lvmt_pc d1gp_now_atn2 c.byr##c.byr	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tq1b_4:	reghdfe lvmt_pc d1gp_now_atn1 c.byr##c.byr	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tq1b_5:	reghdfe lvmt_pc d1gp_now_atp0 c.byr##c.byr	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tq1b_6:	reghdfe lvmt_pc d1gp_now_atp1 c.byr##c.byr	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tq1b_7:	reghdfe lvmt_pc d1gp_now_atp2 c.byr##c.byr	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tq1b_8:	reghdfe lvmt_pc d1gp_now_atp3 c.byr##c.byr	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tq1b_9:	reghdfe lvmt_pc d1gp_now_atp4 c.byr##c.byr	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tq1b_10:	reghdfe lvmt_pc d1gp_now_atp5 c.byr##c.byr	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tq1b_11:	reghdfe lvmt_pc d1gp_now_atp6 c.byr##c.byr	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-
-eststo tq1c_1:	reghdfe lvmt_pc real_gp_atn4 c.byr##c.byr	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tq1c_2:	reghdfe lvmt_pc real_gp_atn3 c.byr##c.byr	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tq1c_3:	reghdfe lvmt_pc real_gp_atn2 c.byr##c.byr	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tq1c_4:	reghdfe lvmt_pc real_gp_atn1 c.byr##c.byr	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tq1c_5:	reghdfe lvmt_pc real_gp_atp0 c.byr##c.byr	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tq1c_6:	reghdfe lvmt_pc real_gp_atp1 c.byr##c.byr	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tq1c_7:	reghdfe lvmt_pc real_gp_atp2 c.byr##c.byr	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tq1c_8:	reghdfe lvmt_pc real_gp_atp3 c.byr##c.byr	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tq1c_9:	reghdfe lvmt_pc real_gp_atp4 c.byr##c.byr	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tq1c_10:	reghdfe lvmt_pc real_gp_atp5 c.byr##c.byr	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tq1c_11:	reghdfe lvmt_pc real_gp_atp6 c.byr##c.byr	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-
-local 	tabprefs cells(b(star fmt(%9.4f)) se(par)) stats(r2_a N, fmt(%9.4f %9.0g) labels(R-squared)) legend label starlevels(+ 0.10 * 0.05 ** 0.01 *** 0.001) 
-
-estimates drop t?1?_1
-
-local 	rn2	"d2gp_now_at13 d2gp d2gp_now_at14 d2gp d2gp_now_at15 d2gp d2gp_now_at16 d2gp d2gp_now_at17 d2gp d2gp_now_at18 d2gp d2gp_now_at19 d2gp d2gp_now_at20 d2gp d2gp_now_at21 d2gp d2gp_now_at22 d2gp"
-local 	rn1	"d1gp_now_at13 d1gp d1gp_now_at14 d1gp d1gp_now_at15 d1gp d1gp_now_at16 d1gp d1gp_now_at17 d1gp d1gp_now_at18 d1gp d1gp_now_at19 d1gp d1gp_now_at20 d1gp d1gp_now_at21 d1gp d1gp_now_at22 d1gp"
-local 	rnlev	"real_gp_at13 lev real_gp_at14 lev real_gp_at15 lev real_gp_at16 lev real_gp_at17 lev real_gp_at18 lev real_gp_at19 lev real_gp_at20 lev real_gp_at21 lev real_gp_at22 lev"
-
-local 	rndl2	"d2gp_now_atn3 d2gp d2gp_now_atn2 d2gp d2gp_now_atn1 d2gp d2gp_now_atp0 d2gp d2gp_now_atp1 d2gp d2gp_now_atp2 d2gp d2gp_now_atp3 d2gp d2gp_now_atp4 d2gp d2gp_now_atp5 d2gp d2gp_now_atp6 d2gp"
-local 	rndl1	"d1gp_now_atn3 d1gp d1gp_now_atn2 d1gp d1gp_now_atn1 d1gp d1gp_now_atp0 d1gp d1gp_now_atp1 d1gp d1gp_now_atp2 d1gp d1gp_now_atp3 d1gp d1gp_now_atp4 d1gp d1gp_now_atp5 d1gp d1gp_now_atp6 d1gp"
-local 	rndllev	"real_gp_atn3 lev real_gp_atn2 lev real_gp_atn1 lev real_gp_atp0 lev real_gp_atp1 lev real_gp_atp2 lev real_gp_atp3 lev real_gp_atp4 lev real_gp_atp5 lev real_gp_atp6 lev"
-
-esttab 	tc1a_* using "./results/panel_nhts/compareq_reald2ages.tex", rename(`rn2') booktabs replace `tabprefs' 
-esttab 	tc1b_* using "./results/panel_nhts/compareq_reald1ages.tex", rename(`rn1') booktabs replace `tabprefs' 
-esttab 	tc1c_* using "./results/panel_nhts/compareq_reallevels.tex", rename(`rnlev') booktabs replace `tabprefs' 
-
-esttab 	tq1a_* using "./results/panel_nhts/compareq_dlreald2ages.tex", rename(`rndl2') booktabs replace `tabprefs' 
-esttab 	tq1b_* using "./results/panel_nhts/compareq_dlreald1ages.tex", rename(`rndl1') booktabs replace `tabprefs' 
-esttab 	tq1c_* using "./results/panel_nhts/compareq_dlreallevels.tex", rename(`rndllev') booktabs replace `tabprefs' 
+***************
 
 log close
 eststo clear

@@ -2,9 +2,13 @@
 ** This file makes performs panel analyses from all census 
 ** data years.
 *************************************************************
+clear
+
+local 	logf "`1'" 
+log using "`logf'", replace text
 
 use 	"./output/NHTScombined_per.dta", clear
-do 	"mn_wrapper_eval.do"
+
 ********************************
 ********************************
 ** Gas Price Merge	 		****
@@ -182,7 +186,8 @@ preserve
 	replace aexp = 0
 	reg 	lvmt_pc age_* stf_* nyr_*
 	predict td_resids, r
-
+	do 		"$dof/analysis/code/cef/mn_wrapper_eval.do"
+	
 	matrix 	P = J(21,17,.)
 
 	local 	i = 1
@@ -204,7 +209,7 @@ restore
 
 * Final optimization
 
-* APPROACH B
+* APPROACH B * These are results in the paper *
 reg 	lvmt_pc  age_* stf_* nyr_* [aw=expfllpr]
 predict td_resids, r
 
@@ -217,38 +222,6 @@ mat 	C2 = e(b)
 
 mat 	Af = (C1[1,82]+C2[1,1],C2[1,2],C2[1,3], C1[1,1..81])
 mn_wrapper_eval lvmt_pc aexp age_* stf_* nyr_* [aw=expfllpr], tfirst(0) tlast(38) expvar(d1gp_bp) awts(wt) initall(Af)
-
-
-****** STOP ********
-
-
-
-
-
-
-
-
-
-
-
-** -0.011391, -0.9882452
-
-gen  	t_drivealt1 = t_drive + 0.011391*aexp
-reg 	t_drivealt1 age_* bpl_* cy_* if insample_samestate==1 [aw=perwt]
-predict	resid_1, r
-
-mat 	Af = (0,-0.011391,-0.9882452)
-mn_wrapper_eval resid_1 aexp if insample_samestate==1 [aw=perwt], tfirst(0) tlast(38) expvar(d1gp_bp) awts(wt) init3(Af)
-** -0.002697, -0.8367698
-
-mat 	Af = (0.94,-0.011391,-0.9882452)
-mn_wrapper_eval resid_1 aexp age_* bpl_* cy_* if insample_samestate==1 [aw=perwt], tfirst(0) tlast(38) expvar(d1gp_bp) awts(wt) init3(Af)
-
-mat 	Af = (0.94,-0.011391,-0.9882452)
-mn_wrapper_eval t_drive aexp age_* bpl_* cy_* if insample_samestate==1 [aw=perwt], tfirst(0) tlast(38) expvar(d1gp_bp) awts(wt) init3(Af)
-
-mn_wrapper_eval t_drive aexp age_* bpl_* cy_* if insample_samestate==1 [aw=perwt], tfirst(0) tlast(38) expvar(d1gp_bp) awts(wt) init3(Af)
-
 
 capture noisily log close
 clear
