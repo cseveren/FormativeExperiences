@@ -179,35 +179,6 @@ drop if bpl==15
 
 gen 	byr = birthyr-1950
 
-/* sandbox */
-reghdfe t_drive d2gp_bp_at17 						if m_samestate==1 & !mi(metro) [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
-
-reghdfe t_drive d2gp_bp_at17 		if m_samestate==1 & !mi(metro) & metro!=0 [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
-
-gen 	incity = .
-replace incity = 1 if metro==2 | metro==3 | metro==4
-replace incity = 0 if metro==1
-
-gen 	incentralcity = .
-replace incentralcity = 1 if metro==2
-replace incentralcity = 0 if metro==3
-
-reghdfe incity d2gp_bp_at17 		if m_samestate==1 [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
-reghdfe incentralcity d2gp_bp_at17 	if m_samestate==1 [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
-
-reghdfe t_drive d2gp_bp_at17 		if m_samestate==1 & incity==1 [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
-reghdfe t_drive d2gp_bp_at17 		if m_samestate==1 & !mi(incentralcity) [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
-reghdfe t_drive d2gp_bp_at17 		if m_samestate==1 & incentralcity==1 [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
-
-
-** Conditional on vehicle ownership
-/*
-reghdfe t_drive d2gp_bp_at17 						if m_samestate==1 [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
-sum t_vehicle [aw=perwt] if e(sample)==1
-reghdfe t_drive d2gp_bp_at17 						if m_samestate==1 & t_vehicle==1 [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
-reghdfe t_drive d2gp_bp_at17 						if m_samestate==1 & t_vehicle==0 [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
-*/
-
 /* Summary Statistics */ 
 
 eststo 	sum1: estpost tabstat t_drive  t_transit  t_vehicle d2gp_bp_at17 e_emp age d_* w_hhi m_samestate [aw=perwt], s(mean sd count) c(s) 
@@ -215,14 +186,14 @@ eststo 	sum2: estpost tabstat t_drive  t_transit  t_vehicle d2gp_bp_at17 age d_*
 eststo 	sum3: estpost tabstat t_drive  t_transit  t_vehicle d2gp_bp_at17 e_emp age d_* w_hhi if m_samestate==1, s(mean sd count) c(s) 
 eststo 	sum4: estpost tabstat t_drive  t_transit  t_vehicle d2gp_bp_at17 age d_* w_hhi if m_samestate==1 & e_emp==1, s(mean sd count) c(s) 
 	
-esttab sum? using "./results/panel_census/summarystats.tex", booktabs replace cells(mean sd count)
+esttab sum? using "./results/table_a2/census_summarystats.tex", booktabs replace cells(mean sd count)
 
 eststo 	gsum1: estpost tabstat real_gp_at16 real_gp_atp0 d1gp_bp_at16 d1gp_bp_atp0 d1gp_bp_at17 d1gp_bp_atp1 d2gp_bp_at17 d2gp_bp_atp1 d2gp_now_at17  [aw=perwt], s(mean sd min max) c(s) 
 eststo 	gsum2: estpost tabstat real_gp_at16 real_gp_atp0 d1gp_bp_at16 d1gp_bp_atp0 d1gp_bp_at17 d1gp_bp_atp1 d2gp_bp_at17 d2gp_bp_atp1 d2gp_now_at17 if e_emp==1 [aw=perwt], s(mean sd min max) c(s) 
 eststo 	gsum3: estpost tabstat real_gp_at16 real_gp_atp0 d1gp_bp_at16 d1gp_bp_atp0 d1gp_bp_at17 d1gp_bp_atp1 d2gp_bp_at17 d2gp_bp_atp1 if m_samestate==1, s(mean sd min max) c(s) 
 eststo 	gsum4: estpost tabstat real_gp_at16 real_gp_atp0 d1gp_bp_at16 d1gp_bp_atp0 d1gp_bp_at17 d1gp_bp_atp1 d2gp_bp_at17 d2gp_bp_atp1 if m_samestate==1 & e_emp==1, s(mean sd min max) c(s) 
 	
-esttab gsum? using "./results/panel_census/summarystats_treatment.tex", booktabs replace cells(mean(pattern(1 1 1 1)) sd(pattern(1 1 1 1)) min(pattern(1 1 1 1)) max(pattern(1 1 1 1)))
+esttab gsum? using "./results/table_a7/census_summarystats_treatment.tex", booktabs replace cells(mean(pattern(1 1 1 1)) sd(pattern(1 1 1 1)) min(pattern(1 1 1 1)) max(pattern(1 1 1 1)))
 	
 /* Main specifications at different ages */ 
 
@@ -283,12 +254,12 @@ local 	rnme2d "d1gp_bp_at17 d1gp17 d1gp_now_at17 d1gp17"
 local 	rnme2e "d1gp_bp_at16 d1gp16 d1gp_now_at16 d1gp16"   
 local 	rnme2f "real_gp_at16 real16 real_now_at16 real16" 
 
-esttab 	tc2a_* using "./results/panel_census/mainspecs_d2_18.tex", rename(`rnme2a') booktabs replace `tabprefs'
-esttab 	tc2b_* using "./results/panel_census/mainspecs_d2_17.tex", rename(`rnme2b') booktabs replace `tabprefs'
-esttab 	tc2c_* using "./results/panel_census/mainspecs_d1_18.tex", rename(`rnme2c') booktabs replace `tabprefs'
-esttab 	tc2d_* using "./results/panel_census/mainspecs_d1_17.tex", rename(`rnme2d') booktabs replace `tabprefs'
-esttab 	tc2e_* using "./results/panel_census/mainspecs_d1_16.tex", rename(`rnme2e') booktabs replace `tabprefs'
-esttab 	tc2f_* using "./results/panel_census/mainspecs_lev16.tex", rename(`rnme2f') booktabs replace `tabprefs'
+esttab 	tc2a_* using "./results/table_a8/census_mainspecs_d2_18.tex", rename(`rnme2a') booktabs replace `tabprefs'
+esttab 	tc2b_* using "./results/table1/census_mainspecs_d2_17.tex", rename(`rnme2b') booktabs replace `tabprefs'
+esttab 	tc2c_* using "./results/table_a8/census_mainspecs_d1_18.tex", rename(`rnme2c') booktabs replace `tabprefs'
+esttab 	tc2d_* using "./results/table_a8/census_mainspecs_d1_17.tex", rename(`rnme2d') booktabs replace `tabprefs'
+esttab 	tc2e_* using "./results/table_a8/census_mainspecs_d1_16.tex", rename(`rnme2e') booktabs replace `tabprefs'
+esttab 	tc2f_* using "./results/table1/census_mainspecs_lev16.tex", rename(`rnme2f') booktabs replace `tabprefs'
 
 eststo clear
 
@@ -351,46 +322,16 @@ local 	rnme2d "d1gp_bp_atp1 d1gpp1 d1gp_now_atp1 d1gpp1"
 local 	rnme2e "d1gp_bp_atp0 d1gpp0 d1gp_now_atp0 d1gpp0"   
 local 	rnme2f "real_gp_atp0 realp0 real_now_atp0 realp0" 
 
-esttab 	tdla_* using "./results/panel_census/mainspecs_d2_p2.tex", rename(`rnme2a') booktabs replace `tabprefs'
-esttab 	tdlb_* using "./results/panel_census/mainspecs_d2_p1.tex", rename(`rnme2b') booktabs replace `tabprefs'
-esttab 	tdlc_* using "./results/panel_census/mainspecs_d1_p2.tex", rename(`rnme2c') booktabs replace `tabprefs'
-esttab 	tdld_* using "./results/panel_census/mainspecs_d1_p1.tex", rename(`rnme2d') booktabs replace `tabprefs'
-esttab 	tdle_* using "./results/panel_census/mainspecs_d1_p0.tex", rename(`rnme2e') booktabs replace `tabprefs'
-esttab 	tdlf_* using "./results/panel_census/mainspecs_levp0.tex", rename(`rnme2f') booktabs replace `tabprefs'
+esttab 	tdla_* using "./results/table_a8/census_mainspecs_d2_p2.tex", rename(`rnme2a') booktabs replace `tabprefs'
+esttab 	tdlb_* using "./results/table1/census_mainspecs_d2_p1.tex", rename(`rnme2b') booktabs replace `tabprefs'
+esttab 	tdlc_* using "./results/table_a8/census_mainspecs_d1_p2.tex", rename(`rnme2c') booktabs replace `tabprefs'
+esttab 	tdld_* using "./results/table_a8/census_mainspecs_d1_p1.tex", rename(`rnme2d') booktabs replace `tabprefs'
+esttab 	tdle_* using "./results/table_a8/census_mainspecs_d1_p0.tex", rename(`rnme2e') booktabs replace `tabprefs'
+esttab 	tdlf_* using "./results/table1/census_mainspecs_levp0.tex", rename(`rnme2f') booktabs replace `tabprefs'
 
 eststo clear
 
 /* Main specifications with cohort fixed effects */ 
-
-eststo tcogp_a_1:	reghdfe t_drive d2gp_bp_at18 			if m_samestate==1 [aw=perwt], a(bpl censusyear_all byr age) cluster(bpl)
-eststo tcogp_a_2:	reghdfe t_drive d2gp_bp_at18 d_*		if m_samestate==1 [aw=perwt], a(bpl censusyear_all byr age) cluster(bpl)
-eststo tcogp_a_3:	reghdfe t_drive d2gp_bp_at18 d_* lhhi	if m_samestate==1 [aw=perwt], a(bpl censusyear_all byr age) cluster(bpl)
-eststo tcogp_a_4:	reghdfe t_drive d2gp_bp_at18 d_* lhhi	if m_samestate==1 [aw=perwt], a(stcenyr_fe byr age) cluster(bpl)
-
-eststo tcogp_b_1:	reghdfe t_drive d2gp_bp_at17 			if m_samestate==1 [aw=perwt], a(bpl censusyear_all byr age) cluster(bpl)
-eststo tcogp_b_2:	reghdfe t_drive d2gp_bp_at17 d_*		if m_samestate==1 [aw=perwt], a(bpl censusyear_all byr age) cluster(bpl)
-eststo tcogp_b_3:	reghdfe t_drive d2gp_bp_at17 d_* lhhi	if m_samestate==1 [aw=perwt], a(bpl censusyear_all byr age) cluster(bpl)
-eststo tcogp_b_4:	reghdfe t_drive d2gp_bp_at17 d_* lhhi	if m_samestate==1 [aw=perwt], a(stcenyr_fe byr age) cluster(bpl)
-
-eststo tcogp_c_1:	reghdfe t_drive d1gp_bp_at18 			if m_samestate==1 [aw=perwt], a(bpl censusyear_all byr age) cluster(bpl)
-eststo tcogp_c_2:	reghdfe t_drive d1gp_bp_at18 d_*		if m_samestate==1 [aw=perwt], a(bpl censusyear_all byr age) cluster(bpl)
-eststo tcogp_c_3:	reghdfe t_drive d1gp_bp_at18 d_* lhhi	if m_samestate==1 [aw=perwt], a(bpl censusyear_all byr age) cluster(bpl)
-eststo tcogp_c_4:	reghdfe t_drive d1gp_bp_at18 d_* lhhi	if m_samestate==1 [aw=perwt], a(stcenyr_fe byr age) cluster(bpl)
-
-eststo tcogp_d_1:	reghdfe t_drive d1gp_bp_at17 			if m_samestate==1 [aw=perwt], a(bpl censusyear_all byr age) cluster(bpl)
-eststo tcogp_d_2:	reghdfe t_drive d1gp_bp_at17 d_*		if m_samestate==1 [aw=perwt], a(bpl censusyear_all byr age) cluster(bpl)
-eststo tcogp_d_3:	reghdfe t_drive d1gp_bp_at17 d_* lhhi	if m_samestate==1 [aw=perwt], a(bpl censusyear_all byr age) cluster(bpl)
-eststo tcogp_d_4:	reghdfe t_drive d1gp_bp_at17 d_* lhhi	if m_samestate==1 [aw=perwt], a(stcenyr_fe byr age) cluster(bpl)
-
-eststo tcogp_e_1:	reghdfe t_drive d1gp_bp_at16 			if m_samestate==1 [aw=perwt], a(bpl censusyear_all byr age) cluster(bpl)
-eststo tcogp_e_2:	reghdfe t_drive d1gp_bp_at16 d_*		if m_samestate==1 [aw=perwt], a(bpl censusyear_all byr age) cluster(bpl)
-eststo tcogp_e_3:	reghdfe t_drive d1gp_bp_at16 d_* lhhi	if m_samestate==1 [aw=perwt], a(bpl censusyear_all byr age) cluster(bpl)
-eststo tcogp_e_4:	reghdfe t_drive d1gp_bp_at16 d_* lhhi	if m_samestate==1 [aw=perwt], a(stcenyr_fe byr age) cluster(bpl)
-
-eststo tcogp_f_1:	reghdfe t_drive real_gp_at16 			if m_samestate==1 [aw=perwt], a(bpl censusyear_all byr age) cluster(bpl)
-eststo tcogp_f_2:	reghdfe t_drive real_gp_at16 d_*		if m_samestate==1 [aw=perwt], a(bpl censusyear_all byr age) cluster(bpl)
-eststo tcogp_f_3:	reghdfe t_drive real_gp_at16 d_* lhhi	if m_samestate==1 [aw=perwt], a(bpl censusyear_all byr age) cluster(bpl)
-eststo tcogp_f_4:	reghdfe t_drive real_gp_at16 d_* lhhi	if m_samestate==1 [aw=perwt], a(stcenyr_fe byr age) cluster(bpl)
 
 eststo tcodl_a_1:	reghdfe t_drive d2gp_bp_atp2 			if m_samestate==1 [aw=perwt], a(bpl censusyear_all byr age) cluster(bpl)
 eststo tcodl_a_2:	reghdfe t_drive d2gp_bp_atp2 d_*		if m_samestate==1 [aw=perwt], a(bpl censusyear_all byr age) cluster(bpl)
@@ -424,30 +365,16 @@ eststo tcodl_f_4:	reghdfe t_drive real_gp_atp0 d_* lhhi	if m_samestate==1 [aw=pe
 
 local 	tabprefs cells(b(star fmt(%9.4f)) se(par)) stats(r2_a N, fmt(%9.4f %9.0g) labels(R-squared)) legend label starlevels(+ 0.10 * 0.05 ** 0.01 *** 0.001) 
 
-esttab 	tcogp_a_* using "./results/panel_census/cohfespecs_d2_18.tex", booktabs replace `tabprefs'
-esttab 	tcogp_b_* using "./results/panel_census/cohfespecs_d2_17.tex", booktabs replace `tabprefs'
-esttab 	tcogp_c_* using "./results/panel_census/cohfespecs_d1_18.tex", booktabs replace `tabprefs'
-esttab 	tcogp_d_* using "./results/panel_census/cohfespecs_d1_17.tex", booktabs replace `tabprefs'
-esttab 	tcogp_e_* using "./results/panel_census/cohfespecs_d1_16.tex", booktabs replace `tabprefs'
-esttab 	tcogp_f_* using "./results/panel_census/cohfespecs_lev16.tex", booktabs replace `tabprefs'
-
-esttab 	tcodl_a_* using "./results/panel_census/cohfespecs_d2_p2.tex", booktabs replace `tabprefs'
-esttab 	tcodl_b_* using "./results/panel_census/cohfespecs_d2_p1.tex", booktabs replace `tabprefs'
-esttab 	tcodl_c_* using "./results/panel_census/cohfespecs_d1_p2.tex", booktabs replace `tabprefs'
-esttab 	tcodl_d_* using "./results/panel_census/cohfespecs_d1_p1.tex", booktabs replace `tabprefs'
-esttab 	tcodl_e_* using "./results/panel_census/cohfespecs_d1_p0.tex", booktabs replace `tabprefs'
-esttab 	tcodl_f_* using "./results/panel_census/cohfespecs_levp0.tex", booktabs replace `tabprefs'
+esttab 	tcodl_a_* using "./results/table_a10/census_cohfespecs_d2_p2.tex", booktabs replace `tabprefs'
+esttab 	tcodl_b_* using "./results/table_a10/census_cohfespecs_d2_p1.tex", booktabs replace `tabprefs'
+esttab 	tcodl_c_* using "./results/table_a10/census_cohfespecs_d1_p2.tex", booktabs replace `tabprefs'
+esttab 	tcodl_d_* using "./results/table_a10/census_cohfespecs_d1_p1.tex", booktabs replace `tabprefs'
+esttab 	tcodl_e_* using "./results/table_a10/census_cohfespecs_d1_p0.tex", booktabs replace `tabprefs'
+esttab 	tcodl_f_* using "./results/table_a10/census_cohfespecs_levp0.tex", booktabs replace `tabprefs'
 
 eststo clear
 
 /* Other outcomes */ 
-
-eststo tother_a_1:	reghdfe t_transit d2gp_bp_at18 							if m_samestate==1 [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
-eststo tother_a_2:	reghdfe t_transit d2gp_bp_at18 c.byr##c.byr d_* lhhi	if m_samestate==1 [aw=perwt], a(stcenyr_fe age) cluster(bpl)
-eststo tother_a_3:	reghdfe t_vehicle d2gp_bp_at18 							if m_samestate==1 & mi(t_transit)==0 [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
-eststo tother_a_4:	reghdfe t_vehicle d2gp_bp_at18 c.byr##c.byr d_* lhhi	if m_samestate==1 & mi(t_transit)==0 [aw=perwt], a(stcenyr_fe age) cluster(bpl)
-eststo tother_a_5:	reghdfe t_vehicle d2gp_bp_at18 							if m_samestate==1 [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
-eststo tother_a_6:	reghdfe t_vehicle d2gp_bp_at18 c.byr##c.byr d_* lhhi	if m_samestate==1 [aw=perwt], a(stcenyr_fe age) cluster(bpl)
 
 eststo tother_b_1:	reghdfe t_transit d2gp_bp_at17 							if m_samestate==1 [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
 eststo tother_b_2:	reghdfe t_transit d2gp_bp_at17 c.byr##c.byr d_* lhhi	if m_samestate==1 [aw=perwt], a(stcenyr_fe age) cluster(bpl)
@@ -455,27 +382,6 @@ eststo tother_b_3:	reghdfe t_vehicle d2gp_bp_at17 							if m_samestate==1 & mi(
 eststo tother_b_4:	reghdfe t_vehicle d2gp_bp_at17 c.byr##c.byr d_* lhhi	if m_samestate==1 & mi(t_transit)==0 [aw=perwt], a(stcenyr_fe age) cluster(bpl)
 eststo tother_b_5:	reghdfe t_vehicle d2gp_bp_at17 							if m_samestate==1 [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
 eststo tother_b_6:	reghdfe t_vehicle d2gp_bp_at17 c.byr##c.byr d_* lhhi	if m_samestate==1 [aw=perwt], a(stcenyr_fe age) cluster(bpl)
-
-eststo tother_c_1:	reghdfe t_transit d1gp_bp_at18 							if m_samestate==1 [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
-eststo tother_c_2:	reghdfe t_transit d1gp_bp_at18 c.byr##c.byr d_* lhhi	if m_samestate==1 [aw=perwt], a(stcenyr_fe age) cluster(bpl)
-eststo tother_c_3:	reghdfe t_vehicle d1gp_bp_at18 							if m_samestate==1 & mi(t_transit)==0 [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
-eststo tother_c_4:	reghdfe t_vehicle d1gp_bp_at18 c.byr##c.byr d_* lhhi	if m_samestate==1 & mi(t_transit)==0 [aw=perwt], a(stcenyr_fe age) cluster(bpl)
-eststo tother_c_5:	reghdfe t_vehicle d1gp_bp_at18 							if m_samestate==1 [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
-eststo tother_c_6:	reghdfe t_vehicle d1gp_bp_at18 c.byr##c.byr d_* lhhi	if m_samestate==1 [aw=perwt], a(stcenyr_fe age) cluster(bpl)
-
-eststo tother_d_1:	reghdfe t_transit d1gp_bp_at17 							if m_samestate==1 [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
-eststo tother_d_2:	reghdfe t_transit d1gp_bp_at17 c.byr##c.byr d_* lhhi	if m_samestate==1 [aw=perwt], a(stcenyr_fe age) cluster(bpl)
-eststo tother_d_3:	reghdfe t_vehicle d1gp_bp_at17 							if m_samestate==1 & mi(t_transit)==0 [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
-eststo tother_d_4:	reghdfe t_vehicle d1gp_bp_at17 c.byr##c.byr d_* lhhi	if m_samestate==1 & mi(t_transit)==0 [aw=perwt], a(stcenyr_fe age) cluster(bpl)
-eststo tother_d_5:	reghdfe t_vehicle d1gp_bp_at17 							if m_samestate==1 [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
-eststo tother_d_6:	reghdfe t_vehicle d1gp_bp_at17 c.byr##c.byr d_* lhhi	if m_samestate==1 [aw=perwt], a(stcenyr_fe age) cluster(bpl)
-
-eststo tother_e_1:	reghdfe t_transit d1gp_bp_at16 							if m_samestate==1 [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
-eststo tother_e_2:	reghdfe t_transit d1gp_bp_at16 c.byr##c.byr d_* lhhi	if m_samestate==1 [aw=perwt], a(stcenyr_fe age) cluster(bpl)
-eststo tother_e_3:	reghdfe t_vehicle d1gp_bp_at16 							if m_samestate==1 & mi(t_transit)==0 [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
-eststo tother_e_4:	reghdfe t_vehicle d1gp_bp_at16 c.byr##c.byr d_* lhhi	if m_samestate==1 & mi(t_transit)==0 [aw=perwt], a(stcenyr_fe age) cluster(bpl)
-eststo tother_e_5:	reghdfe t_vehicle d1gp_bp_at16 							if m_samestate==1 [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
-eststo tother_e_6:	reghdfe t_vehicle d1gp_bp_at16 c.byr##c.byr d_* lhhi	if m_samestate==1 [aw=perwt], a(stcenyr_fe age) cluster(bpl)
 
 eststo tother_f_1:	reghdfe t_transit real_gp_at16  						if m_samestate==1 [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
 eststo tother_f_2:	reghdfe t_transit real_gp_at16 c.byr##c.byr d_* lhhi	if m_samestate==1 [aw=perwt], a(stcenyr_fe age) cluster(bpl)
@@ -486,21 +392,10 @@ eststo tother_f_6:	reghdfe t_vehicle real_gp_at16 c.byr##c.byr d_* lhhi	if m_sam
 
 local 	tabprefs cells(b(star fmt(%9.4f)) se(par)) stats(r2_a N, fmt(%9.4f %9.0g) labels(R-squared)) legend label starlevels(+ 0.10 * 0.05 ** 0.01 *** 0.001) 
 
-esttab 	tother_a_? using "./results/panel_census/other_d2_18.tex", booktabs replace `tabprefs'
-esttab 	tother_b_? using "./results/panel_census/other_d2_17.tex", booktabs replace `tabprefs'
-esttab 	tother_c_? using "./results/panel_census/other_d1_18.tex", booktabs replace `tabprefs'
-esttab 	tother_d_? using "./results/panel_census/other_d1_17.tex", booktabs replace `tabprefs'
-esttab 	tother_e_? using "./results/panel_census/other_d1_16.tex", booktabs replace `tabprefs'
-esttab 	tother_f_? using "./results/panel_census/other_lev16.tex", booktabs replace `tabprefs'
+esttab 	tother_b_? using "./results/table2/other_d2_17.tex", booktabs replace `tabprefs'
+esttab 	tother_f_? using "./results/table2/other_lev16.tex", booktabs replace `tabprefs'
 
 eststo clear
-
-eststo tother_a_1:	reghdfe t_transit d2gp_bp_atp2 							if m_samestate==1 [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
-eststo tother_a_2:	reghdfe t_transit d2gp_bp_atp2 c.byr##c.byr d_* lhhi	if m_samestate==1 [aw=perwt], a(stcenyr_fe age) cluster(bpl)
-eststo tother_a_3:	reghdfe t_vehicle d2gp_bp_atp2 							if m_samestate==1 & mi(t_transit)==0 [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
-eststo tother_a_4:	reghdfe t_vehicle d2gp_bp_atp2 c.byr##c.byr d_* lhhi	if m_samestate==1 & mi(t_transit)==0 [aw=perwt], a(stcenyr_fe age) cluster(bpl)
-eststo tother_a_5:	reghdfe t_vehicle d2gp_bp_atp2 							if m_samestate==1 [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
-eststo tother_a_6:	reghdfe t_vehicle d2gp_bp_atp2 c.byr##c.byr d_* lhhi	if m_samestate==1 [aw=perwt], a(stcenyr_fe age) cluster(bpl)
 
 eststo tother_b_1:	reghdfe t_transit d2gp_bp_atp1 							if m_samestate==1 [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
 eststo tother_b_2:	reghdfe t_transit d2gp_bp_atp1 c.byr##c.byr d_* lhhi	if m_samestate==1 [aw=perwt], a(stcenyr_fe age) cluster(bpl)
@@ -508,27 +403,6 @@ eststo tother_b_3:	reghdfe t_vehicle d2gp_bp_atp1 							if m_samestate==1 & mi(
 eststo tother_b_4:	reghdfe t_vehicle d2gp_bp_atp1 c.byr##c.byr d_* lhhi	if m_samestate==1 & mi(t_transit)==0 [aw=perwt], a(stcenyr_fe age) cluster(bpl)
 eststo tother_b_5:	reghdfe t_vehicle d2gp_bp_atp1 							if m_samestate==1 [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
 eststo tother_b_6:	reghdfe t_vehicle d2gp_bp_atp1 c.byr##c.byr d_* lhhi	if m_samestate==1 [aw=perwt], a(stcenyr_fe age) cluster(bpl)
-
-eststo tother_c_1:	reghdfe t_transit d1gp_bp_atp2 							if m_samestate==1 [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
-eststo tother_c_2:	reghdfe t_transit d1gp_bp_atp2 c.byr##c.byr d_* lhhi	if m_samestate==1 [aw=perwt], a(stcenyr_fe age) cluster(bpl)
-eststo tother_c_3:	reghdfe t_vehicle d1gp_bp_atp2 							if m_samestate==1 & mi(t_transit)==0 [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
-eststo tother_c_4:	reghdfe t_vehicle d1gp_bp_atp2 c.byr##c.byr d_* lhhi	if m_samestate==1 & mi(t_transit)==0 [aw=perwt], a(stcenyr_fe age) cluster(bpl)
-eststo tother_c_5:	reghdfe t_vehicle d1gp_bp_atp2 							if m_samestate==1 [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
-eststo tother_c_6:	reghdfe t_vehicle d1gp_bp_atp2 c.byr##c.byr d_* lhhi	if m_samestate==1 [aw=perwt], a(stcenyr_fe age) cluster(bpl)
-
-eststo tother_d_1:	reghdfe t_transit d1gp_bp_atp1 							if m_samestate==1 [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
-eststo tother_d_2:	reghdfe t_transit d1gp_bp_atp1 c.byr##c.byr d_* lhhi	if m_samestate==1 [aw=perwt], a(stcenyr_fe age) cluster(bpl)
-eststo tother_d_3:	reghdfe t_vehicle d1gp_bp_atp1 							if m_samestate==1 & mi(t_transit)==0 [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
-eststo tother_d_4:	reghdfe t_vehicle d1gp_bp_atp1 c.byr##c.byr d_* lhhi	if m_samestate==1 & mi(t_transit)==0 [aw=perwt], a(stcenyr_fe age) cluster(bpl)
-eststo tother_d_5:	reghdfe t_vehicle d1gp_bp_atp1 							if m_samestate==1 [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
-eststo tother_d_6:	reghdfe t_vehicle d1gp_bp_atp1 c.byr##c.byr d_* lhhi	if m_samestate==1 [aw=perwt], a(stcenyr_fe age) cluster(bpl)
-
-eststo tother_e_1:	reghdfe t_transit d1gp_bp_atp0 							if m_samestate==1 [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
-eststo tother_e_2:	reghdfe t_transit d1gp_bp_atp0 c.byr##c.byr d_* lhhi	if m_samestate==1 [aw=perwt], a(stcenyr_fe age) cluster(bpl)
-eststo tother_e_3:	reghdfe t_vehicle d1gp_bp_atp0 							if m_samestate==1 & mi(t_transit)==0 [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
-eststo tother_e_4:	reghdfe t_vehicle d1gp_bp_atp0 c.byr##c.byr d_* lhhi	if m_samestate==1 & mi(t_transit)==0 [aw=perwt], a(stcenyr_fe age) cluster(bpl)
-eststo tother_e_5:	reghdfe t_vehicle d1gp_bp_atp0 							if m_samestate==1 [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
-eststo tother_e_6:	reghdfe t_vehicle d1gp_bp_atp0 c.byr##c.byr d_* lhhi	if m_samestate==1 [aw=perwt], a(stcenyr_fe age) cluster(bpl)
 
 eststo tother_f_1:	reghdfe t_transit real_gp_atp0  						if m_samestate==1 [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
 eststo tother_f_2:	reghdfe t_transit real_gp_atp0 c.byr##c.byr d_* lhhi	if m_samestate==1 [aw=perwt], a(stcenyr_fe age) cluster(bpl)
@@ -539,162 +413,130 @@ eststo tother_f_6:	reghdfe t_vehicle real_gp_atp0 c.byr##c.byr d_* lhhi	if m_sam
 
 local 	tabprefs cells(b(star fmt(%9.4f)) se(par)) stats(r2_a N, fmt(%9.4f %9.0g) labels(R-squared)) legend label starlevels(+ 0.10 * 0.05 ** 0.01 *** 0.001) 
 
-esttab 	tother_a_? using "./results/panel_census/other_d2_p2.tex", booktabs replace `tabprefs'
-esttab 	tother_b_? using "./results/panel_census/other_d2_p1.tex", booktabs replace `tabprefs'
-esttab 	tother_c_? using "./results/panel_census/other_d1_p2.tex", booktabs replace `tabprefs'
-esttab 	tother_d_? using "./results/panel_census/other_d1_p1.tex", booktabs replace `tabprefs'
-esttab 	tother_e_? using "./results/panel_census/other_d1_p0.tex", booktabs replace `tabprefs'
-esttab 	tother_f_? using "./results/panel_census/other_levp0.tex", booktabs replace `tabprefs'
+esttab 	tother_b_? using "./results/table2/other_d2_p1.tex", booktabs replace `tabprefs'
+esttab 	tother_f_? using "./results/table2/other_levp0.tex", booktabs replace `tabprefs'
 
 eststo clear
 
 /* Age Heterogeneity */
 
-gen		d2gp_age18_2534 = (age>=25 & age<=34)*d2gp_bp_at18
-gen		d2gp_age18_3544 = (age>=35 & age<=44)*d2gp_bp_at18
-gen		d2gp_age18_4554 = (age>=45 & age<=54)*d2gp_bp_at18
-
-gen		d2gp_age18_2529 = (age>=25 & age<=29)*d2gp_bp_at18
-gen		d2gp_age18_3034 = (age>=30 & age<=34)*d2gp_bp_at18
-gen		d2gp_age18_3539 = (age>=35 & age<=39)*d2gp_bp_at18
-gen		d2gp_age18_4044 = (age>=40 & age<=44)*d2gp_bp_at18
-gen		d2gp_age18_4549 = (age>=45 & age<=49)*d2gp_bp_at18
-gen		d2gp_age18_5054 = (age>=50 & age<=54)*d2gp_bp_at18
-
-gen		d2gp_agep2_2534 = (age>=25 & age<=34)*d2gp_bp_atp2
-gen		d2gp_agep2_3544 = (age>=35 & age<=44)*d2gp_bp_atp2
-gen		d2gp_agep2_4554 = (age>=45 & age<=54)*d2gp_bp_atp2
-
-gen		d2gp_agep2_2529 = (age>=25 & age<=29)*d2gp_bp_atp2
-gen		d2gp_agep2_3034 = (age>=30 & age<=34)*d2gp_bp_atp2
-gen		d2gp_agep2_3539 = (age>=35 & age<=39)*d2gp_bp_atp2
-gen		d2gp_agep2_4044 = (age>=40 & age<=44)*d2gp_bp_atp2
-gen		d2gp_agep2_4549 = (age>=45 & age<=49)*d2gp_bp_atp2
-gen		d2gp_agep2_5054 = (age>=50 & age<=54)*d2gp_bp_atp2
-
-local 	bin5yrs_18  d2gp_age18_2529 d2gp_age18_3034 d2gp_age18_3539 d2gp_age18_4044 d2gp_age18_4549 d2gp_age18_5054
-local	bin10yrs_18 d2gp_age18_2534 d2gp_age18_3544 d2gp_age18_4554
-
-local 	bin5yrs_p2  d2gp_agep2_2529 d2gp_agep2_3034 d2gp_agep2_3539 d2gp_agep2_4044 d2gp_agep2_4549 d2gp_agep2_5054
-local	bin10yrs_p2 d2gp_agep2_2534 d2gp_agep2_3544 d2gp_agep2_4554
-
-eststo tcage_1:	reghdfe t_drive `bin5yrs_18'						if m_samestate==1 [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
-eststo tcage_2:	reghdfe t_drive `bin5yrs_18' c.byr##c.byr d_* lhhi	if m_samestate==1 [aw=perwt], a(stcenyr_fe age) cluster(bpl)
-eststo tcage_3:	reghdfe t_drive `bin10yrs_18' 						if m_samestate==1 [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
-eststo tcage_4:	reghdfe t_drive `bin10yrs_18' c.byr##c.byr d_* lhhi	if m_samestate==1 [aw=perwt], a(stcenyr_fe age) cluster(bpl)
-
-eststo tcage_5:	reghdfe t_drive `bin5yrs_p2'						if m_samestate==1 [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
-eststo tcage_6:	reghdfe t_drive `bin5yrs_p2' c.byr##c.byr d_* lhhi	if m_samestate==1 [aw=perwt], a(stcenyr_fe age) cluster(bpl)
-eststo tcage_7:	reghdfe t_drive `bin10yrs_p2' 						if m_samestate==1 [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
-eststo tcage_8:	reghdfe t_drive `bin10yrs_p2' c.byr##c.byr d_* lhhi	if m_samestate==1 [aw=perwt], a(stcenyr_fe age) cluster(bpl)
-
-local 	tabprefs cells(b(star fmt(%9.4f)) se(par)) stats(r2_a N, fmt(%9.4f %9.0g) labels(R-squared)) legend label starlevels(+ 0.10 * 0.05 ** 0.01 *** 0.001) 
-
-esttab 	tcage_? using "./results/panel_census/agehet_18p2.tex", booktabs replace `tabprefs'
-
-eststo clear
-drop  	d2gp_age??_????
-
 gen		d2gp_age17_2534 = (age>=25 & age<=34)*d2gp_bp_at17
 gen		d2gp_age17_3544 = (age>=35 & age<=44)*d2gp_bp_at17
 gen		d2gp_age17_4554 = (age>=45 & age<=54)*d2gp_bp_at17
-
-gen		d2gp_age17_2529 = (age>=25 & age<=29)*d2gp_bp_at17
-gen		d2gp_age17_3034 = (age>=30 & age<=34)*d2gp_bp_at17
-gen		d2gp_age17_3539 = (age>=35 & age<=39)*d2gp_bp_at17
-gen		d2gp_age17_4044 = (age>=40 & age<=44)*d2gp_bp_at17
-gen		d2gp_age17_4549 = (age>=45 & age<=49)*d2gp_bp_at17
-gen		d2gp_age17_5054 = (age>=50 & age<=54)*d2gp_bp_at17
 
 gen		d2gp_agep1_2534 = (age>=25 & age<=34)*d2gp_bp_atp1
 gen		d2gp_agep1_3544 = (age>=35 & age<=44)*d2gp_bp_atp1
 gen		d2gp_agep1_4554 = (age>=45 & age<=54)*d2gp_bp_atp1
 
-gen		d2gp_agep1_2529 = (age>=25 & age<=29)*d2gp_bp_atp1
-gen		d2gp_agep1_3034 = (age>=30 & age<=34)*d2gp_bp_atp1
-gen		d2gp_agep1_3539 = (age>=35 & age<=39)*d2gp_bp_atp1
-gen		d2gp_agep1_4044 = (age>=40 & age<=44)*d2gp_bp_atp1
-gen		d2gp_agep1_4549 = (age>=45 & age<=49)*d2gp_bp_atp1
-gen		d2gp_agep1_5054 = (age>=50 & age<=54)*d2gp_bp_atp1
-
-local 	bin5yrs_17  d2gp_age17_2529 d2gp_age17_3034 d2gp_age17_3539 d2gp_age17_4044 d2gp_age17_4549 d2gp_age17_5054
 local	bin10yrs_17 d2gp_age17_2534 d2gp_age17_3544 d2gp_age17_4554
 
-local 	bin5yrs_p1  d2gp_agep1_2529 d2gp_agep1_3034 d2gp_agep1_3539 d2gp_agep1_4044 d2gp_agep1_4549 d2gp_agep1_5054
 local	bin10yrs_p1 d2gp_agep1_2534 d2gp_agep1_3544 d2gp_agep1_4554
 
-eststo tcage_1:	reghdfe t_drive `bin5yrs_17'				if m_samestate==1 [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
-eststo tcage_2:	reghdfe t_drive `bin5yrs_17' c.byr##c.byr	if m_samestate==1 [aw=perwt], a(stcenyr_fe age) cluster(bpl)
-eststo tcage_3:	reghdfe t_drive `bin10yrs_17' 				if m_samestate==1 [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
-eststo tcage_4:	reghdfe t_drive `bin10yrs_17' c.byr##c.byr	if m_samestate==1 [aw=perwt], a(stcenyr_fe age) cluster(bpl)
+eststo tcage_1:	reghdfe t_drive `bin10yrs_17' 				if m_samestate==1 [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
+eststo tcage_2:	reghdfe t_drive `bin10yrs_17' c.byr##c.byr d_* lhhi	if m_samestate==1 [aw=perwt], a(stcenyr_fe age) cluster(bpl)
 
-eststo tcage_5:	reghdfe t_drive `bin5yrs_p1'				if m_samestate==1 [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
-eststo tcage_6:	reghdfe t_drive `bin5yrs_p1' c.byr##c.byr	if m_samestate==1 [aw=perwt], a(stcenyr_fe age) cluster(bpl)
-eststo tcage_7:	reghdfe t_drive `bin10yrs_p1' 				if m_samestate==1 [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
-eststo tcage_8:	reghdfe t_drive `bin10yrs_p1' c.byr##c.byr	if m_samestate==1 [aw=perwt], a(stcenyr_fe age) cluster(bpl)
+eststo tcage_3:	reghdfe t_drive `bin10yrs_p1' 				if m_samestate==1 [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
+eststo tcage_4:	reghdfe t_drive `bin10yrs_p1' c.byr##c.byr d_* lhhi	if m_samestate==1 [aw=perwt], a(stcenyr_fe age) cluster(bpl)
 
 local 	tabprefs cells(b(star fmt(%9.4f)) se(par)) stats(r2_a N, fmt(%9.4f %9.0g) labels(R-squared)) legend label starlevels(+ 0.10 * 0.05 ** 0.01 *** 0.001) 
 
-esttab 	tcage_? using "./results/panel_census/agehet_17p1.tex", booktabs replace `tabprefs'
+esttab 	tcage_? using "./results/table_a16/census_agehet_17p1.tex", booktabs replace `tabprefs'
 
 eststo clear
 drop  	d2gp_age??_????
 
-/* Asymmetry  */
+** ** ** **
+/* Robust to dropping 1979/80 Crisis */
+loc y79 "birthyr!=1965"	
+loc y74 "birthyr!=1960"
 
-gen		d2gp_bp_at18_pos = max(0, d2gp_bp_at18) if !mi(d2gp_bp_at18)
-gen		d2gp_bp_at18_neg = min(0, d2gp_bp_at18) if !mi(d2gp_bp_at18)
+eststo tdrop_1: reghdfe t_drive d2gp_bp_at17 						if m_samestate==1 & `y74'  [aw=perwt], a(bpl censusyear_all age) cluster(bpl)	
+eststo tdrop_2: reghdfe t_drive d1gp_bp_atp2 						if m_samestate==1 & `y74'  [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
+eststo tdrop_3: reghdfe t_drive d2gp_bp_at17 						if m_samestate==1 & `y79'  [aw=perwt], a(bpl censusyear_all age) cluster(bpl)	
+eststo tdrop_4: reghdfe t_drive d1gp_bp_atp2 						if m_samestate==1 & `y79'  [aw=perwt], a(bpl censusyear_all age) cluster(bpl)	
+eststo tdrop_5: reghdfe t_drive d2gp_bp_at17 						if m_samestate==1 & `y74' & `y79'  [aw=perwt], a(bpl censusyear_all age) cluster(bpl)	
+eststo tdrop_6: reghdfe t_drive d1gp_bp_atp2 						if m_samestate==1 & `y74' & `y79' [aw=perwt], a(bpl censusyear_all age) cluster(bpl)	
+	
+local 	tabprefs cells(b(star fmt(%9.4f)) se(par)) stats(r2_a N, fmt(%9.4f %9.0g) labels(R-squared)) legend label starlevels(+ 0.10 * 0.05 ** 0.01 *** 0.001) 
+	
+esttab 	tdrop_? using "./results/other/dropoilcrises.tex", booktabs replace `tabprefs'
 
-gen		d2gp_bp_at17_pos = max(0, d2gp_bp_at17) if !mi(d2gp_bp_at17)
-gen		d2gp_bp_at17_neg = min(0, d2gp_bp_at17) if !mi(d2gp_bp_at17)
+est clear
 
-gen		d2gp_bp_atp2_pos = max(0, d2gp_bp_atp2) if !mi(d2gp_bp_atp2)
-gen		d2gp_bp_atp2_neg = min(0, d2gp_bp_atp2) if !mi(d2gp_bp_atp2)
+** ** ** **
+/* Other robustness */
 
-gen		d2gp_bp_atp1_pos = max(0, d2gp_bp_atp1) if !mi(d2gp_bp_atp1)
-gen		d2gp_bp_atp1_neg = min(0, d2gp_bp_atp1) if !mi(d2gp_bp_atp1)
+preserve
+	clear
+	insheet using 	"./data/state_pops/nhgis0081_ds104_1980_state.csv", c
+	keep 	statea c7l001
+	rename 	statea statefip
+	rename	c7l001 pop
+	tempfile p1980
+	save	"`p1980'", replace
+	
+	use 	"./output/gasprice_prepped.dta", clear
+	merge 	m:1 statefip using "`p1980'"
+	collapse (mean) gas_price_99 d1gp_bp d2gp_bp [aw=pop], by(year)
+	rename gas_price_99 rgp_national 
+	rename d1gp_bp d1gp_national
+	rename d2gp_bp d2gp_national
+	tempfile natprice
+	save	"`natprice'", replace
+	tab 	rgp_national 
+	tab 	year
+restore
 
-eststo tc_asym8_1:	reghdfe t_drive d2gp_bp_at18_??? 						if m_samestate==1 [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
-eststo tc_asym8_2:	reghdfe t_drive d2gp_bp_at18_??? d_*					if m_samestate==1 [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
-eststo tc_asym8_3:	reghdfe t_drive d2gp_bp_at18_??? d_* lhhi				if m_samestate==1 [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
-eststo tc_asym8_4:	reghdfe t_drive d2gp_bp_at18_??? d_* lhhi				if m_samestate==1 [aw=perwt], a(stcenyr_fe age) cluster(bpl)
-eststo tc_asym8_5:	reghdfe t_drive d2gp_bp_at18_??? d_* lhhi c.byr##c.byr	if m_samestate==1 [aw=perwt], a(stcenyr_fe age) cluster(bpl)
+rename 	yr_age17 year
+merge m:1 year using "`natprice'"
+keep if	_merge==3
+drop  	d1gp_national rgp_national _merge
+rename  d2gp_national d2gp17_national
+rename 	year yr_age17
 
-eststo tc_asym7_1:	reghdfe t_drive d2gp_bp_at17_??? 						if m_samestate==1 [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
-eststo tc_asym7_2:	reghdfe t_drive d2gp_bp_at17_??? d_*					if m_samestate==1 [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
-eststo tc_asym7_3:	reghdfe t_drive d2gp_bp_at17_??? d_* lhhi				if m_samestate==1 [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
-eststo tc_asym7_4:	reghdfe t_drive d2gp_bp_at17_??? d_* lhhi				if m_samestate==1 [aw=perwt], a(stcenyr_fe age) cluster(bpl)
-eststo tc_asym7_5:	reghdfe t_drive d2gp_bp_at17_??? d_* lhhi c.byr##c.byr	if m_samestate==1 [aw=perwt], a(stcenyr_fe age) cluster(bpl)
+rename yr_age16 year
+merge m:1 year using "`natprice'"
+drop if _merge==2
+drop  	d1gp_national d2gp_national _merge
+rename   rgp_national rgp16_national
+rename year yr_age16
 
-eststo td_asym2_1:	reghdfe t_drive d2gp_bp_atp2_??? 						if m_samestate==1 [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
-eststo td_asym2_2:	reghdfe t_drive d2gp_bp_atp2_??? d_*					if m_samestate==1 [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
-eststo td_asym2_3:	reghdfe t_drive d2gp_bp_atp2_??? d_* lhhi				if m_samestate==1 [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
-eststo td_asym2_4:	reghdfe t_drive d2gp_bp_atp2_??? d_* lhhi				if m_samestate==1 [aw=perwt], a(stcenyr_fe age) cluster(bpl)
-eststo td_asym2_5:	reghdfe t_drive d2gp_bp_atp2_??? d_* lhhi c.byr##c.byr	if m_samestate==1 [aw=perwt], a(stcenyr_fe age) cluster(bpl)
 
-eststo td_asym1_1:	reghdfe t_drive d2gp_bp_atp1_??? 						if m_samestate==1 [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
-eststo td_asym1_2:	reghdfe t_drive d2gp_bp_atp1_??? d_*					if m_samestate==1 [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
-eststo td_asym1_3:	reghdfe t_drive d2gp_bp_atp1_??? d_* lhhi				if m_samestate==1 [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
-eststo td_asym1_4:	reghdfe t_drive d2gp_bp_atp1_??? d_* lhhi				if m_samestate==1 [aw=perwt], a(stcenyr_fe age) cluster(bpl)
-eststo td_asym1_5:	reghdfe t_drive d2gp_bp_atp1_??? d_* lhhi c.byr##c.byr	if m_samestate==1 [aw=perwt], a(stcenyr_fe age) cluster(bpl)
+** Multiple treatments + national shocks
+eststo mt_1: reghdfe t_drive d2gp_bp_at17 real_gp_at16 						if m_samestate==1 [aw=perwt], a(bpl censusyear_all age) cluster(bpl)	
+eststo mt_2: reghdfe t_drive d2gp_bp_at17 real_gp_at16 d_* lhhi c.byr##c.byr if m_samestate==1 [aw=perwt], a(stcenyr_fe age) cluster(bpl)
+eststo mt_3: reghdfe t_drive d2gp17_national 						if m_samestate==1 [aw=perwt], a(bpl censusyear_all age) cluster(bpl)	
+eststo mt_4: reghdfe t_drive d2gp17_national d_* lhhi c.byr##c.byr if m_samestate==1 [aw=perwt], a(stcenyr_fe age) cluster(bpl)
+eststo mt_5: reghdfe t_drive rgp16_national 						if m_samestate==1 [aw=perwt], a(bpl censusyear_all age) cluster(bpl)	
+eststo mt_6: reghdfe t_drive rgp16_national d_* lhhi c.byr##c.byr if m_samestate==1 [aw=perwt], a(stcenyr_fe age) cluster(bpl)
 
 local 	tabprefs cells(b(star fmt(%9.4f)) se(par)) stats(r2_a N, fmt(%9.4f %9.0g) labels(R-squared)) legend label starlevels(+ 0.10 * 0.05 ** 0.01 *** 0.001) 
+	
+esttab 	mt_? using "./results/other/census_multtreatment_and_national.tex", booktabs replace `tabprefs'
+est clear
 
-esttab 	tc_asym8_? using "./results/panel_census/asym_d2_18.tex", booktabs replace `tabprefs'
-esttab 	tc_asym7_? using "./results/panel_census/asym_d2_17.tex", booktabs replace `tabprefs'
-esttab 	td_asym2_? using "./results/panel_census/asym_d2_p2.tex", booktabs replace `tabprefs'
-esttab 	td_asym1_? using "./results/panel_census/asym_d2_p1.tex", booktabs replace `tabprefs'
+** SEs
 
-eststo clear
+eststo se_1: reghdfe t_drive d2gp_bp_at17 						if m_samestate==1 [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
+eststo se_2: reghdfe t_drive d2gp_bp_at17 						if m_samestate==1 [aw=perwt], a(bpl censusyear_all age) cluster(byr)	
+eststo se_3: reghdfe t_drive d2gp_bp_at17 						if m_samestate==1 [aw=perwt], a(bpl censusyear_all age) cluster(bpl byr)
+eststo se_4: reghdfe t_drive d2gp_bp_at17 d_* lhhi c.byr##c.byr  if m_samestate==1 [aw=perwt], a(stcenyr_fe age) cluster(bpl)
+eststo se_5: reghdfe t_drive d2gp_bp_at17 d_* lhhi c.byr##c.byr  if m_samestate==1 [aw=perwt], a(stcenyr_fe age) cluster(byr)
+eststo se_6: reghdfe t_drive d2gp_bp_at17 d_* lhhi c.byr##c.byr  if m_samestate==1 [aw=perwt], a(stcenyr_fe age) cluster(bpl byr)
 
-/* Robust to dropping 1979/80 Crisis */
-loc yrex "birthyr!=1963 & birthyr!=1964 & birthyr!=1965"	
+eststo se_7: reghdfe t_drive real_gp_at16 						if m_samestate==1 [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
+eststo se_8: reghdfe t_drive real_gp_at16 						if m_samestate==1 [aw=perwt], a(bpl censusyear_all age) cluster(byr)
+eststo se_9: reghdfe t_drive real_gp_at16 						if m_samestate==1 [aw=perwt], a(bpl censusyear_all age) cluster(bpl byr)	
+eststo se_10: reghdfe t_drive real_gp_at16 d_* lhhi c.byr##c.byr  if m_samestate==1 [aw=perwt], a(stcenyr_fe age) cluster(bpl)
+eststo se_11: reghdfe t_drive real_gp_at16 d_* lhhi c.byr##c.byr  if m_samestate==1 [aw=perwt], a(stcenyr_fe age) cluster(byr)
+eststo se_12: reghdfe t_drive real_gp_at16 d_* lhhi c.byr##c.byr  if m_samestate==1 [aw=perwt], a(stcenyr_fe age) cluster(bpl byr)
 
-reghdfe t_drive d2gp_bp_at17 						if m_samestate==1 [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
-reghdfe t_drive d2gp_bp_at17 						if m_samestate==1 & `yrex'  [aw=perwt], a(bpl censusyear_all age) cluster(bpl)	
-reghdfe t_drive d1gp_bp_atp2 						if m_samestate==1 & `yrex'  [aw=perwt], a(bpl censusyear_all age) cluster(bpl)	
+local 	tabprefs cells(b(star fmt(%9.4f)) se(par)) stats(r2_a N, fmt(%9.4f %9.0g) labels(R-squared)) legend label starlevels(+ 0.10 * 0.05 ** 0.01 *** 0.001) 
+	
+esttab 	se_* using "./results/other/census_altSEs.tex", booktabs replace `tabprefs'
+est clear
 
-
+**************************************************
 /* Mediation Analysis and Additional Robustness */
 
 rename 	bpl statefip
@@ -795,7 +637,7 @@ foreach inc of varlist unemprate lhhi lincw lincp {
 
 local vlist thetaY gamma thetaM ind tot
 
-texdoc init "./results/panel_census/mediation.tex", replace force
+texdoc init "./results/table_a9/mediation.tex", replace force
 tex  & unemp & unemp & hhi & hhi & incw & incw & incp & incp  \\
 tex  & 17 & p1 & 17 & p1 & 17 & p1 & 17 & p1 \\
 tex \addlinespace \hline

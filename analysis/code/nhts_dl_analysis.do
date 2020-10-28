@@ -1,8 +1,3 @@
-* Last update 3-18-2019
-*==============================================================================*
-*                      	   NHTS analysis do file                               *
-*==============================================================================*
-* This program uses 1990 and later NHTS data to investigate driving decisions.
 
 local 	logf "`1'" 
 log using "`logf'", replace text
@@ -23,6 +18,10 @@ drop 	_merge
 destring hhstfips, replace
 rename hhstfips statefip
 
+destring r_sex, replace
+replace	r_sex = . if r_sex<0
+rename	r_sex sex
+
 /* ADD IN DL DATA */
 gen		yr_at16 = yr_16_new
 rename 	statefip stfip
@@ -32,7 +31,7 @@ drop	_merge year yr_at16
 rename 	stfip statefip
 /* END: Add in DL */
 
-local 	agelist 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30
+local 	agelist 16 17 18
 
 foreach age of local agelist {
 	gen 	year = yr_16_new + (`age' - 16)
@@ -57,23 +56,7 @@ foreach age of local agelist {
 drop if _merge16!=3
 drop	_merge*
 
-foreach diff of numlist 1/4 {
-	gen 	year = round(min_age_full) + (yr_16_new - 16) - `diff'
-
-	merge m:1 year statefip using "./output/gasprice_prepped.dta", keepusing(gas_price gas_price_99 d1gp_bp d2gp_bp) gen(_mergen`diff')
-
-	rename	gas_price gas_price_atn`diff'
-	rename	gas_price_99 real_gp_atn`diff'
-	rename	d1gp_bp  d1gp_now_atn`diff'
-	rename	d2gp_bp  d2gp_now_atn`diff'
-
-	drop if _mergen`diff'==2
-
-	rename 	year yr_fulln`diff'
-	lab var yr_fulln`diff' "Year before/after (`diff') full age" 
-}
-
-foreach diff of numlist 0/6 {
+foreach diff of numlist 0/2 {
 	gen 	year = round(min_age_full) + (yr_16_new - 16) + `diff'
 
 	merge m:1 year statefip using "./output/gasprice_prepped.dta", keepusing(gas_price gas_price_99 d1gp_bp d2gp_bp) gen(_mergep`diff')
@@ -96,30 +79,15 @@ drop if statename=="AK"
 gen 	age2 = age*age
 
 gen		white = (hh_race==1)
+
 gen		urban_bin = 0
 replace	urban_bin = 1 if urban==1 & nhtsyear<=1995 & urban!=.
 replace	urban_bin = 1 if urban<=3 & nhtsyear>=2001 & urban!=.
 
-replace htppopdn_cont = . if htppopdn_cont==-9
-replace htppopdn_cont = . if htppopdn_cont==0
-replace htppopdn_cont = . if htppopdn_cont==999998
-gen		ldens_all = ln(htppopdn_cont)
+gen		ldens = ln(htppopdn_cont)
+replace ldens = . if htppopdn_cont==999998
+replace ldens = 0 if htppopdn_cont==0 /* Not true zeros, from rounding error */
 
-gen		htppopdn_cont30 = htppopdn_cont
-replace htppopdn_cont30 = 30000 if htppopdn_cont>30000 & !mi(htppopdn_cont) // Top coded in 2009/17
-gen		ldens30 = ln(htppopdn_cont30)
-
-gen		htppopdn_stand = htppopdn_cont if nhtsyear==2009 | nhtsyear==2017
-replace htppopdn_stand = 50 if nhtsyear<=2001 & htppopdn_cont>=0 & htppopdn_cont<100
-replace htppopdn_stand = 300 if nhtsyear<=2001 & htppopdn_cont>=100 & htppopdn_cont<500
-replace htppopdn_stand = 750 if nhtsyear<=2001 & htppopdn_cont>=500 & htppopdn_cont<1000
-replace htppopdn_stand = 1500 if nhtsyear<=2001 & htppopdn_cont>=1000 & htppopdn_cont<2000
-replace htppopdn_stand = 3000 if nhtsyear<=2001 & htppopdn_cont>=2000 & htppopdn_cont<4000
-replace htppopdn_stand = 7000 if nhtsyear<=2001 & htppopdn_cont>=4000 & htppopdn_cont<10000
-replace htppopdn_stand = 17000 if nhtsyear<=2001 & htppopdn_cont>=10000 & htppopdn_cont<25000
-replace htppopdn_stand = 30000 if nhtsyear<=2001 & htppopdn_cont>=25000 & htppopdn_cont<300000 
- /* Verified max legit value is 220815.7 */
-gen		ldens = ln(htppopdn_stand)
 
 /* Income bins (quintiles), see Table H-1 and H-3 */
 	/* https://www.census.gov/data/tables/time-series/demo/income-poverty/historical-income-households.html */
@@ -176,45 +144,53 @@ replace age_i_grps=15 if age_i_grps==14
 
 gen		byr = yr_16_new-16
 
-sum miles_per_psn
-sum miles_per_psn if miles_per_psn>0
-
 /* Define treatment using all vehicle data, enforce topcode of 115k miles */
 
 gen		lvmt_pc 	= log(min(miles_per_psn_ALL,115000))
 
-compress 
+gen		mile_per_psn_ALL_lt115 = min(miles_per_psn_ALL,115000)
+sum 	mile_per_psn_ALL_lt115
+sum 	mile_per_psn_ALL_lt115 if mile_per_psn_ALL_lt115>0
 
-********************************
-** Panel Regressions 		 ***
-********************************
+*************
 
-** ** ** **
+est clear
 
-eststo tc1a_1: reghdfe lvmt_pc d1gp_now_at14 d1gp_now_at15 d1gp_now_at16 d1gp_now_at17 ///
-					d1gp_now_at18 d1gp_now_at19 [aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tc1a_2: reghdfe lvmt_pc d1gp_now_at13 d1gp_now_at14 d1gp_now_at15 d1gp_now_at16 d1gp_now_at17 ///
-					d1gp_now_at18 d1gp_now_at19 d1gp_now_at20 [aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
+/* GDL and stuff */
+local demc white urban_bin famsize i.sex
 
-local 	tabprefs cells(b(star fmt(%9.4f)) se(par)) stats(r2 N, fmt(%9.4f %9.0g) labels(R-squared)) legend label starlevels(+ 0.10 * 0.05 ** 0.01 *** 0.001) 
+eststo dle_1:	reghdfe lvmt_pc min_age_full									[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
+eststo dle_2:	reghdfe lvmt_pc min_int_age 									[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
+eststo dle_3:	reghdfe lvmt_pc min_age_full min_int_age 						[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
+test min_age_full min_int_age
+estadd scalar F_diff = r(F)
+estadd scalar p_diff = r(p)
 
-esttab 	tc1a_* using "./results/table4/nhts_reald1ages_13-20.tex", booktabs replace `tabprefs' 
+eststo dle_4:	reghdfe lvmt_pc min_age_full min_int_age `demc'					[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
+test min_age_full min_int_age
+estadd scalar F_diff = r(F)
+estadd scalar p_diff = r(p)
 
-eststo clear					
-					
-local timevars d1gp_now_at13 d1gp_now_at14 d1gp_now_at15 d1gp_now_at16 d1gp_now_at17 d1gp_now_at18 ///
-				d1gp_now_at19 d1gp_now_at20 d1gp_now_at21 d1gp_now_at22 d1gp_now_at23 d1gp_now_at24 ///
-				d1gp_now_at25
+eststo dle_5:	reghdfe lvmt_pc min_age_full min_int_age `demc' 				[aw=expfllpr], a(stateid nhtsyear age hhi_bin_yr) cluster(stateid)
+test min_age_full min_int_age
+estadd scalar F_diff = r(F)
+estadd scalar p_diff = r(p)
 
-reghdfe lvmt_pc `timevars' [aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
+eststo dle_6:	reghdfe lvmt_pc min_age_full min_int_age `demc' 				[aw=expfllpr], a(stsamyr_fe age hhi_bin_yr) cluster(stateid)
+test min_age_full min_int_age
+estadd scalar F_diff = r(F)
+estadd scalar p_diff = r(p)
 
-postfile handle str32 varname float(b se) using "./results/figures/nhts_reald1ages_long", replace
-foreach v of local timevars {
-	post handle ("`v'") (_b[`v']) (_se[`v'])
-}
-postclose handle
+eststo dle_7:	reghdfe lvmt_pc min_age_full min_int_age `demc' c.byr##c.byr 	[aw=expfllpr], a(stsamyr_fe age hhi_bin_yr) cluster(stateid)
+test min_age_full min_int_age
+estadd scalar F_diff = r(F)
+estadd scalar p_diff = r(p)
+
+local 	tabprefs cells(b(star fmt(%9.4f)) se(par))  stats(r2_a N F_diff p_diff, fmt(%9.4f %9.0g %9.3f %9.3f) labels(R-squared)) legend label starlevels(+ 0.10 * 0.05 ** 0.01 *** 0.001) 
+ 
+esttab 	dle_* using "./results/table6/nhts_dl.tex", booktabs replace `tabprefs' 
+
 
 eststo clear
-
 log close
 clear

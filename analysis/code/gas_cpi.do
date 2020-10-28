@@ -1,6 +1,5 @@
 *************************************************************
 ** Gas and CPI monthly for long history
-** Feb 2020
 *************************************************************
 
 ************************************
@@ -50,6 +49,6 @@ twoway (scatter gp_real myr if myr>tm(1965m1) & myr<=tm(1990m1), c(d) lp(solid))
 		xtitle("Year/Month") ytitle("Price of Gasoline") ///
 		xline(`=tm(1973m9)' `=tm(1974m5)' `=tm(1979m2)' `=tm(1980m4)', lc(red) lp(dash))
 
-graph export "./results/gasprices_1970s.png", replace
+graph export "./results/figures/gasprices_1970s.png", replace
 clear
 
