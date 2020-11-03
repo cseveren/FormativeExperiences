@@ -449,13 +449,16 @@ drop  	d2gp_age??_????
 /* Robust to dropping 1979/80 Crisis */
 loc y79 "birthyr!=1965"	
 loc y74 "birthyr!=1960"
+loc y70s "(birthyr<1959 | birthyr>1966)"
 
 eststo tdrop_1: reghdfe t_drive d2gp_bp_at17 						if m_samestate==1 & `y74'  [aw=perwt], a(bpl censusyear_all age) cluster(bpl)	
 eststo tdrop_2: reghdfe t_drive d2gp_bp_atp1						if m_samestate==1 & `y74'  [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
 eststo tdrop_3: reghdfe t_drive d2gp_bp_at17 						if m_samestate==1 & `y79'  [aw=perwt], a(bpl censusyear_all age) cluster(bpl)	
 eststo tdrop_4: reghdfe t_drive d2gp_bp_atp1 						if m_samestate==1 & `y79'  [aw=perwt], a(bpl censusyear_all age) cluster(bpl)	
-eststo tdrop_5: reghdfe t_drive d2gp_bp_at17 						if m_samestate==1 & `y74' & `y79'  [aw=perwt], a(bpl censusyear_all age) cluster(bpl)	
-eststo tdrop_6: reghdfe t_drive d2gp_bp_atp1 						if m_samestate==1 & `y74' & `y79' [aw=perwt], a(bpl censusyear_all age) cluster(bpl)	
+eststo tdrop_5: reghdfe t_drive d2gp_bp_at17 						if m_samestate==1 & `y74' & `y79' [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
+eststo tdrop_6: reghdfe t_drive d2gp_bp_atp1 						if m_samestate==1 & `y74' & `y79' [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
+eststo tdrop_7: reghdfe t_drive d2gp_bp_at17 						if m_samestate==1 & `y70s' [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
+eststo tdrop_8: reghdfe t_drive d2gp_bp_atp1 						if m_samestate==1 & `y70s' [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
 	
 local 	tabprefs cells(b(star fmt(%9.4f)) se(par)) stats(r2_a N, fmt(%9.4f %9.0g) labels(R-squared)) legend label starlevels(+ 0.10 * 0.05 ** 0.01 *** 0.001) 
 	
