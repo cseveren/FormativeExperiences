@@ -331,6 +331,43 @@ esttab hetrdq_dri_iPC_A?? using "./results/table_a6/hetdri_iPC_quad.tex", keep(T
 
 eststo clear
 
+********************************
+** Covariate checks *****
+********************************
+
+local checkvars e_emp e_lfp e_hrs_con e_wks_con w_wage_con w_hhi h_own h_rent h_value h_rentpr d_marr d_div d_hs d_col
+foreach n of numlist 3 4 5{
+foreach v of local checkvars {
+	reg `v' T D DT 		if bwA<=`n' [aw=perwt], robust
+
+	local se_`n'_`v' = "(" + string(_se[T], "%9.4f") + ")"
+	
+	local df_r = e(df_r)
+	local p = 2*ttail(`df_r',abs(_b[T]/_se[T]))
+	if `p' <0.01 {
+		local b_`n'_`v' = string(_b[T], "%9.4f") + "**"
+	}
+	else if `p'<0.05 {
+		local b_`n'_`v' = string(_b[T], "%9.4f") + "*"
+	}
+	else if `p'<0.10 {
+		local b_`n'_`v' = string(_b[T], "%9.4f") + "+"
+	}
+	else {
+		local b_`n'_`v' = string(_b[T], "%9.4f")
+	}
+} 
+}
+
+texdoc init "./results/other/eventstudyrobustness.tex", replace force
+foreach v of local checkvars {
+tex `v' & `b_3_`v'' & `b_4_`v''  & `b_5_`v'' \\
+tex 	& `se_3_`v''& `se_4_`v'' & `se_5_`v'' \\[4pt]
+}
+
+texdoc close
+
+eststo clear
 
 ********************************
 ** 1974 Oil Crisis *************

@@ -354,11 +354,11 @@ loc y79 "byr!=1965"
 loc y74 "byr!=1960"
 
 eststo tdrop_1:	reghdfe lvmt_pc d2gp_now_at17  				if `y74' [aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tdrop_2:	reghdfe lvmt_pc d2gp_now_atp2 				if `y74' [aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
+eststo tdrop_2:	reghdfe lvmt_pc d2gp_now_atp1 				if `y74' [aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
 eststo tdrop_3:	reghdfe lvmt_pc d2gp_now_at17  				if `y79' [aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tdrop_4:	reghdfe lvmt_pc d2gp_now_atp2 				if `y79' [aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
+eststo tdrop_4:	reghdfe lvmt_pc d2gp_now_atp1 				if `y79' [aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
 eststo tdrop_5:	reghdfe lvmt_pc d2gp_now_at17  				if `y74' & `y79' [aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
-eststo tdrop_6:	reghdfe lvmt_pc d2gp_now_atp2 				if `y74' & `y79' [aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
+eststo tdrop_6:	reghdfe lvmt_pc d2gp_now_atp1 				if `y74' & `y79' [aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
 
 
 local 	tabprefs cells(b(star fmt(%9.4f)) se(par)) stats(r2_a N, fmt(%9.4f %9.0g) labels(R-squared)) legend label starlevels(+ 0.10 * 0.05 ** 0.01 *** 0.001) 
