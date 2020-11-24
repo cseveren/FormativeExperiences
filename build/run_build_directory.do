@@ -34,5 +34,8 @@ do		"$dof/build/code/prep_drive_license_data.do"
 /* Prep unemployment data */
 do		"$dof/build/code/prep_unemp_data.do" 
 
+/* Prep SEER data */
+do		"$dof/build/code/make_seerdata.do" 
+
 /* Clean up files */
 do		"$dof/build/code/clean_up.do" 

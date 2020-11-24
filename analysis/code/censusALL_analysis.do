@@ -539,6 +539,19 @@ local 	tabprefs cells(b(star fmt(%9.4f)) se(par)) stats(r2_a N, fmt(%9.4f %9.0g)
 esttab 	se_* using "./results/other/census_altSEs.tex", booktabs replace `tabprefs'
 est clear
 
+** Put numbers into context by comparing to income
+
+gen 	lincw = ln(w_incw)
+gen		lincp = ln(w_pinc)
+
+reghdfe t_drive lhhi  d2gp_bp_at17 			if m_samestate==1 [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
+nlcom exp(_b[d2gp_bp_at17]/_b[lhhi])-1
+reghdfe t_drive lincw d2gp_bp_at17				if m_samestate==1 [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
+nlcom exp(_b[d2gp_bp_at17]/_b[lincw])-1
+reghdfe t_drive lincp d2gp_bp_at17		if m_samestate==1 [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
+nlcom exp(_b[d2gp_bp_at17]/_b[lincp])-1
+
+est clear
 **************************************************
 /* Mediation Analysis and Additional Robustness */
 
@@ -551,9 +564,6 @@ drop	if _merge==2
 drop	_merge year 
 
 rename	statefip bpl
-
-gen 	lincw = ln(w_incw)
-gen		lincp = ln(w_pinc)
 
 keep d2gp_bp_at17 d2gp_bp_atp1 unemprate lhhi lincw lincp d_fem d_black d_hisp m_samestate perwt bpl censusyear_all age t_drive
 

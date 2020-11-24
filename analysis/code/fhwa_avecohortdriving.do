@@ -21,7 +21,7 @@ compress
 ****************************
 /* CDFs of adoption */
 
-merge 1:1 age year using "./data/seerpopest/SeerPopEst_National.dta"
+merge 1:1 age year using "./output/SeerPopEst_National.dta"
 
 drop if _merge!=3
 drop	_merge n_male n_female
