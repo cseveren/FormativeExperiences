@@ -173,6 +173,8 @@ compress
 ** Panel Regressions 		 ***
 ********************************
 
+** Tables A.14 and A.15 (partial) **
+
 eststo clear
 
 eststo tc1a_2:	reghdfe lvmt_pc d2gp_now_at13  	[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)

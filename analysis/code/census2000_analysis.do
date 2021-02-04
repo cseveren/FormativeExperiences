@@ -459,6 +459,7 @@ foreach y of numlist 15 {
 	scatter t_vehicle   `gphlist' name(t3, replace) ytitle("Household Vehicle Access")
 	graph export "./results/figures/tgraphs`y'_vehicle.png", replace
 
+	** Figure 2 **
 	graph combine t1 t2 t3, row(3) xcommon saving(tgraphs_127, replace) ysize(8.5)
 	graph export "./results/figures/tgraphs15_main3outcomes.png", replace
 
@@ -477,6 +478,7 @@ foreach y of numlist 15 {
 	scatter w_wage_con 	`gphlist' name(w2, replace) ytitle("Wage Income if Employed") 
 	scatter w_hhi  		`gphlist' name(w3, replace) ytitle("Household Income")
 
+	** Figure A.3 **
 	graph combine e1 e2 e6 e8 w2 w3, row(3) xcommon title("Labor Market in 2000") saving(eWgraphs, replace) xsize(5)
 	graph export "./results/figures/eWgraphs`y'.png", replace
 
@@ -485,6 +487,7 @@ foreach y of numlist 15 {
 	scatter h_value  	`gphlist' name(h3, replace) ytitle("House Value")
 	scatter h_rentpr 	`gphlist' name(h4, replace) ytitle("Contract Rent")
 
+	** Figure A.4
 	graph combine h1 h2 h3 h4, row(2) xcommon title("Housing in 2000") saving(hgraphs, replace)
 	graph export "./results/figures/hgraphs`y'.png", replace
 
@@ -493,6 +496,7 @@ foreach y of numlist 15 {
 	scatter d_hs  	`gphlist' name(d3, replace) ytitle("Graduated High School")
 	scatter d_col 	`gphlist' name(d4, replace) ytitle("Graduated College")
 
+	** Figure A.2 **
 	graph combine d1 d2 d3 d4, row(2) xcommon title("Education and Household in 2000") saving(dgraphs, replace)
 	graph export "./results/figures/dgraphs`y'.png", replace
 
@@ -567,6 +571,7 @@ twoway (scatter _b_T inc_centile,  msize(tiny)) || (rspike hse_bon lse_bon inc_c
 
 graph export "./results/figures/RDincome_het.png", replace
 		
+** Figure A.5 **		
 twoway (scatter _b_T inc_centile,  msize(tiny)) || (rspike hse_bon lse_bon inc_centile) || ///
 		(lpoly b_T100 inc_centile [aw=n_bin100]), ///
 		legend(label(1 "Decile-specific RD Estimate") label(2 "Bonferroni Corrected Standard Errors") label(3 "Smoothed, Weighted Centile Effect")) ///

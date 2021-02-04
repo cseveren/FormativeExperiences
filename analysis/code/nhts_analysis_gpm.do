@@ -208,6 +208,8 @@ esttab gsum? using "./results/table_a2/summary_stats_gpm.tex", booktabs replace 
 /*MERGE AT 17*/
 est clear
 
+** Table A.13 Results **
+
 local demc white urban_bin famsize i.sex
 
 eststo gpm_tabA_1:	reghdfe GPMCombo_All d2gp_now_at18 						 if idco==1 [aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)

@@ -84,6 +84,8 @@ compress
 
 /* Longer series */
 
+** Table A.14 (partial) **
+
 eststo tc1b_2:	reghdfe t_drive d1gp_bp_at13   if m_samestate==1 [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
 eststo tc1b_3:	reghdfe t_drive d1gp_bp_at14   if m_samestate==1 [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
 eststo tc1b_4:	reghdfe t_drive d1gp_bp_at15   if m_samestate==1 [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
@@ -104,6 +106,8 @@ esttab 	tc1b_* using "./results/table_a14/census_reald1.tex", rename(`rn1') book
 eststo clear
 
 /* Test different ages */
+
+** Table A.15 (partial) **
 	
 eststo tc1a_2:	reghdfe t_drive d2gp_bp_at13   if m_samestate==1 [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
 eststo tc1a_3:	reghdfe t_drive d2gp_bp_at14   if m_samestate==1 [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
@@ -193,6 +197,8 @@ drop	_merge*
 rename 	statefip bpl
 
 /* Test different ages */
+
+** Table A.14 and Table A.15 (partial) **	
 	
 eststo tq1a_2:	reghdfe t_drive d2gp_bp_atn3   if m_samestate==1 [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
 eststo tq1a_3:	reghdfe t_drive d2gp_bp_atn2   if m_samestate==1 [aw=perwt], a(bpl censusyear_all age) cluster(bpl)

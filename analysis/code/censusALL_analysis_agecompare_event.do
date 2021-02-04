@@ -87,6 +87,8 @@ drop if bpl==15
 
 compress
 
+** Table 4 (partial) **
+
 eststo tc1a_1: reghdfe t_drive d1gp_bp_at14 d1gp_bp_at15 d1gp_bp_at16 d1gp_bp_at17 ///
 					d1gp_bp_at18 d1gp_bp_at19 if m_samestate==1 [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
 eststo tc1a_2: reghdfe t_drive d1gp_bp_at13 d1gp_bp_at14 d1gp_bp_at15 d1gp_bp_at16 d1gp_bp_at17 ///
@@ -96,7 +98,9 @@ local 	tabprefs cells(b(star fmt(%9.4f)) se(par)) stats(r2 N, fmt(%9.4f %9.0g) l
 
 esttab 	tc1a_* using "./results/table4/census_reald1ages_13-20.tex", booktabs replace `tabprefs' 
 
-eststo clear					
+eststo clear		
+
+** Input for Figure 4 (partial) **			
 					
 local timevars d1gp_bp_at13 d1gp_bp_at14 d1gp_bp_at15 d1gp_bp_at16 d1gp_bp_at17 d1gp_bp_at18 ///
 				d1gp_bp_at19 d1gp_bp_at20 d1gp_bp_at21 d1gp_bp_at22 d1gp_bp_at23 d1gp_bp_at24 ///

@@ -156,6 +156,8 @@ sum 	mile_per_psn_ALL_lt115 if mile_per_psn_ALL_lt115>0
 
 est clear
 
+** Table A.17 (partial, old Table 6) **
+
 /* GDL and stuff */
 local demc white urban_bin famsize i.sex
 

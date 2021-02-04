@@ -49,6 +49,8 @@ save	"`statepops'", replace
 
 *******************
 
+** All used for Table A.1 **
+
 use		"./output/dlpanel_prepped", clear
 
 *keep if year==1970 | year==1975 | year==1980 | year==1985 | year==1990 | year==1995 | year==2000 | year==2005 | year==2010

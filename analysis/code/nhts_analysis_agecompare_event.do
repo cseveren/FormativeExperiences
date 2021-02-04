@@ -191,6 +191,8 @@ compress
 
 ** ** ** **
 
+** Table 4 (partial) **
+
 eststo tc1a_1: reghdfe lvmt_pc d1gp_now_at14 d1gp_now_at15 d1gp_now_at16 d1gp_now_at17 ///
 					d1gp_now_at18 d1gp_now_at19 [aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
 eststo tc1a_2: reghdfe lvmt_pc d1gp_now_at13 d1gp_now_at14 d1gp_now_at15 d1gp_now_at16 d1gp_now_at17 ///
@@ -201,7 +203,9 @@ local 	tabprefs cells(b(star fmt(%9.4f)) se(par)) stats(r2 N, fmt(%9.4f %9.0g) l
 esttab 	tc1a_* using "./results/table4/nhts_reald1ages_13-20.tex", booktabs replace `tabprefs' 
 
 eststo clear					
-					
+
+** Input for Figure 4 (partial) **			
+			
 local timevars d1gp_now_at13 d1gp_now_at14 d1gp_now_at15 d1gp_now_at16 d1gp_now_at17 d1gp_now_at18 ///
 				d1gp_now_at19 d1gp_now_at20 d1gp_now_at21 d1gp_now_at22 d1gp_now_at23 d1gp_now_at24 ///
 				d1gp_now_at25

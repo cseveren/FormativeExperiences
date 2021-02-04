@@ -53,6 +53,8 @@ preserve
 
 	set scheme plotplainblind
 
+	** Figure 5 **
+	
 	twoway (scatter p_drivers cohort16 if age==16 & drop16==0, c(l)) || (scatter p_drivers ofage17inyr if age==17 & drop17==0, c(l)) || ///
 		(scatter p_drivers ofage18inyr if age==18 & drop18==0, c(l)) || (scatter p_drivers ofage20inyr if age==20 & drop20==0, c(l)) || ///
 		(scatter p_drivers ofage22inyr if age==22 & drop22==0, c(l)), ///

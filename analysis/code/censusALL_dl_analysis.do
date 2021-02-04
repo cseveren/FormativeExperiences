@@ -68,6 +68,8 @@ est clear
 
 ** TEST AGES **
 
+** Table A.17 (partial, old draft Table 6) **
+
 eststo dle_1:	reghdfe t_drive min_age_full											if m_samestate==1 [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
 eststo dle_2:	reghdfe t_drive min_int_age												if m_samestate==1 [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
 

@@ -167,12 +167,16 @@ eststo clear
 
 /* Summary Stats */ 
 
+** Table A.2 (partial) **
+
 eststo 	sum1: estpost tabstat mile_per_psn_ALL_lt115 d2gp_now_at17 white urban_bin famsize sex age [aw=expfllpr], s(mean sd count) c(s) 
 eststo 	sum2: estpost tabstat mile_per_psn_ALL_lt115 if mile_per_psn_ALL_lt115>0 & !mi(mile_per_psn_ALL_lt115) [aw=expfllpr], s(mean sd min max count) c(s) 
 
 esttab sum? using "./results/table_a2/nhts_summary_stats.tex", booktabs replace cells(mean sd min max count)
 
 /* Main specifications at different ages */ 
+
+** Tables 3 and A.11 (partial, see esttab for assignment) **
 
 local demc white urban_bin famsize i.sex
 
@@ -225,6 +229,8 @@ eststo clear
 
 /* Main specifications at different driver license minimums */ 
 
+** Tables 3 and A.11 (partial, see esttab for assignment) **
+
 local demc white urban_bin famsize i.sex
 
 eststo tdla_1:	reghdfe lvmt_pc d2gp_now_atp2  						[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
@@ -276,6 +282,8 @@ eststo clear
 
 /* Main specifications with cohort fixed effects */ 
 
+** Table A.12 **
+
 local demc white urban_bin famsize i.sex
 
 eststo tcodl_a_1:	reghdfe lvmt_pc d2gp_now_atp2			[aw=expfllpr], a(stateid nhtsyear yr_age16 age) cluster(stateid)
@@ -321,6 +329,8 @@ eststo clear
 
 /* Age Heterogeneity */
 
+** Table A.16 (partial) **
+
 gen		d2gp_age17_2534 = (age>=25 & age<=34)*d2gp_now_at17
 gen		d2gp_age17_3544 = (age>=35 & age<=44)*d2gp_now_at17
 gen		d2gp_age17_4554 = (age>=45 & age<=54)*d2gp_now_at17
@@ -350,6 +360,9 @@ drop  	d2gp_age??_????
 
 ** ** ** **
 /* Robust to dropping 1979/80 Crisis */
+
+** Table A.18 **
+
 loc y79 "byr!=1965"	
 loc y74 "byr!=1960"
 loc y70s "(byr<1959 | byr>1966)"
@@ -409,6 +422,8 @@ rename year yr_age16
 
 ** Multiple treatments + national shocks
 
+** Table A.19 (partial) **
+
 local demc white urban_bin famsize i.sex
 
 eststo mt_1:	reghdfe lvmt_pc d2gp_now_at17 real_gp_at16 						[aw=expfllpr], a(stateid nhtsyear age) cluster(stateid)
@@ -424,6 +439,8 @@ esttab 	mt_* using "./results/other/nhts_multtreatment_and_national.tex", bookta
 est clear
 
 ** SEs
+
+** Table A.20 (partial) **
 
 local demc white urban_bin famsize i.sex
 

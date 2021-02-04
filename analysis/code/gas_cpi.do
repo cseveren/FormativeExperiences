@@ -41,6 +41,8 @@ gen 	gp_real = gp_nom*(250.519/cpiu)
 
 tsset myr
 
+** Figure 1 **
+
 set scheme plotplainblind
 
 twoway (scatter gp_real myr if myr>tm(1965m1) & myr<=tm(1990m1), c(d) lp(solid)) || ///

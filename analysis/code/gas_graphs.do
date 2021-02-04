@@ -17,6 +17,8 @@ collapse (median) gas_price gas_price_99 d1gp_bp d2gp_bp ///
 
 set scheme plotplainblind
 
+** Figure A.1 **
+
 tempfile real d1 d2
 	   
 twoway line gas_price_99 year, lcolor(gs12) || ///
@@ -54,6 +56,8 @@ twoway line d2gp_bp year, lcolor(gs12) || ///
 	
 gr combine real.gph d1.gph d2.gph, xcommon col(1) ysize(10) xsize(6.8)
 graph export "./results/figures/gasprice_variation_picture.png", replace
+
+** Figure 3 **
 
 twoway line d2gp_bp year, lcolor(gs12) || ///
 	   rbar p25_d2gp_bp d2gp_bp year, fcolor(gs14) lcolor(black) barw(.7) || ///

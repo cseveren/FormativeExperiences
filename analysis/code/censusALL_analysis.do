@@ -181,12 +181,16 @@ gen 	byr = birthyr-1950
 
 /* Summary Statistics */ 
 
+** Table A2 (partial) **
+
 eststo 	sum1: estpost tabstat t_drive  t_transit  t_vehicle d2gp_bp_at17 e_emp age d_* w_hhi m_samestate [aw=perwt], s(mean sd count) c(s) 
 eststo 	sum2: estpost tabstat t_drive  t_transit  t_vehicle d2gp_bp_at17 age d_* w_hhi m_samestate if e_emp==1 [aw=perwt], s(mean sd count) c(s) 
 eststo 	sum3: estpost tabstat t_drive  t_transit  t_vehicle d2gp_bp_at17 e_emp age d_* w_hhi if m_samestate==1, s(mean sd count) c(s) 
 eststo 	sum4: estpost tabstat t_drive  t_transit  t_vehicle d2gp_bp_at17 age d_* w_hhi if m_samestate==1 & e_emp==1, s(mean sd count) c(s) 
 	
 esttab sum? using "./results/table_a2/census_summarystats.tex", booktabs replace cells(mean sd count)
+
+** Table A.7 **
 
 eststo 	gsum1: estpost tabstat real_gp_at16 real_gp_atp0 d1gp_bp_at16 d1gp_bp_atp0 d1gp_bp_at17 d1gp_bp_atp1 d2gp_bp_at17 d2gp_bp_atp1 d2gp_now_at17  [aw=perwt], s(mean sd min max) c(s) 
 eststo 	gsum2: estpost tabstat real_gp_at16 real_gp_atp0 d1gp_bp_at16 d1gp_bp_atp0 d1gp_bp_at17 d1gp_bp_atp1 d2gp_bp_at17 d2gp_bp_atp1 d2gp_now_at17 if e_emp==1 [aw=perwt], s(mean sd min max) c(s) 
@@ -196,6 +200,8 @@ eststo 	gsum4: estpost tabstat real_gp_at16 real_gp_atp0 d1gp_bp_at16 d1gp_bp_at
 esttab gsum? using "./results/table_a7/census_summarystats_treatment.tex", booktabs replace cells(mean(pattern(1 1 1 1)) sd(pattern(1 1 1 1)) min(pattern(1 1 1 1)) max(pattern(1 1 1 1)))
 	
 /* Main specifications at different ages */ 
+
+** Tables 1 and A8 (partial, see esttab below for assignment) **
 
 eststo tc2a_1:	reghdfe t_drive d2gp_bp_at18 						if m_samestate==1 [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
 eststo tc2a_2:	reghdfe t_drive d2gp_bp_at18 									  	  [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
@@ -265,6 +271,8 @@ eststo clear
 
 /* Main specifications at different relative driver license minimums */ 
 
+** Tables 1 and A8 (partial, see esttab below for assignment) **
+
 eststo tdla_1:	reghdfe t_drive d2gp_bp_atp2 						if m_samestate==1 [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
 eststo tdla_2:	reghdfe t_drive d2gp_bp_atp2 									  	  [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
 eststo tdla_3:	reghdfe t_drive d2gp_now_atp2 									  	  [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
@@ -333,6 +341,8 @@ eststo clear
 
 /* Main specifications with cohort fixed effects */ 
 
+** Table A.10 **
+
 eststo tcodl_a_1:	reghdfe t_drive d2gp_bp_atp2 			if m_samestate==1 [aw=perwt], a(bpl censusyear_all byr age) cluster(bpl)
 eststo tcodl_a_2:	reghdfe t_drive d2gp_bp_atp2 d_*		if m_samestate==1 [aw=perwt], a(bpl censusyear_all byr age) cluster(bpl)
 eststo tcodl_a_3:	reghdfe t_drive d2gp_bp_atp2 d_* lhhi	if m_samestate==1 [aw=perwt], a(bpl censusyear_all byr age) cluster(bpl)
@@ -376,6 +386,8 @@ eststo clear
 
 /* Other outcomes */ 
 
+** Table 2 (partial) **
+
 eststo tother_b_1:	reghdfe t_transit d2gp_bp_at17 							if m_samestate==1 [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
 eststo tother_b_2:	reghdfe t_transit d2gp_bp_at17 c.byr##c.byr d_* lhhi	if m_samestate==1 [aw=perwt], a(stcenyr_fe age) cluster(bpl)
 eststo tother_b_3:	reghdfe t_vehicle d2gp_bp_at17 							if m_samestate==1 & mi(t_transit)==0 [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
@@ -396,6 +408,8 @@ esttab 	tother_b_? using "./results/table2/other_d2_17.tex", booktabs replace `t
 esttab 	tother_f_? using "./results/table2/other_lev16.tex", booktabs replace `tabprefs'
 
 eststo clear
+
+** Table 2 (partial) **
 
 eststo tother_b_1:	reghdfe t_transit d2gp_bp_atp1 							if m_samestate==1 [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
 eststo tother_b_2:	reghdfe t_transit d2gp_bp_atp1 c.byr##c.byr d_* lhhi	if m_samestate==1 [aw=perwt], a(stcenyr_fe age) cluster(bpl)
@@ -419,6 +433,8 @@ esttab 	tother_f_? using "./results/table2/other_levp0.tex", booktabs replace `t
 eststo clear
 
 /* Age Heterogeneity */
+
+** Table A.16 **
 
 gen		d2gp_age17_2534 = (age>=25 & age<=34)*d2gp_bp_at17
 gen		d2gp_age17_3544 = (age>=35 & age<=44)*d2gp_bp_at17
@@ -447,6 +463,9 @@ drop  	d2gp_age??_????
 
 ** ** ** **
 /* Robust to dropping 1979/80 Crisis */
+
+** Table A.18 (partial) **
+
 loc y79 "birthyr!=1965"	
 loc y74 "birthyr!=1960"
 loc y70s "(birthyr<1959 | birthyr>1966)"
@@ -468,6 +487,8 @@ est clear
 
 ** ** ** **
 /* Other robustness */
+
+** Table A.19 (partial) **
 
 preserve
 	clear
@@ -520,6 +541,8 @@ est clear
 
 ** SEs
 
+** Table A.20 **
+
 eststo se_1: reghdfe t_drive d2gp_bp_at17 						if m_samestate==1 [aw=perwt], a(bpl censusyear_all age) cluster(bpl)
 eststo se_2: reghdfe t_drive d2gp_bp_at17 						if m_samestate==1 [aw=perwt], a(bpl censusyear_all age) cluster(byr)	
 eststo se_3: reghdfe t_drive d2gp_bp_at17 						if m_samestate==1 [aw=perwt], a(bpl censusyear_all age) cluster(bpl byr)
@@ -539,7 +562,8 @@ local 	tabprefs cells(b(star fmt(%9.4f)) se(par)) stats(r2_a N, fmt(%9.4f %9.0g)
 esttab 	se_* using "./results/other/census_altSEs.tex", booktabs replace `tabprefs'
 est clear
 
-** Put numbers into context by comparing to income
+** Put numbers into context by comparing to income **
+** Footnote in Section 4.1.1 **
 
 gen 	lincw = ln(w_incw)
 gen		lincp = ln(w_pinc)
@@ -554,6 +578,8 @@ nlcom exp(_b[d2gp_bp_at17]/_b[lincp])-1
 est clear
 **************************************************
 /* Mediation Analysis and Additional Robustness */
+
+** Table A.9 **
 
 rename 	bpl statefip
 gen		yr_at18 = birthyr + 18

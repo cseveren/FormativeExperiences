@@ -26,6 +26,8 @@ global 	data	"C:\Dropbox\Dropbox\Data_Projects\FormativeExperiences_Data"
 
 ** Set data location to current directory **
 cd 		"$data"
+do 		"$dof/config_stata.do"
+
 
 ** Execute script to construct data **
 do		"$dof/build/run_build_directory.do"

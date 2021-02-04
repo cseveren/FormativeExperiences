@@ -10,7 +10,6 @@ do		"$dof/build/code/make_census8090.do" 	"./output/census8090_basefile.dta"
 do		"$dof/build/code/make_census2000.do" 	"./output/census2000_basefile.dta"
 do		"$dof/build/code/make_acs06-15.do" 		"./output/acs06-15_basefile.dta"
 do		"$dof/build/code/make_acs16-17.do" 		"./output/acs16-17_basefile.dta"
-do		"$dof/build/code/make_census8017.do" 	"./output/census8017_basefile.dta"
 
 do		"$dof/build/code/combine_allcensus.do"
 do		"$dof/build/code/prep_allcensus.do"
