@@ -137,7 +137,7 @@ replace nwhite 	= 1 if race>=2
 compress
 
 ****************************************
-** RD in commuting *********************
+** RD in commuting (Table A.3 = bwA, A.5 = bwB)* *
 ****************************************
 
 eststo clear
@@ -195,7 +195,7 @@ foreach bw of local bwlistq {
 }
 
 ***************************
-** RD in transit **********
+** RD in transit (Table A.4, partial) **
 ***************************
 
 * Simple (unconditional) RD
@@ -209,7 +209,7 @@ foreach bw of local bwlistq {
 }
 
 ***************************
-** RD in vehicle ownersh **
+** RD in vehicle ownersh (Table A.4, partial) **
 ***************************
 
 * Simple (unconditional) RD
@@ -269,7 +269,7 @@ esttab rdq_dri_B??_cI_rb using "./results/table_a5/dri_demstinc_2o_altbw.tex", k
 eststo clear 
 
 ********************************
-** RD HETEROGENEITY ************
+** RD HETEROGENEITY (Table A.6) **
 ********************************
 
 ** Race = Black **
