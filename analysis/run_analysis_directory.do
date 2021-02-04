@@ -39,13 +39,4 @@ do		"$dof/analysis/code/cef/census_mnfunction_change.do" 	"$dof/log/cef_census.l
 do		"$dof/analysis/code/cef/nhts_mnfunction_change.do" 		"$dof/log/cef_nhts.log"
 
 ** Note, you must hand type the results from the above two files into the below to produce the graph output
-
 do		"$dof/analysis/code/cef/mn_graph.do"
-
-/* Other Supporting Analysis */
-do		"$dof/analysis/code/hhvehaccess_by_age.do" 
-
-
-
-
-/* Clean up */
