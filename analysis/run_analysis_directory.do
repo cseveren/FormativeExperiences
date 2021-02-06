@@ -29,7 +29,7 @@ do		"$dof/analysis/code/nhts_analysis_gpm.do" 			"$dof/log/nhts_gpm.log"
 do		"$dof/analysis/code/dl_summary.do"
 do		"$dof/analysis/code/fhwa_avecohortdriving.do"
 
-/* Cumulative Exposure Function */
+** Cumulative Exposure Function 
 ** CAUTION: census_mnfunction_change.do should not be run without taking a subsample on a desktop -- it requires
 **  too much memory. Uncomment line 21 in census_mnfunction_change.do to take a 20% sample to verify code works
 **  or too explore if on a desktop. Otherwise, if on larger memory machine, leave line 21 commented to reproduce

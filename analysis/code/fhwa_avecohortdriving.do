@@ -72,4 +72,4 @@ keep age year p_drivers
 
 reshape wide p_drivers, i(year) j(age)
 
-export delim "./results/figures/dladoption_by_age.csv"
+export delim "./results/figures/dladoption_by_age.csv", replace
